@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/knsar/!svn/ver/182/Trunk/arena-server/src/main/java/nl/kennisnet/arena/utils
+END
+CommonsConfigurationFactoryBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/knsar/!svn/ver/159/Trunk/arena-server/src/main/java/nl/kennisnet/arena/utils/CommonsConfigurationFactoryBean.java
+END
+GamarayDataBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/knsar/!svn/ver/182/Trunk/arena-server/src/main/java/nl/kennisnet/arena/utils/GamarayDataBean.java
+END
+UtilityHelper.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/knsar/!svn/ver/182/Trunk/arena-server/src/main/java/nl/kennisnet/arena/utils/UtilityHelper.java
+END
+LocationUtilities.java
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/knsar/!svn/ver/87/Trunk/arena-server/src/main/java/nl/kennisnet/arena/utils/LocationUtilities.java
+END
+ConfigurationFactoryBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/knsar/!svn/ver/159/Trunk/arena-server/src/main/java/nl/kennisnet/arena/utils/ConfigurationFactoryBean.java
+END
+ConvertorConfiguration.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/knsar/!svn/ver/182/Trunk/arena-server/src/main/java/nl/kennisnet/arena/utils/ConvertorConfiguration.java
+END
+PropertyConfigurationFactoryBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/knsar/!svn/ver/159/Trunk/arena-server/src/main/java/nl/kennisnet/arena/utils/PropertyConfigurationFactoryBean.java
+END

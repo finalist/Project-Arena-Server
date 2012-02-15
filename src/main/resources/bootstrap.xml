@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+				http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.0.xsd">
+				
+	<tx:annotation-driven />
+	<bean id="bootstrapService" class="nl.kennisnet.arena.setup.Bootstrap" init-method="bootstrap">
+		<constructor-arg index="0" ref="participantService"/>
+		
+		<property name="teams">
+			<map>
+				<entry key="zwart">
+					<value>000000</value>
+				</entry>															
+				<entry key="groen">
+					<value>00FF00</value>
+				</entry>	
+				<entry key="rood">
+					<value>FF0000</value>
+				</entry>
+				<entry key="blauw">
+					<value>0000ff</value>
+				</entry>
+				<entry key="oranje">
+					<value>ffaa00</value>
+				</entry>
+				<entry key="geel">
+					<value>ffff00</value>
+				</entry>
+				<entry key="indigo">
+					<value>6f00ff</value>
+				</entry>
+				<entry key="violet">
+					<value>ee82ee</value>
+				</entry>	
+				<entry key="azure">
+					<value>007fff</value>
+				</entry>	
+				<entry key="bruin">
+					<value>6d351a</value>
+				</entry>	
+				
+			</map>
+		</property>
+	</bean>
+</beans>

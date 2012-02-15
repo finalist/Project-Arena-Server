@@ -1,0 +1,589 @@
+/** Add css rules here for your application. */
+.toManyCharacters {
+	color: red;
+}
+
+.FlexTable {
+	background-color: #007200;
+	color: white;
+}
+
+.FlexTable-OddRow {
+	background-color: #00A700;
+}
+
+.FlexTable-EvenRow {
+	background-color: #33EA33;
+}
+
+.FlexTable-ColumnLabelCell {
+	
+}
+
+.FlexTable-Cell {
+	padding: 7px;
+}
+
+.FlexTable-column-label {
+	font-weight: bold;
+}
+
+.FlexTable-row-label {
+	font-weight: bold;
+}
+
+.FlexTable-value {
+	text-align: center;
+}
+
+.panelHeader {
+	font-size: 16px;
+}
+
+.panelSubHeader {
+	font-size: 12px;
+}
+
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 0.69em;
+	line-height: 1.3em;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	word-wrap: break-word;
+}
+
+form {
+	margin: 0;
+}
+
+img {
+	border: medium none;
+}
+
+#tile_01 .links_headlines .links li {
+	display: inline;
+}
+
+#menu {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	background: #0099ee url(gfx/menu3.gif) 0 100% no-repeat;
+	margin-bottom: 12px;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	margin: auto;
+	width:404px;
+}
+
+#header {
+	height: 84px;
+}
+
+#menu h2 {
+	height: 0;
+	overflow: hidden;
+	position: absolute;
+	width: 0;
+}
+
+#menu ul {
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
+	margin: 0;
+	padding: 2px 0;
+	width: 100%;
+}
+
+#menu ul:after {
+	clear: both;
+	content: ".";
+	display: block;
+	height: 0;
+	visibility: hidden;
+}
+
+#menu li {
+	display: inline;
+	float: left;
+	margin-left: 9px;
+}
+
+#menu li a {
+	color: #FFFFFF;
+	float: left;
+	font-size: 1.65em;
+	font-weight: bold;
+	left: 1px;
+	line-height: 27px;
+	padding: 0 13px 1px;
+	position: relative;
+	text-decoration: none;
+}
+
+#menu li:hover,#menu li.hover {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	background: transparent url(gfx/menu_item_hover.gif) no-repeat scroll 0
+		50%;
+}
+
+#menu li:hover a,#menu li.hover a {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	background: transparent url(gfx/menu_item_hover.gif) no-repeat scroll
+		100% 50%;
+}
+
+#menu li.active {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	background: transparent url(gfx/menu_item_active.gif) no-repeat scroll 0
+		50%;
+}
+
+#menu li.active a {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	background: transparent url(gfx/menu_item_active.gif) no-repeat scroll
+		100% 50%;
+	color: #2E3192;
+}
+
+#arenaLogo {
+	background: transparent url(ARena_logoW.png) no-repeat scroll 100% 50%;
+	background-position: top left;
+	position: absolute;
+	left: 20;
+	top: 0;
+	width: 100px;
+	height: 150px;
+}
+
+#kennisnetLogo {
+	background: transparent url(SNKNlogoVSmallW.png) no-repeat scroll 100%
+		50%;
+	background-position: top right;
+	float: left;
+	position: absolute;
+	right: 15;
+	top: 15;
+	width: 300px;
+	height: 84px;
+}
+
+.gwt-DialogBox .Caption {
+	background: #e3e8f3 url(images/hborder.png) repeat-x 0px -2003px;
+	padding: 4px 4px 4px 8px;
+	cursor: default;
+	border-bottom: 1px solid #bbbbbb;
+	border-top: 5px solid #d0e4f6;
+}
+
+.gwt-DialogBox .dialogContent {
+	
+}
+
+.gwt-DialogBox .dialogMiddleCenter {
+	padding: 3px;
+	background: white;
+}
+
+.gwt-DialogBox .dialogBottomCenter {
+	background: url(images/hborder.png) repeat-x 0px -4px;
+	-background: url(images/hborder_ie6.png) repeat-x 0px -4px;
+}
+
+.gwt-DialogBox .dialogMiddleLeft {
+	background: url(images/vborder.png) repeat-y;
+}
+
+.gwt-DialogBox .dialogMiddleRight {
+	background: url(images/vborder.png) repeat-y -4px 0px;
+	-background: url(images/vborder_ie6.png) repeat-y -4px 0px;
+}
+
+.gwt-DialogBox .dialogTopLeftInner {
+	width: 5px;
+	zoom: 1;
+}
+
+.gwt-DialogBox .dialogTopRightInner {
+	width: 8px;
+	zoom: 1;
+}
+
+.gwt-DialogBox .dialogBottomLeftInner {
+	width: 5px;
+	height: 8px;
+	zoom: 1;
+}
+
+.gwt-DialogBox .dialogBottomRightInner {
+	width: 5px;
+	height: 8px;
+	zoom: 1;
+}
+
+.gwt-DialogBox .dialogTopLeft {
+	background: url(images/corner.png) no-repeat -13px 0px;
+	-background: url(images/corner_ie6.png) no-repeat -13px 0px;
+}
+
+.gwt-DialogBox .dialogTopRight {
+	background: url(images/corner.png) no-repeat -18px 0px;
+	-background: url(images/corner_ie6.png) no-repeat -18px 0px;
+}
+
+.gwt-DialogBox .dialogBottomLeft {
+	background: url(images/corner.png) no-repeat 0px -15px;
+	-background: url(images/corner_ie6.png) no-repeat 0px -15px;
+}
+
+.gwt-DialogBox .dialogBottomRight {
+	background: url(images/corner.png) no-repeat -5px -15px;
+	-background: url(images/corner_ie6.png) no-repeat -5px -15px;
+}
+
+* html .gwt-DialogBox .dialogTopLeftInner {
+	width: 5px;
+	overflow: hidden;
+}
+
+* html .gwt-DialogBox .dialogTopRightInner {
+	width: 8px;
+	overflow: hidden;
+}
+
+* html .gwt-DialogBox .dialogBottomLeftInner {
+	width: 5px;
+	height: 8px;
+	overflow: hidden;
+}
+
+* html .gwt-DialogBox .dialogBottomRightInner {
+	width: 8px;
+	height: 8px;
+	overflow: hidden;
+}
+
+#typefilter ul {
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
+	margin: 0;
+	padding: 2px 0;
+	width: 100%;
+}
+
+#typefilter li {
+	display: inline;
+	float: left;
+	margin-left: 6px;
+	width: 100%;
+	padding: 2px 0;
+}
+
+#typefilter li a {
+	color: #00000;
+	float: left;
+	font-size: 0.75em;
+	font-weight: bold;
+	left: 1px;
+	line-height: 27px;
+	position: relative;
+	text-decoration: none;
+	width: 90%;
+	padding: 3px;
+}
+
+#typefilter li a:link {
+	color: gray;
+}
+
+#typefilter li a:visited {
+	color: gray;
+}
+
+#typefilter li a:hover {
+	color: black;
+	text-decoration: underline;
+}
+
+#typefilter li.active #Verhaal {
+	background-color: #da0000;
+	color: white;
+}
+
+#typefilter li.active #Vraag {
+	background-color: #00a700;
+	color: white;
+}
+
+#typefilter li.active #Foto {
+	background-color: #0337d1;
+	color: white;
+}
+
+#typeselect ul {
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
+	margin: 0;
+	padding: 2px 0;
+	width: 100%;
+}
+
+#typeselect li {
+	display: inline;
+	float: left;
+	margin-left: 6px;
+	width: 100%;
+	padding: 2px 0;
+}
+
+#typeselect li a {
+	color: #00000;
+	float: left;
+	font-size: 0.75em;
+	font-weight: bold;
+	left: 1px;
+	line-height: 27px;
+	position: relative;
+	text-decoration: none;
+	width: 90%;
+	padding: 3px;
+}
+
+#typeselect li a:link {
+	color: gray;
+}
+
+#typeselect li a:visited {
+	color: gray;
+}
+
+#typeselect li a:hover {
+	color: black;
+	text-decoration: underline;
+}
+
+#typeselect li.active {
+	color: white;
+}
+
+#typeselect li.active #Verhaal {
+	background-color: #da0000;
+}
+
+#typeselect li.active #Vraag {
+	background-color: #00a700;
+}
+
+#typeselect li.active #Foto {
+	background-color: #0337d1;
+}
+
+#typeselect li #Verhaal {
+	background: transparent url(text-red.png) no-repeat scroll 100% 50%;
+}
+
+#typeselect li #Vraag {
+	background: transparent url(question.png) no-repeat scroll 100% 50%;
+}
+
+#typeselect li #Foto {
+	background: transparent url(photo.png) no-repeat scroll 100% 50%;
+}
+
+.paneltitle {
+	font-weight: bold;
+}
+
+.paneltext {
+	font-size: 0.60em;
+}
+
+.leftSidePanel {
+	width: 140px;
+	margin: auto;
+	padding: 5px;
+	border: 2px solid gray;
+}
+
+.rightSidePanel {
+	width: 280px;
+	margin: auto;
+	padding: 5px;
+	border: 2px solid gray;
+}
+
+.sidepane {
+	padding: 3px;
+}
+
+.questitempanel {
+	color: white;
+	padding: 0;
+	height: 36px;
+	width: 100%;
+}
+
+.verhaal_panel {
+	background-color: #da0000;
+}
+
+.vraag_panel {
+	background-color: #00a700;
+}
+
+.foto_panel {
+	background-color: #0337d1;
+	padding: 0;
+}
+
+.questitempanel a:link {
+	color: white;
+	padding-right: 3px;
+	padding-left: 3px;
+	font-size: 0.60em;
+}
+
+.questitempanel a:visited {
+	color: white;
+}
+
+.vraag_panel .questitempanel_name {
+	background: url(question.png) no-repeat scroll left top
+}
+
+.verhaal_panel .questitempanel_name {
+	background: url(text-red.png) no-repeat scroll left top
+}
+
+.foto_panel .questitempanel_name {
+	background: url(photo.png) no-repeat scroll left top
+}
+
+.questitempanel a:hover {
+	text-decoration: underline;
+	color: black;
+}
+
+.questitempanel_name {
+	float: left;
+	font-size: 0.75em;
+	padding-left: 32px;
+	padding-top: 8px;
+	height: 100%;
+	width: 102px;
+}
+
+.itemlinks {
+	float: right;
+	padding-top: 10px;
+}
+
+#teamfilter ul {
+	list-style-image: none;
+	list-style-position: outside;
+	list-style-type: none;
+	margin: 0;
+	padding: 2px 0;
+	width: 100%;
+}
+
+#teamfilter li {
+	display: inline;
+	float: left;
+	margin-left: 6px;
+	width: 100%;
+	padding: 2px 0;
+}
+
+#teamfilter li a {
+	color: #00000;
+	float: left;
+	font-size: 0.75em;
+	font-weight: bold;
+	left: 1px;
+	line-height: 27px;
+	position: relative;
+	text-decoration: none;
+	width: 90%;
+	padding: 3px;
+}
+
+#teamfilter li a:link {
+	color: gray;
+}
+
+#teamfilter li a:visited {
+	color: gray;
+}
+
+#teamfilter li a:hover {
+	color: grey;
+	text-decoration: underline;
+}
+
+#teamfilter li.active {
+	color: white;
+}
+
+#teamfilter li.active #Rood {
+	background-color: #ff0000;
+}
+
+#teamfilter li.active #Blauw {
+	background-color: #0000ff;
+}
+
+#teamfilter li.active #Groen {
+	background-color: #00ff00;
+}
+
+#teamfilter li.active #Zwart {
+	background-color: #000000;
+}
+
+#teamfilter li.active #Oranje {
+	background-color: #ffaa00;
+}
+
+#teamfilter li.active #Geel {
+	background-color: #ffff00;
+}
+
+#teamfilter li.active #Indigo {
+	background-color: #6f00ff;
+}
+
+#teamfilter li.active #Violet {
+	background-color: #ee82ee;
+}
+
+#teamfilter li.active #Azure {
+	background-color: #007fff;
+}
+
+#teamfilter li.active #Bruin {
+	background-color: #6d351a;
+}
+
+.scoreheader {
+	font-size: 1.60em;
+	padding: 20px;
+}
+
+.sortlink {
+	padding-left: 4px;
+	padding-right: 4px;
+}

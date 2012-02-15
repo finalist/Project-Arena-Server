@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/knsar/!svn/ver/244/Trunk/arena-server/src/main/java/nl/kennisnet/arena/formats
+END
+Asset.java
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/knsar/!svn/ver/207/Trunk/arena-server/src/main/java/nl/kennisnet/arena/formats/Asset.java
+END
+OverlayTxt.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/knsar/!svn/ver/124/Trunk/arena-server/src/main/java/nl/kennisnet/arena/formats/OverlayTxt.java
+END
+Overlays.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/knsar/!svn/ver/182/Trunk/arena-server/src/main/java/nl/kennisnet/arena/formats/Overlays.java
+END
+Dimension.java
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/knsar/!svn/ver/182/Trunk/arena-server/src/main/java/nl/kennisnet/arena/formats/Dimension.java
+END
+FeatureImg.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/knsar/!svn/ver/207/Trunk/arena-server/src/main/java/nl/kennisnet/arena/formats/FeatureImg.java
+END
+Location.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/knsar/!svn/ver/207/Trunk/arena-server/src/main/java/nl/kennisnet/arena/formats/Location.java
+END
+RefreshDistance.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/knsar/!svn/ver/150/Trunk/arena-server/src/main/java/nl/kennisnet/arena/formats/RefreshDistance.java
+END
+FeatureTxt.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/knsar/!svn/ver/207/Trunk/arena-server/src/main/java/nl/kennisnet/arena/formats/FeatureTxt.java
+END
+RefreshTime.java
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/knsar/!svn/ver/124/Trunk/arena-server/src/main/java/nl/kennisnet/arena/formats/RefreshTime.java
+END
+Features.java
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/knsar/!svn/ver/182/Trunk/arena-server/src/main/java/nl/kennisnet/arena/formats/Features.java
+END
+OverlayImg.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/knsar/!svn/ver/207/Trunk/arena-server/src/main/java/nl/kennisnet/arena/formats/OverlayImg.java
+END

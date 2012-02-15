@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/knsar/!svn/ver/252/Trunk/arena-server/src/main/resources
+END
+arena-settings.properties
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/knsar/!svn/ver/252/Trunk/arena-server/src/main/resources/arena-settings.properties
+END
+integration.xml
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/knsar/!svn/ver/197/Trunk/arena-server/src/main/resources/integration.xml
+END
+services.xml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/knsar/!svn/ver/197/Trunk/arena-server/src/main/resources/services.xml
+END
+configuration.xml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/knsar/!svn/ver/207/Trunk/arena-server/src/main/resources/configuration.xml
+END
+log4j.properties
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/knsar/!svn/ver/147/Trunk/arena-server/src/main/resources/log4j.properties
+END
+bootstrap.xml
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/knsar/!svn/ver/248/Trunk/arena-server/src/main/resources/bootstrap.xml
+END

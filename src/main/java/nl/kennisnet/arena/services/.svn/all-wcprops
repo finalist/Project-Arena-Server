@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/knsar/!svn/ver/266/Trunk/arena-server/src/main/java/nl/kennisnet/arena/services
+END
+ParticipantService.java
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svn/knsar/!svn/ver/258/Trunk/arena-server/src/main/java/nl/kennisnet/arena/services/ParticipantService.java
+END
+TransactionalCallback.java
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/knsar/!svn/ver/6/Trunk/arena-server/src/main/java/nl/kennisnet/arena/services/TransactionalCallback.java
+END
+QrCodesPdfBuilder.java
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/knsar/!svn/ver/248/Trunk/arena-server/src/main/java/nl/kennisnet/arena/services/QrCodesPdfBuilder.java
+END
+QuestService.java
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/knsar/!svn/ver/266/Trunk/arena-server/src/main/java/nl/kennisnet/arena/services/QuestService.java
+END
+PictureService.java
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/knsar/!svn/ver/202/Trunk/arena-server/src/main/java/nl/kennisnet/arena/services/PictureService.java
+END
