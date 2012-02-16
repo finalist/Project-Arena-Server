@@ -8,10 +8,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Overlays {
 
-	@XmlElement(name = "overlayTxt")
 	private List<OverlayTxt> textOverlays;
 	
-	@XmlElement(name = "overlayImg")
 	private List<OverlayImg> imageOverlays;
 
 	public Overlays() {

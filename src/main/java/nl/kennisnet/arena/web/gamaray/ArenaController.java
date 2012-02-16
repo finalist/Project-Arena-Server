@@ -15,7 +15,6 @@ import nl.kennisnet.arena.services.QuestService;
 import nl.kennisnet.arena.services.TransactionalCallback;
 import nl.kennisnet.arena.services.factories.GeomUtil;
 import nl.kennisnet.arena.utils.GamarayDataBean;
-
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.log4j.Logger;
@@ -27,18 +26,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.vividsolutions.jts.geom.Point;
 
 @Controller
-@RequestMapping("/gamaray")
+@RequestMapping("/mixare")
 public class ArenaController {
 
 	private final QuestService questService;
 	private final ParticipantService participantService;
 	private final CompositeConfiguration configuration;
-
+	
 	private Logger log = Logger.getLogger(ArenaController.class);
 
 	@Autowired
@@ -57,27 +57,20 @@ public class ArenaController {
 	 * @param name
 	 * @return
 	 */
-	@RequestMapping(value = "/{questId}", method = RequestMethod.GET, params = { "player" })
-	public ModelAndView gamarayCallback(@PathVariable Long questId, @RequestParam("player") final String player) {
+	@RequestMapping(value = "/{questId}", method = RequestMethod.GET, params = { "player" }) @ResponseBody
+	public Dimension gamarayCallback(@PathVariable Long questId, @RequestParam("player") final String player) {
 
-		final ModelAndView modelAndView = new ModelAndView("gamaray");
 		final GamarayDataBean data = new GamarayDataBean();
 		data.setPlayer(player);
 
 		log.debug("default get: [quest=" + questId + ",player=" + player + "]");
 
-		questService.getQuest(questId, new TransactionalCallback<Quest>() {
+		Quest quest = questService.getQuest(questId);
+		final Dimension dimension = DimensionFactory.getEmptyInstance(quest, data, configuration);
+		
+		log.debug("response model: " + dimension);
 
-			@Override
-			public void onResult(Quest result) {
-				final Dimension dimension = DimensionFactory.getEmptyInstance(result, data, configuration);
-				modelAndView.addObject(dimension);
-			}
-		});
-
-		log.debug("response model: " + modelAndView.getModel());
-
-		return modelAndView;
+		return dimension;
 	}
 
 	/**
@@ -89,34 +82,32 @@ public class ArenaController {
 	 * @return
 	 * @throws NotSupportedException
 	 */
-	@RequestMapping(value = "/{questId}", method = RequestMethod.POST)
-	public ModelAndView gamarayCallback(@PathVariable Long questId, @ModelAttribute("data") GamarayDataBean data) throws NotSupportedException {
+	@RequestMapping(value = "/{questId}", method = RequestMethod.POST) @ResponseBody
+	public Dimension gamarayCallback(@PathVariable Long questId, @ModelAttribute("data") GamarayDataBean data) throws NotSupportedException {
 
-		ModelAndView modelAndView = new ModelAndView("gamaray");
+		Dimension dimension = null;
 		data.setQuestId(questId);
-
 		log.debug("request: " + data);
 
 		if ("init".equals(data.getEvent()) && !StringUtils.hasText(data.getAnswer())) {
-			modelAndView = onInitEvent(data);
+			dimension = onInitEvent(data);
 		} else if ("refreshOnTime".equals(data.getEvent()) || "refreshOnDistance".equals(data.getEvent())) {
-			modelAndView = onRefreshEvent(data);
+			dimension = onRefreshEvent(data);
 		} else if ("refreshOnPress".equals(data.getEvent()) || ("init".equals(data.getEvent()) && StringUtils.hasText(data.getAnswer()))) {
 			data.setEvent("refreshOnPress");
-			modelAndView = onPressEvent(data);
+			dimension = onPressEvent(data);
 		} else {
 			// Not a valid event type, return exception
 	      log.error("Event type not supported : " + data);
 			throw new NotSupportedException("Event type not supported");
 		}
 
-		log.debug("response model: " + modelAndView.getModel());
+		log.debug("response model: " + dimension);
 
-		return modelAndView;
+		return dimension;
 	}
 
-	private ModelAndView onInitEvent(final GamarayDataBean data) {
-		final ModelAndView modelAndView = new ModelAndView("gamaray");
+	private Dimension onInitEvent(final GamarayDataBean data) {
 
 		final long participantId = participantService.getParticipant(data.getPlayer());
 		final Quest quest = questService.getQuest(data.getQuestId());
@@ -127,22 +118,14 @@ public class ArenaController {
 		final Map<MultiKey,Integer> answers=participantService.getAnswers(quest.getId());
 		final Progress progress = participantService.getProgress(participationId);
 		
-		questService.getQuest(data.getQuestId(), new TransactionalCallback<Quest>() {
+		Quest result = questService.getQuest(data.getQuestId());
+		final Dimension dimension = DimensionFactory.getInstance(result, data, configuration, progress, answers,participantId);
+		log.error("Response on init : " + dimension);
 
-			@Override
-			public void onResult(Quest result) {
-				final Dimension dimension = DimensionFactory.getInstance(result, data, configuration, progress, answers,participantId);
-		      log.error("Response on init : " + dimension);
-
-				modelAndView.addObject(dimension);
-			}
-		});
-
-		return modelAndView;
+		return dimension;
 	}
 
-	private ModelAndView onRefreshEvent(final GamarayDataBean data) {
-		final ModelAndView modelAndView = new ModelAndView("gamaray");
+	private Dimension onRefreshEvent(final GamarayDataBean data) {
 
 		final long participantId = participantService.getParticipant(data.getPlayer());
 		final Quest quest = questService.getQuest(data.getQuestId());
@@ -153,26 +136,18 @@ public class ArenaController {
 		final Progress progress = participantService.getProgress(participationId);
       final Map<MultiKey,Integer> answers=participantService.getAnswers(quest.getId());
 
-		questService.getQuest(data.getQuestId(), new TransactionalCallback<Quest>() {
-
-			@Override
-			public void onResult(Quest result) {
-//				GeometryFactory factory = new GeometryFactory();
-//				factory.createPoint(new Coordinate(data.getLon(), data.getLat()));
-				final Dimension dimension = DimensionFactory.getInstance(result, data, configuration, progress, answers,participantId);
-				modelAndView.addObject(dimension);
-			}
-		});
-
-		return modelAndView;
+		Quest result = questService.getQuest(data.getQuestId());
+//		GeometryFactory factory = new GeometryFactory();
+//		factory.createPoint(new Coordinate(data.getLon(), data.getLat()));
+		final Dimension dimension = DimensionFactory.getInstance(result, data, configuration, progress, answers,participantId);
+		
+		return dimension;
 	}
 
-	private ModelAndView onPressEvent(final GamarayDataBean data) {
+	private Dimension onPressEvent(final GamarayDataBean data) {
 		if (!StringUtils.hasText(data.getEventSrc())) {
 			throw new IllegalArgumentException("event must have a source!");
 		}
-
-		final ModelAndView modelAndView = new ModelAndView("gamaray");
 
 		final long participantId = participantService.getParticipant(data.getPlayer());
 		final Quest quest = questService.getQuest(data.getQuestId());
@@ -187,18 +162,12 @@ public class ArenaController {
 
 		final Map<MultiKey,Integer> answers=participantService.getAnswers(quest.getId());
 		final Progress progress = participantService.getProgress(participationId);
-		questService.getQuest(data.getQuestId(), new TransactionalCallback<Quest>() {
+		Quest result = questService.getQuest(data.getQuestId());
+//		GeometryFactory factory = new GeometryFactory();
+//		factory.createPoint(new Coordinate(data.getLon(), data.getLat()));
+		final Dimension dimension = DimensionFactory.getInstance(result, data, configuration, progress,answers,participantId );
 
-			@Override
-			public void onResult(Quest result) {
-//				GeometryFactory factory = new GeometryFactory();
-//				factory.createPoint(new Coordinate(data.getLon(), data.getLat()));
-				final Dimension dimension = DimensionFactory.getInstance(result, data, configuration, progress,answers,participantId );
-				modelAndView.addObject(dimension);
-			}
-		});
-
-		return modelAndView;
+		return dimension;
 	}
 
 }

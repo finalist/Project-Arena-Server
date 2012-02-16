@@ -9,21 +9,13 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class FeatureImg {
 
-	@XmlAttribute
 	private String id;
-	@XmlElement
 	private String anchor;
-	@XmlElement
 	private String onPress;
-	@XmlElement
 	private int xLoc;
-	@XmlElement
 	private int yLoc;
-	@XmlElement
 	private int zLoc;
-	@XmlElement
 	private boolean showInRadar;
-	@XmlElement
 	private String assetId;
 	private Location location;
 	

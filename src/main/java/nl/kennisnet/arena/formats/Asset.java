@@ -9,11 +9,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Asset {
 
-	@XmlAttribute
 	private String id;
-	@XmlElement
 	private String format;
-	@XmlElement
 	private String url;
 	
 	public Asset() {

@@ -18,12 +18,10 @@ public class RefreshTime {
 		this.waitForAssets = waitForAssets;
 	}
 
-	@XmlElement
 	public int getValidFor() {
 		return validFor;
 	}
 	
-	@XmlElement
 	public boolean getWaitForAssets() {
 		return waitForAssets;
 	}

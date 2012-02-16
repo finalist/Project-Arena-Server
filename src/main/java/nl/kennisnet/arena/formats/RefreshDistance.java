@@ -17,7 +17,6 @@ public class RefreshDistance {
 		this.validWithinRange = validWithinRange;
 	}
 
-	@XmlElement
 	public int getValidWithinRange() {
 		return validWithinRange;
 	}

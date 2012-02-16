@@ -9,17 +9,11 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class OverlayImg {
 
-	@XmlAttribute
 	private String id;
-	@XmlElement
 	private double x;
-	@XmlElement
 	private double y;
-	@XmlElement
 	private String anchor;
-	@XmlElement
 	private String onPress;
-	@XmlElement
 	private String assetId;
 		
 	public OverlayImg() {

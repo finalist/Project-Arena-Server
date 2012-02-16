@@ -18,12 +18,10 @@ public class Location {
 	   super();
 	}
 	
-	@XmlElement
 	public double getLon() {
 		return lon;
 	}
 	
-	@XmlElement
 	public double getLat() {
 		return lat;
 	}

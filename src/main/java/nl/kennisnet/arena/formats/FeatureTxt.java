@@ -9,21 +9,13 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class FeatureTxt {
 
-	@XmlAttribute
 	private String id;
-	@XmlElement
 	private String text;
-	@XmlElement
 	private String anchor;
-	@XmlElement
 	private String onPress;
-	@XmlElement
 	private int xLoc;
-	@XmlElement
 	private int yLoc;
-	@XmlElement
 	private int zLoc;
-	@XmlElement
 	private boolean showInRadar = true;
 	private Location location;
 	
@@ -69,7 +61,6 @@ public class FeatureTxt {
 		return showInRadar;
 	}
 
-	@XmlElement
 	public Location getLocation() {
 		return location;
 	}

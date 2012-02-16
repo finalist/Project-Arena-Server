@@ -11,25 +11,24 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-@XmlRootElement
+
 public class Dimension {
 	private static final String DIMENSION_VERSION = "1.0";
-	@XmlAttribute
+	
 	private String version;
-	@XmlElement
+	
 	private String name;
-	@XmlElement
+	
 	private boolean relativeAltitude = true;
-	@XmlElement
+	
 	private String refreshUrl;
-	@XmlElement
+
+	
 	private RefreshTime refreshTime;
-	@XmlElement
+	
 	private RefreshDistance refreshDistance;
 	private Features features;
 	
-	@XmlElementWrapper(name = "assets")
-	@XmlElement(name = "asset")	
 	private List<Asset> assets;
 	
 	private Overlays overlays;
@@ -84,7 +83,6 @@ public class Dimension {
 		return refreshDistance;
 	}
 
-	@XmlElement
 	public Features getFeatures() {
 		return features;
 	}
@@ -93,7 +91,6 @@ public class Dimension {
 		return assets;
 	}
 	
-	@XmlElement
 	public Overlays getOverlays() {
 		return overlays;
 	}
