@@ -14,8 +14,4 @@
 				
 	<tx:annotation-driven />
 	<context:component-scan base-package="nl.kennisnet.arena.services" />
-	
-					
-	<mvc:annotation-driven />
-	<context:component-scan base-package="nl.kennisnet.arena.web" />
 </beans>

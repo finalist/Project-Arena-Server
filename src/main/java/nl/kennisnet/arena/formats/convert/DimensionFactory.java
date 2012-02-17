@@ -66,6 +66,7 @@ public final class DimensionFactory {
 	 */
 	public static Dimension getInstance(final Quest quest, final GamarayDataBean data,
 			final CompositeConfiguration configuration, final Progress progress, final  Map<MultiKey, Integer> answers, final Long participantId) {
+		/*
 		final ConvertorConfiguration config = new ConvertorConfiguration(data, configuration, quest);
 
 		final InformationConvertor informationConvertor = new InformationConvertor();
@@ -112,6 +113,8 @@ public final class DimensionFactory {
 
 		return new Dimension(quest.getName(), UtilityHelper.url(quest, data.getPlayer(), configuration), positionableFeaturesTxt,
 				positionableFeaturesImg, assets, positionableOverlayTxt, positionableOverlayImg);
+				*/ 
+		return null;
 	}
 
 	private static String formatProgress(final Progress progress) {

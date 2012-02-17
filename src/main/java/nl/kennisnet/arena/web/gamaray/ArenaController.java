@@ -6,7 +6,9 @@ import java.util.Map;
 import javax.transaction.NotSupportedException;
 
 import nl.kennisnet.arena.client.domain.ActionDTO;
+import nl.kennisnet.arena.formats.Arena;
 import nl.kennisnet.arena.formats.Dimension;
+import nl.kennisnet.arena.formats.convert.ArenaFactory;
 import nl.kennisnet.arena.formats.convert.DimensionFactory;
 import nl.kennisnet.arena.model.Progress;
 import nl.kennisnet.arena.model.Quest;
@@ -14,6 +16,7 @@ import nl.kennisnet.arena.services.ParticipantService;
 import nl.kennisnet.arena.services.QuestService;
 import nl.kennisnet.arena.services.TransactionalCallback;
 import nl.kennisnet.arena.services.factories.GeomUtil;
+import nl.kennisnet.arena.utils.ArenaDataBean;
 import nl.kennisnet.arena.utils.GamarayDataBean;
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.commons.configuration.CompositeConfiguration;
@@ -73,6 +76,30 @@ public class ArenaController {
 		return dimension;
 	}
 
+	@RequestMapping(value = "/{questId}", method = RequestMethod.GET, params = {"player", "lat", "lng"}) @ResponseBody
+	public String mixareCallback(@PathVariable Long questId, @RequestParam("player") final String player,
+								@RequestParam("lat") final float latitude, @RequestParam("lng") final float longitude){
+		final ArenaDataBean data = new ArenaDataBean();
+		data.setPlayer(player);
+		data.setLat(latitude);
+		data.setLon(longitude);
+		
+		log.debug("default get: [quest=" + questId + ",player=" + player + "]");
+		
+		Quest quest = questService.getQuest(questId);
+		final Arena arena = ArenaFactory.getInstance(data, quest, configuration);
+		
+		log.debug("response model: " + arena);
+
+		return arena.toString();		
+	}
+	
+	
+	@RequestMapping(value = "/{questId}", method = RequestMethod.GET) @ResponseBody
+	public String mixareCallback(@PathVariable Long questId){
+		return "Please specify the team(player), latitude(lat) and longitude(lng)";		
+	}
+	
 	/**
 	 * Gamaray POSTs important data of its current state, which we can base
 	 * decisions about the new game state on.

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ public class Quest implements DomainObject {
 	@Column(nullable = false)
 	private String emailOwner;
 
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@IndexColumn(name = "position")
 	private List<Positionable> positionables = new ArrayList<Positionable>();
 
@@ -90,7 +91,7 @@ public class Quest implements DomainObject {
 
 			double dist = GeomUtil.calculateDistanceInMeters(point, selectedPoint);
 			
-			if (dist <= positionable.getLocation().getRadius()&&dist>HOTZONE_RADIUS) {
+			if (dist <= positionable.getLocation().getRadius() && dist>HOTZONE_RADIUS) {
 				filteredPositionables.add(positionable);
 			}
 		}
@@ -111,7 +112,7 @@ public class Quest implements DomainObject {
          Point point = positionable.getLocation().getPoint();
 
          double dist = GeomUtil.calculateDistanceInMeters(point, selectedPoint);
-         
+         System.out.println(dist);
          if (dist <= HOTZONE_RADIUS) {
             filteredPositionables.add(positionable);
          }
