@@ -12,6 +12,8 @@ import nl.kennisnet.arena.client.domain.ActionDTO;
 import nl.kennisnet.arena.client.domain.LogDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.TeamDTO;
+import nl.kennisnet.arena.model.Image;
+import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Participation;
@@ -303,5 +305,15 @@ public class ParticipantService extends HibernateAwareService {
 		for (ParticipationLog participationLog : log) {
 			getSession().delete(participationLog);
 		}
+	}
+	
+	public String getImageUrl(long imageId){
+		Image image = get(Image.class, imageId);		
+		return image.getUrl();
+	}
+	
+	public Information getInformation(long informationId){
+		Information information = get(Information.class, informationId);
+		return information;
 	}
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import nl.kennisnet.arena.services.PictureService;
+import nl.kennisnet.arena.utils.UtilityHelper;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.http.HttpEntity;
@@ -69,6 +70,7 @@ public class FileController {
 
    public byte[] send(MultipartFile image) throws Exception {
       HttpClient httpclient = new DefaultHttpClient();
+      String baseUrl = UtilityHelper.getBaseUrl(configuration);
       HttpPost httppost = new HttpPost("http://betelgeuse-filestore.appspot.com/fileupload");
 
       MultipartEntity reqEntity = new MultipartEntity();

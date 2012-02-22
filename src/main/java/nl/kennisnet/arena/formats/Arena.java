@@ -1,7 +1,10 @@
 package nl.kennisnet.arena.formats;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang.StringEscapeUtils;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -9,6 +12,7 @@ import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.ParticipantAnswer;
+import nl.kennisnet.arena.model.Picture;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.services.ParticipantService;
@@ -85,8 +89,15 @@ public class Arena {
 	}
 	
 	private Result buildWebPage(Result result, Positionable positionable, String baseUrl, ArenaDataBean data){
-		result.setWebpage(baseUrl + "item/show/" + data.getQuestId() + "/"
-				+ positionable.getId() + "/" + data.getPlayer() + ".item");
+		if (positionable instanceof Image) {
+			result.setWebpage(baseUrl + "item/show/" + data.getQuestId() + "/"
+					+ positionable.getId() + "/" + data.getPlayer() + ".item");
+		} else if (positionable instanceof Information){
+			result.setWebpage(baseUrl + "item/show/"+ positionable.getId() +".item");
+		}
+		else if (positionable instanceof Image){
+			result.setWebpage(((Image) positionable).getUrl());
+		}
 		return result;
 	}
 
@@ -114,7 +125,7 @@ public class Arena {
 		} else if (positionable instanceof Information){			
 			result.setObjectType(buildInformationImage(baseUrl));			
 		} else if (positionable instanceof Image){
-			result.setObjectType(buildPhotoImage(positionable, baseUrl));
+			result.setObjectType(buildPhotoImage(positionable, baseUrl, data));
 		}
 		return result;
 	}
@@ -139,8 +150,9 @@ public class Arena {
 		return baseUrl + "images/information.png";
 	}
 	
-	private String buildPhotoImage(Positionable positionable, String baseUrl){
-		return baseUrl + "item/photo/"+ positionable.getId();
+	private String buildPhotoImage(Positionable positionable, String baseUrl, ArenaDataBean data){
+		String url = data.getParticipantService().getImageUrl((positionable).getId());
+		return url;
 	}
 	
 }
