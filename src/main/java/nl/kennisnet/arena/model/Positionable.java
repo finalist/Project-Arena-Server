@@ -19,7 +19,6 @@ public class Positionable {
 	private Long id;
 	private String name;
 	private Boolean consumable;
-	private Double contentRadius;
 	
 	@ManyToOne()
 	@Cascade(CascadeType.ALL)
@@ -57,11 +56,5 @@ public class Positionable {
 		this.name = name;
 	}
 	
-	public Double getContentRadius() {
-		return contentRadius;
-	}
 	
-	public void setContentRadius(Double contentRadius) {
-		this.contentRadius = contentRadius;
-	}	
 }

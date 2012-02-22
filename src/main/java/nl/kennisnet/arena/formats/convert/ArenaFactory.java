@@ -8,20 +8,26 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 
 import nl.kennisnet.arena.formats.Arena;
+import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Progress;
 import nl.kennisnet.arena.model.Quest;
+import nl.kennisnet.arena.services.ParticipantService;
 import nl.kennisnet.arena.utils.ArenaDataBean;
 import nl.kennisnet.arena.utils.ConvertorConfiguration;
+import nl.kennisnet.arena.utils.UtilityHelper;
 
 public class ArenaFactory {
 
 	public static Arena getInstance(ArenaDataBean arenaDataBean,
-			final Quest quest, final CompositeConfiguration configuration) {
+			final Quest quest, final CompositeConfiguration configuration, final String player,  long participationId, 
+			ParticipantService participantService) {
 		final ConvertorConfiguration config = new ConvertorConfiguration(arenaDataBean, configuration, quest);
+		String baseUrl = UtilityHelper.getBaseUrl(configuration);
 		Arena arena = new Arena();
 		List<Positionable> positionables = quest.getVisiblePositionables(arenaDataBean.getLocation());
-		arena.addPositionResults(positionables);
+		
+		arena.addPositionResults(positionables, baseUrl, quest.getId(), player, participationId, participantService);
 		arena.checkStats();
 		return arena;
 	}

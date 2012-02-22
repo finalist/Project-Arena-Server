@@ -10,6 +10,8 @@ public class Result {
 	private float distance;
 	private int hasDetailPage;
 	private String webpage;
+	private String objectType;
+	private String objectUrl;
 	
 	public long getId() {
 		return id;
@@ -79,11 +81,28 @@ public class Result {
 	public void setWebpage(String webpage) {
 		this.webpage = webpage;
 	}
+	
+	public String getObjectType() {
+		return objectType;
+	}
+	
+	public void setObjectType(String objectType) {
+		this.objectType = objectType;
+	}
+	
+	public void setObjectUrl(String objectUrl) {
+		this.objectUrl = objectUrl;
+	}
+	public String getObjectUrl() {
+		return objectUrl;
+	}
 		
 	@Override
 	public String toString() {
 		String value = "{   "+
+			surroundStringWithQuotations("object_type") + ":" +  surroundStringWithQuotations(getObjectType()) +","+
 			surroundStringWithQuotations("id") + ":" +  surroundStringWithQuotations(getId()) +","+
+			surroundStringWithQuotations("object_url") + ":" +  surroundStringWithQuotations(getObjectUrl()) +","+
 			surroundStringWithQuotations("lat") + ":" +  surroundStringWithQuotations(getLat()) +","+
 			surroundStringWithQuotations("lng") + ":" +  surroundStringWithQuotations(getLng()) +","+
 			surroundStringWithQuotations("elevation") + ":" +  surroundStringWithQuotations(getElevation()) +","+

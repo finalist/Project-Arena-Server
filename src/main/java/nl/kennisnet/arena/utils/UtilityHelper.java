@@ -22,7 +22,7 @@ public final class UtilityHelper {
 	 * @return
 	 */
 	public static String url(final Quest quest, final String name, CompositeConfiguration configuration) {
-		return String.format("%smixare/%d.gddf?player=%s", getBaseUrl(configuration), quest.getId(), name);
+		return String.format("%smixare/%d.mix?player=%s", getBaseUrl(configuration), quest.getId(), name);
 	}
 
 	public static String getBaseUrl(CompositeConfiguration configuration) {

@@ -132,7 +132,7 @@ public class QuestService extends HibernateAwareService {
 
    private String createGamarayUrl(Quest quest) {
       String baseUrl = UtilityHelper.getBaseUrl(configuration);
-      String url = String.format("%smixare/%d.gddf", baseUrl, quest.getId());
+      String url = String.format("%smixare/%d.mix", baseUrl, quest.getId());
       return url;
    }
 

@@ -81,5 +81,17 @@ public class Question extends Positionable implements DomainObject {
    public Integer getCorrectAnswer() {
       return correctAnswer;
    }
+   
+   @Override
+   public boolean equals(Object obj) {
+	   if(obj instanceof Question){
+		   Question q = (Question)obj;
+		   if(q.getId().equals(this.getId())){
+			   return true;
+		   }
+	   }
+	   return super.equals(obj);
+   }
+   
 
 }

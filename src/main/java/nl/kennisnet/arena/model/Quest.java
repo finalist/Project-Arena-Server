@@ -23,7 +23,7 @@ import com.vividsolutions.jts.geom.Polygon;
 @Entity
 public class Quest implements DomainObject {
 	
-   private static final double HOTZONE_RADIUS = 60.0; 
+   private static final double HOTZONE_RADIUS = 500.0; 
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -112,7 +112,6 @@ public class Quest implements DomainObject {
          Point point = positionable.getLocation().getPoint();
 
          double dist = GeomUtil.calculateDistanceInMeters(point, selectedPoint);
-         System.out.println(dist);
          if (dist <= HOTZONE_RADIUS) {
             filteredPositionables.add(positionable);
          }

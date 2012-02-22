@@ -7,14 +7,14 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd
 				http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.0.xsd">
-	
-	<context:component-scan base-package="nl.kennisnet.arena.web.gamaray" />
+
+	<context:component-scan base-package="nl.kennisnet.arena.web.mixare" />
 
 	<bean
 		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 		<property name="mediaTypes">
 			<map>
-				<entry key="gddf" value="application/gamaray-gddf" />
+				<entry key="mix" value="application/mixare-json" />
 			</map>
 		</property>
 		<property name="order" value="0" />
@@ -25,8 +25,7 @@
 		</property>
 	</bean>
 
-	<bean id="gamaray"
-		class="nl.kennisnet.arena.view.MarshallingView">
+	<bean id="gamaray" class="nl.kennisnet.arena.view.MarshallingView">
 		<property name="marshaller" ref="marshaller" />
 	</bean>
 

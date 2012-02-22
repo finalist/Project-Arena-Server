@@ -587,3 +587,28 @@ img {
 	padding-left: 4px;
 	padding-right: 4px;
 }
+
+.question {
+	margin: 20 auto;	
+}
+
+.answer {
+	max-width: 80%;
+	margin: 0 auto;
+}
+
+.answer form table{
+	margin: 0 auto;
+}
+
+.answer form table tr{
+	height: 30px;
+}
+
+.chooseAnswer{
+	width: 50px;
+}
+
+.questionResult{
+	margin: 0 auto;
+}
