@@ -3,6 +3,8 @@ package nl.kennisnet.arena.formats;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.annotations.SerializedName;
+
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Participant;
@@ -10,16 +12,22 @@ import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.services.ParticipantService;
+import nl.kennisnet.arena.utils.ArenaDataBean;
 import nl.kennisnet.arena.utils.UtilityHelper;
 
 public class Arena {
 
+	@SerializedName("stats")
 	private String stats;
 
+	@SerializedName("num_results")
+	private int numResults = 0;
+	
 	private enum STATS {
 		OK, NO_OBJECTS
 	}
-
+	
+	@SerializedName("results")
 	private List<Result> results = new ArrayList<Result>();
 
 	public String getStats() {
@@ -49,85 +57,90 @@ public class Arena {
 	public void addResult(Result result) {
 		results.add(result);
 	}
-
-	public void addPositionResults(List<Positionable> positionables, String baseUrl, long questId,
-			String player, long participationId,  ParticipantService participantService) {
-		
-		for (Positionable positionable : positionables) {
-			Result result = new Result();
-			result.setId(positionable.getId());
-			result.setLat((float) positionable.getLocation().getPoint().getY());
-			result.setLng((float) positionable.getLocation().getPoint().getX());
-			result.setTitle(positionable.getName());
-			result.setHasDetailPage(true);
-			result.setWebpage(baseUrl + "item/show/" + questId + "/"
-					+ positionable.getId() + "/" + player
-					+ ".item");
-			result.setObjectType(getPositionableType(positionable));
-			buildQuestionImage(baseUrl, positionable, result,
-					participationId, participantService);
-			results.add(result);
-		}
-		
-	}
-
-	private String getPositionableType(Positionable positionable) {
-		if (positionable instanceof Image) {
-			return "image";
-		} else if (positionable instanceof Information) {
-			return "information";
-		} else if (positionable instanceof Question) {
-			return "question";
-		}
-		return "";
-	}
 	
-	private void buildQuestionImage(String baseUrl, Positionable positionable, Result result, long participationId, ParticipantService participantService) {
-		if (positionable instanceof Question) {
-			ParticipantAnswer participantAnswer = participantService.getParticipationAnswer(participationId, (Question)positionable);
-			String objectUrl = "";
-			if(participantAnswer == null){
-				objectUrl = baseUrl + "images/blue-question.png";
-			}
-			if(participantAnswer != null){
-				if(participantAnswer.getAnswer().equals(((Question)positionable).getCorrectAnswer())){
-					objectUrl = baseUrl + "images/green-question.png";
-				}
-				else{
-					objectUrl = baseUrl + "images/red-question.png";
-				}				
-			}
-			result.setObjectUrl(objectUrl);
-		}
-		return;
-	}
-
 	public int getNumResults() {
 		return results.size();
 	}
 
-	@Override
-	public String toString() {
-		String value = "{   " + surroundStringWithQuotations("stats") + ":"
-				+ surroundStringWithQuotations(getStats()) + ","
-				+ surroundStringWithQuotations("num_results") + ":"
-				+ surroundStringWithQuotations(getNumResults()) + ",";
+	public void addPositionResults(List<Positionable> positionables,
+			String baseUrl, ArenaDataBean data) {
 
-		value += surroundStringWithQuotations("results") + ": [";
-		for (Result result : results) {
-			value += result.toString() + ",";
+		for (Positionable positionable : positionables) {
+			Result result = new Result();
+			result = buildResultData(result, positionable);
+			result = buildWebPage(result, positionable, baseUrl, data);
+			result = buildPositionableType(result, positionable);
+			result = buildObjectImage(result, positionable, baseUrl, data);
+			results.add(result);
 		}
-		// remove the last comma
-		value = value.substring(0, value.length() - 1);
-		value += "] }";
-		return value;
+	}
+	
+	private Result buildResultData(Result result, Positionable positionable){
+		result.setId(positionable.getId());
+		result.setLat((float) positionable.getLocation().getPoint().getY());
+		result.setLng((float) positionable.getLocation().getPoint().getX());
+		result.setTitle(positionable.getName());
+		result.setHasDetailPage(true);		
+		return result;
+	}
+	
+	private Result buildWebPage(Result result, Positionable positionable, String baseUrl, ArenaDataBean data){
+		result.setWebpage(baseUrl + "item/show/" + data.getQuestId() + "/"
+				+ positionable.getId() + "/" + data.getPlayer() + ".item");
+		return result;
 	}
 
-	private String surroundStringWithQuotations(String value) {
-		return "\"" + value + "\"";
+	private Result buildPositionableType(Result result, Positionable positionable) {
+		if (positionable instanceof Image) {
+			result.setObjectType("image");
+		} else if (positionable instanceof Information) {
+			result.setObjectType("information");
+		} else if (positionable instanceof Question) {
+			result.setObjectType("question");
+		}
+		return result;
 	}
 
-	private String surroundStringWithQuotations(int value) {
-		return "\"" + value + "\"";
+	private Result buildObjectImage(Result result, Positionable positionable,
+								  String baseUrl, ArenaDataBean data) {
+		if (positionable instanceof Question) {
+			
+			ParticipantAnswer participantAnswer = data.getParticipantService()
+									.getParticipationAnswer(data.getParticipationId(),
+									(Question) positionable);			
+			
+			result.setObjectUrl(buildQuestionImage(positionable, participantAnswer, baseUrl));
+		
+		} else if (positionable instanceof Information){			
+			result.setObjectType(buildInformationImage(baseUrl));			
+		} else if (positionable instanceof Image){
+			result.setObjectType(buildPhotoImage(positionable, baseUrl));
+		}
+		return result;
 	}
+	
+	private String buildQuestionImage(Positionable positionable, ParticipantAnswer participantAnswer, String baseUrl){
+		String objectUrl = "";
+		if (participantAnswer == null) {
+			objectUrl = baseUrl + "images/blue-question.png";
+		}
+		if (participantAnswer != null) {
+			if (participantAnswer.getAnswer().equals(
+					((Question) positionable).getCorrectAnswer())) {
+				objectUrl = baseUrl + "images/green-question.png";
+			} else {
+				objectUrl = baseUrl + "images/red-question.png";
+			}
+		}
+		return objectUrl;
+	}
+	
+	private String buildInformationImage(String baseUrl){
+		return baseUrl + "images/information.png";
+	}
+	
+	private String buildPhotoImage(Positionable positionable, String baseUrl){
+		return baseUrl + "item/photo/"+ positionable.getId();
+	}
+	
 }

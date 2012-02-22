@@ -14,6 +14,7 @@ import nl.kennisnet.arena.formats.convert.DimensionFactory;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Progress;
 import nl.kennisnet.arena.model.Quest;
+import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.services.ParticipantService;
 import nl.kennisnet.arena.services.QuestService;
 import nl.kennisnet.arena.services.TransactionalCallback;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.vividsolutions.jts.geom.Point;
 
 @Controller
@@ -63,25 +65,29 @@ public class ArenaController {
 	@RequestMapping(value = "/{questId}", method = RequestMethod.GET, params = {"player", "lat", "lng"}) @ResponseBody
 	public String mixareCallback(@PathVariable Long questId, @RequestParam("player") final String player,
 								@RequestParam("lat") final float latitude, @RequestParam("lng") final float longitude){
-		final ArenaDataBean data = new ArenaDataBean();
-		data.setPlayer(player);
-		data.setLat(latitude);
-		data.setLon(longitude);
-		
-		final long participantId = participantService.getParticipantId(data.getPlayer());
+			
+		final long participantId = participantService.getParticipantId(player);
 		final Quest quest = questService.getQuest(questId);
 		final long participationId = questService.participateInQuest(participantId, quest);
 
-		participantService.addParticipationLog(participationId, new Date().getTime(), "player: "+ player + " on lat: "+ latitude+ " and lng "+ longitude
-		, GeomUtil.createJTSPoint(latitude, longitude));
+		final ArenaDataBean data = new ArenaDataBean(questId, player, latitude, longitude, participantId, quest, null, participationId);
+		data.setParticipantService(participantService);
+
+		String pLog = "player: "+ player + " on lat: "+ latitude+ " and lng "+ longitude;
+		participantService.addParticipationLog(participationId, new Date().getTime(), pLog
+		, GeomUtil.createJTSPoint(latitude, longitude));		
 		
-		
-		log.debug("default get: [quest=" + questId + ",player=" + player + "]");
-		
-		final Arena arena = ArenaFactory.getInstance(data, quest, configuration, player, participationId, participantService);
+		log.debug("default get: [quest=" + questId + ",player=" + player + "]");		
+		try{
+		final Arena arena = ArenaFactory.getInstance(data, configuration);
 		
 		log.debug("response model: " + arena);
-		return arena.toString();		
+		Gson gson = new Gson();
+		return gson.toJson(arena);		
+		}catch(NullPointerException ne){ //if quest is unknown:
+			ne.printStackTrace();
+			return "error, quest not found";
+		}
 	}
 	
 	/**

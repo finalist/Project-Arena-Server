@@ -19,16 +19,17 @@ import nl.kennisnet.arena.utils.UtilityHelper;
 
 public class ArenaFactory {
 
-	public static Arena getInstance(ArenaDataBean arenaDataBean,
-			final Quest quest, final CompositeConfiguration configuration, final String player,  long participationId, 
-			ParticipantService participantService) {
-		final ConvertorConfiguration config = new ConvertorConfiguration(arenaDataBean, configuration, quest);
-		String baseUrl = UtilityHelper.getBaseUrl(configuration);
-		Arena arena = new Arena();
-		List<Positionable> positionables = quest.getVisiblePositionables(arenaDataBean.getLocation());
+	public static Arena getInstance(final ArenaDataBean data, final CompositeConfiguration configuration) {
 		
-		arena.addPositionResults(positionables, baseUrl, quest.getId(), player, participationId, participantService);
+		final ConvertorConfiguration config = new ConvertorConfiguration(data, configuration, data.getQuest());
+		String baseUrl = UtilityHelper.getBaseUrl(configuration);
+		
+		Arena arena = new Arena();
+		List<Positionable> positionables = data.getQuest().getPositionablesForRadar(data.getLocation());
+		
+		arena.addPositionResults(positionables, baseUrl, data);
 		arena.checkStats();
+		
 		return arena;
 	}
 

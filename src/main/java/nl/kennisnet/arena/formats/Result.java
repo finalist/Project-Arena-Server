@@ -1,16 +1,30 @@
 package nl.kennisnet.arena.formats;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Result {
 
 	private long id;
+
 	private float lat;
+
 	private float lng;
+
 	private int elevation;
+
 	private String title;
+
 	private float distance;
+	
+	@SerializedName("has_detail_page")
 	private int hasDetailPage;
+	
 	private String webpage;
+	
+	@SerializedName("object_type")
 	private String objectType;
+	
+	@SerializedName("object_url")
 	private String objectUrl;
 	
 	public long getId() {
@@ -95,38 +109,5 @@ public class Result {
 	}
 	public String getObjectUrl() {
 		return objectUrl;
-	}
-		
-	@Override
-	public String toString() {
-		String value = "{   "+
-			surroundStringWithQuotations("object_type") + ":" +  surroundStringWithQuotations(getObjectType()) +","+
-			surroundStringWithQuotations("id") + ":" +  surroundStringWithQuotations(getId()) +","+
-			surroundStringWithQuotations("object_url") + ":" +  surroundStringWithQuotations(getObjectUrl()) +","+
-			surroundStringWithQuotations("lat") + ":" +  surroundStringWithQuotations(getLat()) +","+
-			surroundStringWithQuotations("lng") + ":" +  surroundStringWithQuotations(getLng()) +","+
-			surroundStringWithQuotations("elevation") + ":" +  surroundStringWithQuotations(getElevation()) +","+
-			surroundStringWithQuotations("title") + ":" +  surroundStringWithQuotations(getTitle()) +","+
-			surroundStringWithQuotations("distance") + ":" +  surroundStringWithQuotations(getDistance()) +","+
-			surroundStringWithQuotations("has_detail_page") + ":" +  surroundStringWithQuotations(isHasDetailPage()) +","+
-			surroundStringWithQuotations("webpage") + ":" +  surroundStringWithQuotations(getWebpage());		
-		value += "}";
-		return value;
-	}
-
-	private String surroundStringWithQuotations(String value){
-		return "\""+ value + "\"";		
-	}
-	
-	private String surroundStringWithQuotations(int value){
-		return "\""+ value + "\"";		
-	}
-	
-	private String surroundStringWithQuotations(long value){
-		return "\""+ value + "\"";		
-	}
-	
-	private String surroundStringWithQuotations(float value){
-		return "\""+ value + "\"";		
 	}
 }

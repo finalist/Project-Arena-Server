@@ -280,12 +280,10 @@
 			<version>4.0.1</version>
 			<scope>compile</scope>
 		</dependency>
-
-		<!-- Jackson JSON Mapper -->
 		<dependency>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<groupId>org.codehaus.jackson</groupId>
-			<version>1.9.2</version>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>1.7.1</version>
 		</dependency>
 
 

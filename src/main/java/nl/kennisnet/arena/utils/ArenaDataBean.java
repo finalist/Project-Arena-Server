@@ -1,5 +1,8 @@
 package nl.kennisnet.arena.utils;
 
+import nl.kennisnet.arena.model.Quest;
+import nl.kennisnet.arena.model.Question;
+import nl.kennisnet.arena.services.ParticipantService;
 import nl.kennisnet.arena.services.factories.GeomUtil;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -10,35 +13,33 @@ public class ArenaDataBean {
 
 	private Long questId;
 	private String player;
-	private String answer;
-	private String event;
-	private String eventSrc;
 	private double lat;
 	private double lon;
-	private int width;
-	private int height;
-	private String uid;
-	private Long time;
-
+	private long participantId;
+	private Quest quest;
+	private Question question;
+	private long participationId;
+	private ParticipantService participantService;
+	
 	public ArenaDataBean() {
 	}
 	
-	public ArenaDataBean(Long questId, String player, String answer,
-			String event, String eventSrc, double lat, double lon, int width,
-			int height, String uid, Long time) {
+	public ArenaDataBean(Long questId, String player, double lat, double lon,
+			long participantId, Quest quest, Question question,
+			long participationId) {
 		super();
 		this.questId = questId;
 		this.player = player;
-		this.answer = answer;
-		this.event = event;
-		this.eventSrc = eventSrc;
 		this.lat = lat;
 		this.lon = lon;
-		this.width = width;
-		this.height = height;
-		this.uid = uid;
-		this.time = time;
+		this.participantId = participantId;
+		this.quest = quest;
+		this.question = question;
+		this.participationId = participationId;
 	}
+
+
+
 
 	public Long getQuestId() {
 		return questId;
@@ -54,30 +55,6 @@ public class ArenaDataBean {
 
 	public void setPlayer(String player) {
 		this.player = player;
-	}
-
-	public String getAnswer() {
-		return answer;
-	}
-
-	public void setAnswer(String answer) {
-		this.answer = answer;
-	}
-
-	public String getEvent() {
-		return event;
-	}
-
-	public void setEvent(String event) {
-		this.event = event;
-	}
-
-	public String getEventSrc() {
-		return eventSrc;
-	}
-
-	public void setEventSrc(String eventSrc) {
-		this.eventSrc = eventSrc;
 	}
 
 	public double getLat() {
@@ -96,38 +73,46 @@ public class ArenaDataBean {
 		this.lon = lon;
 	}
 
-	public int getWidth() {
-		return width;
+	public long getParticipantId() {
+		return participantId;
 	}
 
-	public void setWidth(int width) {
-		this.width = width;
+	public void setParticipantId(long participantId) {
+		this.participantId = participantId;
 	}
 
-	public int getHeight() {
-		return height;
+	public Quest getQuest() {
+		return quest;
 	}
 
-	public void setHeight(int height) {
-		this.height = height;
+	public void setQuest(Quest quest) {
+		this.quest = quest;
 	}
 
-	public String getUid() {
-		return uid;
+	public Question getQuestion() {
+		return question;
 	}
 
-	public void setUid(String uid) {
-		this.uid = uid;
+	public void setQuestion(Question question) {
+		this.question = question;
 	}
 
-	public Long getTime() {
-		return time;
+	public long getParticipationId() {
+		return participationId;
 	}
 
-	public void setTime(Long time) {
-		this.time = time;
+	public void setParticipationId(long participationId) {
+		this.participationId = participationId;
 	}
 	
+	public void setParticipantService(ParticipantService participantService) {
+		this.participantService = participantService;
+	}
+	
+	public ParticipantService getParticipantService() {
+		return participantService;
+	}
+
 	public Point getLocation() {
 		return GeomUtil.createJTSPoint(lat, lon);
 	}
