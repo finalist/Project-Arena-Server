@@ -123,9 +123,9 @@ public class Arena {
 			result.setObjectUrl(buildQuestionImage(positionable, participantAnswer, baseUrl));
 		
 		} else if (positionable instanceof Information){			
-			result.setObjectType(buildInformationImage(baseUrl));			
+			result.setObjectUrl(buildInformationImage(baseUrl));			
 		} else if (positionable instanceof Image){
-			result.setObjectType(buildPhotoImage(positionable, baseUrl, data));
+			result.setObjectUrl(buildPhotoImage(positionable, baseUrl, data));
 		}
 		return result;
 	}
