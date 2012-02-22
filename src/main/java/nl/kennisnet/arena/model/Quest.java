@@ -90,7 +90,6 @@ public class Quest implements DomainObject {
 			Point point = positionable.getLocation().getPoint();
 
 			double dist = GeomUtil.calculateDistanceInMeters(point, selectedPoint);
-			
 			if (dist <= positionable.getLocation().getRadius() && dist>HOTZONE_RADIUS) {
 				filteredPositionables.add(positionable);
 			}
@@ -112,8 +111,9 @@ public class Quest implements DomainObject {
          Point point = positionable.getLocation().getPoint();
 
          double dist = GeomUtil.calculateDistanceInMeters(point, selectedPoint);
-         if (dist <= HOTZONE_RADIUS) {
-            filteredPositionables.add(positionable);
+         //if (dist <= HOTZONE_RADIUS) {
+         if (dist <= positionable.getLocation().getRadius()){
+        	 filteredPositionables.add(positionable);
          }
       }
 

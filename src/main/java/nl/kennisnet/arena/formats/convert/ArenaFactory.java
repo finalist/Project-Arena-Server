@@ -25,7 +25,7 @@ public class ArenaFactory {
 		String baseUrl = UtilityHelper.getBaseUrl(configuration);
 		
 		Arena arena = new Arena();
-		List<Positionable> positionables = data.getQuest().getPositionablesForRadar(data.getLocation());
+		List<Positionable> positionables = data.getQuest().getVisiblePositionables(data.getLocation());
 		
 		arena.addPositionResults(positionables, baseUrl, data);
 		arena.checkStats();
