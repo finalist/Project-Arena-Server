@@ -89,7 +89,7 @@ public class Arena {
 	}
 	
 	private Result buildWebPage(Result result, Positionable positionable, String baseUrl, ArenaDataBean data){
-		if (positionable instanceof Image) {
+		if (positionable instanceof Question) {
 			result.setWebpage(baseUrl + "item/show/" + data.getQuestId() + "/"
 					+ positionable.getId() + "/" + data.getPlayer() + ".item");
 		} else if (positionable instanceof Information){
