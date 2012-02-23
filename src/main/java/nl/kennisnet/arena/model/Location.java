@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.Type;
 
 import com.vividsolutions.jts.geom.Point;
@@ -93,6 +94,22 @@ public class Location {
 		this.alt = alt;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Location){
+			Location location = (Location)obj;
+			if(location.getPoint().equals(this.getPoint())){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(this.getPoint()).toHashCode();
+	}
+	
 	
 	
 }
