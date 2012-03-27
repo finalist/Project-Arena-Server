@@ -136,6 +136,8 @@ public class Arena {
 			objectUrl = baseUrl + "images/blue-question.png";
 		}
 		if (participantAnswer != null) {
+			System.out.println(participantAnswer.getAnswer());
+			System.out.println(((Question) positionable).getCorrectAnswer());
 			if (participantAnswer.getAnswer().equals(
 					((Question) positionable).getCorrectAnswer())) {
 				objectUrl = baseUrl + "images/green-question.png";

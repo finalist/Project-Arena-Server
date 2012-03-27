@@ -10,6 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.Cascade;
 
 @Entity
 public class ParticipantAnswer implements DomainObject {
@@ -66,9 +69,11 @@ public class ParticipantAnswer implements DomainObject {
 	@Embeddable
 	public static class ParticipationAnswerPrimaryKey implements Serializable{
 
+		private static final long serialVersionUID = 1L;
+
 		private long participationtId;
 		
-		@ManyToOne(cascade = CascadeType.ALL)
+		@OneToOne(cascade = CascadeType.ALL, orphanRemoval=true)
 		private Question question;
 
 		

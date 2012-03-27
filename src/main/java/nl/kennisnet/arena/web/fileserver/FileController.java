@@ -70,7 +70,6 @@ public class FileController {
 
    public byte[] send(MultipartFile image) throws Exception {
       HttpClient httpclient = new DefaultHttpClient();
-      String baseUrl = UtilityHelper.getBaseUrl(configuration);
       HttpPost httppost = new HttpPost("http://betelgeuse-filestore.appspot.com/fileupload");
 
       MultipartEntity reqEntity = new MultipartEntity();

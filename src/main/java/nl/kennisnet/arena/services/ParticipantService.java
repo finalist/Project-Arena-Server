@@ -259,7 +259,7 @@ public class ParticipantService extends HibernateAwareService {
 			if(p.getParticipationtId() == (participationId) && p.getQuestion().equals(question)){
 				getSession().evict(participants.get(0));
 				getSession().refresh(participants.get(0));
-				return participants.get(0);
+				return p;
 			}			
 		}		
 		return null;
