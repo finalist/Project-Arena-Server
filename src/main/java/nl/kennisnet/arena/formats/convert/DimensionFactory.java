@@ -1,34 +1,22 @@
 package nl.kennisnet.arena.formats.convert;
 
-import static nl.kennisnet.arena.model.PositionableCollectionHelper.filter;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import nl.kennisnet.arena.client.domain.ActionDTO;
-import nl.kennisnet.arena.client.domain.QuestState;
 import nl.kennisnet.arena.formats.Asset;
 import nl.kennisnet.arena.formats.Dimension;
 import nl.kennisnet.arena.formats.FeatureImg;
 import nl.kennisnet.arena.formats.FeatureTxt;
-import nl.kennisnet.arena.formats.OverlayImg;
 import nl.kennisnet.arena.formats.OverlayTxt;
-import nl.kennisnet.arena.model.Image;
-import nl.kennisnet.arena.model.Information;
-import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Progress;
 import nl.kennisnet.arena.model.Quest;
-import nl.kennisnet.arena.model.Question;
-import nl.kennisnet.arena.utils.ConvertorConfiguration;
 import nl.kennisnet.arena.utils.GamarayDataBean;
 import nl.kennisnet.arena.utils.UtilityHelper;
 
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.commons.configuration.CompositeConfiguration;
 
-import com.google.common.collect.Lists;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 

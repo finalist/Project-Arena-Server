@@ -1,15 +1,15 @@
 package nl.kennisnet.arena.services.factories;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import org.springframework.transaction.annotation.Transactional;
 
 import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Location;
+import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
@@ -76,6 +76,12 @@ public class DomainObjectFactory {
 						if(orriginalPos.equals(positionable)){
 							positionable.setId(orriginalPos.getId());
 						}
+						if(orriginalPos instanceof Question && positionable instanceof Question){
+							List<ParticipantAnswer> originalAnswers = ((Question)orriginalPos).getParticipantAnswers();
+							List<ParticipantAnswer> participantAnswer = new ArrayList<ParticipantAnswer>(originalAnswers.size());
+							Collections.copy(originalAnswers, participantAnswer);
+							((Question)positionable).setParticipantAnswers(participantAnswer);
+						}						
 					}
 					items.add(positionable);
 				}

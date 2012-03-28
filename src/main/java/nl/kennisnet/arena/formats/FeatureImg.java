@@ -1,6 +1,5 @@
 package nl.kennisnet.arena.formats;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 import org.apache.commons.lang.builder.EqualsBuilder;

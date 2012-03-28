@@ -2,8 +2,6 @@ package nl.kennisnet.arena.formats;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class Overlays {

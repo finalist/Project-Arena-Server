@@ -12,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-import org.hibernate.annotations.Cascade;
-
 @Entity
 public class ParticipantAnswer implements DomainObject {
 
@@ -73,9 +71,8 @@ public class ParticipantAnswer implements DomainObject {
 
 		private long participationtId;
 		
-		@OneToOne(cascade = CascadeType.ALL, orphanRemoval=true)
+		@OneToOne(cascade = {CascadeType.ALL}, orphanRemoval=true)
 		private Question question;
-
 		
 		public long getParticipationtId() {
 			return participationtId;

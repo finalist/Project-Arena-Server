@@ -2,20 +2,17 @@ package nl.kennisnet.arena.formats.convert;
 
 import java.util.List;
 
+import nl.kennisnet.arena.formats.Arena;
+import nl.kennisnet.arena.model.Positionable;
+import nl.kennisnet.arena.model.Progress;
+import nl.kennisnet.arena.utils.ArenaDataBean;
+import nl.kennisnet.arena.utils.ConvertorConfiguration;
+import nl.kennisnet.arena.utils.UtilityHelper;
+
 import org.apache.commons.configuration.CompositeConfiguration;
 
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
-
-import nl.kennisnet.arena.formats.Arena;
-import nl.kennisnet.arena.model.Participant;
-import nl.kennisnet.arena.model.Positionable;
-import nl.kennisnet.arena.model.Progress;
-import nl.kennisnet.arena.model.Quest;
-import nl.kennisnet.arena.services.ParticipantService;
-import nl.kennisnet.arena.utils.ArenaDataBean;
-import nl.kennisnet.arena.utils.ConvertorConfiguration;
-import nl.kennisnet.arena.utils.UtilityHelper;
 
 public class ArenaFactory {
 

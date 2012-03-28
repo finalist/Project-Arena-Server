@@ -1,7 +1,5 @@
 package nl.kennisnet.arena.formats;
 
-import javax.xml.bind.annotation.XmlElement;
-
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;

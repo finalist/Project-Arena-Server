@@ -1,7 +1,11 @@
 package nl.kennisnet.arena.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Question extends Positionable implements DomainObject {
@@ -13,6 +17,9 @@ public class Question extends Positionable implements DomainObject {
 	private String answer3;
 	private String answer4;
 	private Integer correctAnswer;
+	
+	@OneToMany(mappedBy="participationAnswerPrimaryKey.question", cascade=CascadeType.ALL)
+	private List<ParticipantAnswer> participantAnswers;
 
 	public Question() {
 
@@ -81,6 +88,18 @@ public class Question extends Positionable implements DomainObject {
 
 	public Integer getCorrectAnswer() {
 		return correctAnswer;
+	}
+	
+	public List<ParticipantAnswer> getParticipantAnswers() {
+		return participantAnswers;
+	}
+	
+	public void setParticipantAnswers(List<ParticipantAnswer> participantAnswers) {
+		this.participantAnswers = participantAnswers;
+	}
+	
+	public void clearParticipantAnswers() {
+		this.participantAnswers.clear();
 	}
 
 	@Override
