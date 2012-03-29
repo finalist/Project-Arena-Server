@@ -1,7 +1,11 @@
 package nl.kennisnet.arena.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Question extends Positionable implements DomainObject {
@@ -14,6 +18,9 @@ public class Question extends Positionable implements DomainObject {
 	private String answer4;
 	private Integer correctAnswer;
 	
+	@OneToMany(mappedBy="participationAnswerPrimaryKey.question", cascade=CascadeType.ALL)
+	private List<ParticipantAnswer> participantAnswers;
+
 	public Question() {
 
 	}
@@ -25,7 +32,8 @@ public class Question extends Positionable implements DomainObject {
 		this.answer2 = answer2;
 	}
 
-	public Question(String text, String answer1, String answer2, String answer3, String answer4) {
+	public Question(String text, String answer1, String answer2,
+			String answer3, String answer4) {
 		super();
 		this.text = text;
 		this.answer1 = answer1;
@@ -74,12 +82,37 @@ public class Question extends Positionable implements DomainObject {
 		this.answer4 = answer4;
 	}
 
-   public void setCorrectAnswer(Integer correctAnswer) {
-      this.correctAnswer = correctAnswer;
-   }
+	public void setCorrectAnswer(Integer correctAnswer) {
+		this.correctAnswer = correctAnswer;
+	}
 
-   public Integer getCorrectAnswer() {
-      return correctAnswer;
-   }
+	public Integer getCorrectAnswer() {
+		return correctAnswer;
+	}
+	
+	public List<ParticipantAnswer> getParticipantAnswers() {
+		return participantAnswers;
+	}
+	
+	public void setParticipantAnswers(List<ParticipantAnswer> participantAnswers) {
+		this.participantAnswers = participantAnswers;
+	}
+	
+	public void clearParticipantAnswers() {
+		this.participantAnswers.clear();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Question) {
+			Question q = (Question) obj;
+			if (this.getId() != null && q.getId() != null) {
+				if (q.getId().equals(this.getId())) {
+					return true;
+				}
+			}
+		}
+		return super.equals(obj);
+	}
 
 }

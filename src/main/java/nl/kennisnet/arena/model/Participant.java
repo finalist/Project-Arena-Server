@@ -74,5 +74,16 @@ public class Participant implements DomainObject {
 		this.participations = participations;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Participant){
+			Participant p = (Participant)obj;
+			if(p.getId().equals(this.getId())){
+				return true;
+			}
+		}
+		return super.equals(obj);
+	}
+	
 	
 }

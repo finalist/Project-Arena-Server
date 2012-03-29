@@ -47,7 +47,7 @@ public class MarshallingView extends AbstractView {
 	/**
 	 * Default content type. Overridable as bean property.
 	 */
-	public static final String DEFAULT_CONTENT_TYPE = "application/gamaray-gddf";
+	public static final String DEFAULT_CONTENT_TYPE = "text/html";
 
 	private Marshaller marshaller;
 

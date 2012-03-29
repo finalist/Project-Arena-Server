@@ -6,7 +6,7 @@ import org.apache.commons.configuration.CompositeConfiguration;
 
 public class ConvertorConfiguration {
 
-	private GamarayDataBean data;
+	private ArenaDataBean data;
 	private CompositeConfiguration configuration;
 	private Quest quest;
 	
@@ -14,7 +14,7 @@ public class ConvertorConfiguration {
 		super();
 	}
 
-	public ConvertorConfiguration(GamarayDataBean data,
+	public ConvertorConfiguration(ArenaDataBean data,
 			CompositeConfiguration configuration, Quest quest) {
 		super();
 		this.data = data;
@@ -22,7 +22,7 @@ public class ConvertorConfiguration {
 		this.quest = quest;
 	}
 
-	public GamarayDataBean getData() {
+	public ArenaDataBean getData() {
 		return data;
 	}
 
@@ -30,7 +30,7 @@ public class ConvertorConfiguration {
 		return configuration;
 	}
 
-	public void setData(GamarayDataBean data) {
+	public void setData(ArenaDataBean data) {
 		this.data = data;
 	}
 

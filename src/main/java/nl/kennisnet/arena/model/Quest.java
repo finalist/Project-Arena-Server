@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +14,7 @@ import javax.persistence.OneToMany;
 
 import nl.kennisnet.arena.services.factories.GeomUtil;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Type;
 
@@ -21,8 +23,8 @@ import com.vividsolutions.jts.geom.Polygon;
 
 @Entity
 public class Quest implements DomainObject {
-	
-   private static final double HOTZONE_RADIUS = 60.0; 
+
+	private static final double HOTZONE_RADIUS = 500.0;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -31,15 +33,14 @@ public class Quest implements DomainObject {
 	@Column(nullable = false)
 	private String emailOwner;
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@IndexColumn(name = "position")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "quest")
 	private List<Positionable> positionables = new ArrayList<Positionable>();
 
 	@Type(type = "org.hibernatespatial.GeometryUserType")
 	private Polygon border;
 
 	public Quest() {
-	   super();
+		super();
 	}
 
 	public Quest(String name) {
@@ -75,10 +76,9 @@ public class Quest implements DomainObject {
 		return positionables;
 	}
 
-	
-	
 	/**
 	 * Return the positiables that are visible on the radar.
+	 * 
 	 * @param selectedPoint
 	 * @return
 	 */
@@ -88,39 +88,40 @@ public class Quest implements DomainObject {
 		for (Positionable positionable : positionables) {
 			Point point = positionable.getLocation().getPoint();
 
-			double dist = GeomUtil.calculateDistanceInMeters(point, selectedPoint);
-			
-			if (dist <= positionable.getLocation().getRadius()&&dist>HOTZONE_RADIUS) {
+			double dist = GeomUtil.calculateDistanceInMeters(point,
+					selectedPoint);
+			if (dist <= positionable.getLocation().getRadius()
+					&& dist > HOTZONE_RADIUS) {
 				filteredPositionables.add(positionable);
 			}
 		}
-		
-		
+
 		return filteredPositionables;
 	}
 
-	  /**
-    * Return the positiables that are visible on the radar.
-    * @param selectedPoint
-    * @return
-    */
-   public List<Positionable> getVisiblePositionables(Point selectedPoint) {
-      List<Positionable> filteredPositionables = new ArrayList<Positionable>();
+	/**
+	 * Return the positiables that are visible on the radar.
+	 * 
+	 * @param selectedPoint
+	 * @return
+	 */
+	public List<Positionable> getVisiblePositionables(Point selectedPoint) {
+		List<Positionable> filteredPositionables = new ArrayList<Positionable>();
 
-      for (Positionable positionable : positionables) {
-         Point point = positionable.getLocation().getPoint();
+		for (Positionable positionable : positionables) {
+			Point point = positionable.getLocation().getPoint();
 
-         double dist = GeomUtil.calculateDistanceInMeters(point, selectedPoint);
-         
-         if (dist <= HOTZONE_RADIUS) {
-            filteredPositionables.add(positionable);
-         }
-      }
+			double dist = GeomUtil.calculateDistanceInMeters(point,
+					selectedPoint);
+			// if (dist <= HOTZONE_RADIUS) {
+			if (dist <= positionable.getLocation().getRadius()) {
+				filteredPositionables.add(positionable);
+			}
+		}
 
-      return filteredPositionables;
-   }
+		return filteredPositionables;
+	}
 
-	
 	public void setPositionables(List<Positionable> positionables) {
 		this.positionables = positionables;
 	}
@@ -131,5 +132,21 @@ public class Quest implements DomainObject {
 
 	public void setBorder(Polygon border) {
 		this.border = border;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Quest) {
+			Quest quest = (Quest) obj;
+			if (quest.getId().equals(this.getId())) {
+				return true;
+			}
+		}
+		return super.equals(obj);
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(getId()).toHashCode();
 	}
 }

@@ -7,7 +7,9 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -23,6 +25,9 @@ public class Positionable {
 	@ManyToOne()
 	@Cascade(CascadeType.ALL)
 	private Location location;
+	
+	@ManyToOne()
+	private Quest quest;
 	
 	public Location getLocation() {
 		return location;
@@ -56,5 +61,35 @@ public class Positionable {
 		this.name = name;
 	}
 	
+	public Quest getQuest() {
+		return quest;
+	}
 	
+	public void setQuest(Quest quest) {
+		this.quest = quest;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Positionable){
+			Positionable positionable = (Positionable)obj;
+			
+			if(positionable.getQuest().equals(this.getQuest()) && 
+			   positionable.getName().equals(this.getName()) &&
+			   positionable.getLocation().equals(this.getLocation())){
+				return true;
+			}		
+			else if(this.getId() != null && positionable.getId() != null){
+				if(this.getId().equals(positionable.getId())){
+					return true;
+				}
+			}
+		}
+		return super.equals(obj);
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(getQuest().getId()).append(getName()).append(getLocation().getPoint()).toHashCode();
+	}
 }

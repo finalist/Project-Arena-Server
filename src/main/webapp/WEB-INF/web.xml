@@ -55,7 +55,12 @@
 
 	<servlet-mapping>
 		<servlet-name>arena</servlet-name>
-		<url-pattern>*.gddf</url-pattern>
+		<url-pattern>*.mix</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>arena</servlet-name>
+		<url-pattern>*.item</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
