@@ -44,7 +44,7 @@ public class DomainObjectFactory {
 		} else if (questItemDTO.getTypeName().equals("Vraag")) {
 			Question question = new Question(questItemDTO.getDescription(),
 					questItemDTO.getOption1(), questItemDTO.getOption2(),
-					questItemDTO.getOption3(), questItemDTO.getOption4());
+					questItemDTO.getOption3(), questItemDTO.getOption4(), questItemDTO.getQuestionType());
 			question.setCorrectAnswer(questItemDTO.getCorrectOption());
 			result = question;
 		} else if (questItemDTO.getTypeName().equals("Foto")) {

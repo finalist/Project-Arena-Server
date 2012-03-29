@@ -16,9 +16,9 @@ public class FormTablePanel extends SimplePanel {
       add(formTable);
    }
 
-   public void addField(String label, Widget field) {
+   public void addField(Label label, Widget field) {
       int row = formTable.getRowCount();
-      formTable.setWidget(row, 0, new Label(label));
+      formTable.setWidget(row, 0, label);
       formTable.setWidget(row, 1, field);
    }
    
@@ -28,15 +28,15 @@ public class FormTablePanel extends SimplePanel {
 
    public static class Element{
       
-      private final String label;
+      private final Label label;
       private final Widget field;
       
       public Element(String label,Widget field){
-         this.label=label;
+         this.label=new Label(label);
          this.field=field;
       }
 
-      public String getLabel() {
+      public Label getLabel() {
          return label;
       }
 

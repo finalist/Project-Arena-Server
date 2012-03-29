@@ -50,6 +50,7 @@ public class DTOFactory {
             result.setOption2(question.getAnswer2());
             result.setOption3(question.getAnswer3());
             result.setOption4(question.getAnswer4());
+            result.setQuestionType(question.getQuestionType());
             result.setName(question.getName());
             result.setCorrectOption(question.getCorrectAnswer());
          } else if (positionable instanceof Image){

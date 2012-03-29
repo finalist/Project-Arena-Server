@@ -250,6 +250,15 @@ public class ParticipantService extends HibernateAwareService {
 		participantAnswer.setQuestion(question);
 		merge(participantAnswer);
 	}
+	
+	public void storeParticipationTextAnswer(long participationId,
+			Question question, String textAnswer){
+		ParticipantAnswer participantAnswer = new ParticipantAnswer();
+		participantAnswer.setTextAnswer(textAnswer);
+		participantAnswer.setParticipationtId(participationId);
+		participantAnswer.setQuestion(question);
+		merge(participantAnswer);
+	}
 
 	public ParticipantAnswer getParticipationAnswer(long participationId,
 			Question question) {

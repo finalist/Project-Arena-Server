@@ -7,15 +7,22 @@ import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
+import nl.kennisnet.arena.client.domain.QuestItemDTO.TYPE;
+
 @Entity
 public class Question extends Positionable implements DomainObject {
 
+	public enum TYPE {
+		OPEN_QUESTION, MULTIPLE_CHOICE
+	}
+	
 	@Lob
 	private String text;
 	private String answer1;
 	private String answer2;
 	private String answer3;
 	private String answer4;
+	private Integer questionType = 0;
 	private Integer correctAnswer;
 	
 	@OneToMany(mappedBy="participationAnswerPrimaryKey.question", cascade=CascadeType.ALL)
@@ -33,13 +40,14 @@ public class Question extends Positionable implements DomainObject {
 	}
 
 	public Question(String text, String answer1, String answer2,
-			String answer3, String answer4) {
+			String answer3, String answer4, int questionType) {
 		super();
 		this.text = text;
 		this.answer1 = answer1;
 		this.answer2 = answer2;
 		this.answer3 = answer3;
 		this.answer4 = answer4;
+		this.questionType = questionType;
 	}
 
 	public String getText() {
@@ -100,6 +108,28 @@ public class Question extends Positionable implements DomainObject {
 	
 	public void clearParticipantAnswers() {
 		this.participantAnswers.clear();
+	}
+	
+	public int getQuestionType() {
+		if(questionType == null){
+			return 0;
+		}
+		return questionType;
+	}
+	
+	public void setQuestionType(int questionType) {
+		this.questionType = questionType;
+	}
+	
+	public TYPE getQuestionTypeAsEnum() {
+		if(questionType == null){
+			return TYPE.MULTIPLE_CHOICE;
+		}
+		switch (questionType) {
+			case 0: return TYPE.MULTIPLE_CHOICE;
+			case 1: return TYPE.OPEN_QUESTION;
+			default: return TYPE.MULTIPLE_CHOICE;
+		}
 	}
 
 	@Override

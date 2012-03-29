@@ -5,11 +5,7 @@ import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -19,6 +15,8 @@ public class ParticipantAnswer implements DomainObject {
 	private ParticipationAnswerPrimaryKey participationAnswerPrimaryKey = new ParticipationAnswerPrimaryKey();
 	
 	private Integer answer;
+	
+	private String textAnswer;
 	
 	public ParticipationAnswerPrimaryKey getParticipationAnswerPrimaryKey() {
 		return participationAnswerPrimaryKey;
@@ -51,6 +49,15 @@ public class ParticipantAnswer implements DomainObject {
 	
 	public Integer getAnswer() {
 		return answer;
+	}
+	
+	public void setTextAnswer(String textAnswer) {
+		answer = 0;
+		this.textAnswer = textAnswer;
+	}
+	
+	public String getTextAnswer() {
+		return textAnswer;
 	}
 
 	@Override

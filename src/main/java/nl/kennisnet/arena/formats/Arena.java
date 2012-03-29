@@ -8,6 +8,7 @@ import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Question;
+import nl.kennisnet.arena.model.Question.TYPE;
 import nl.kennisnet.arena.utils.ArenaDataBean;
 
 import com.google.gson.annotations.SerializedName;
@@ -125,15 +126,26 @@ public class Arena {
 	
 	private String buildQuestionImage(Positionable positionable, ParticipantAnswer participantAnswer, String baseUrl){
 		String objectUrl = "";
-		if (participantAnswer == null) {
-			objectUrl = baseUrl + "images/blue-question.png";
+		Question question = (Question)positionable;
+		if(question.getQuestionTypeAsEnum() == TYPE.MULTIPLE_CHOICE){
+			if (participantAnswer == null) {
+				objectUrl = baseUrl + "images/blue-question.png";
+			}
+			if (participantAnswer != null) {
+				if (participantAnswer.getAnswer().equals(
+						((Question) positionable).getCorrectAnswer())) {
+					objectUrl = baseUrl + "images/green-question.png";
+				} else {
+					objectUrl = baseUrl + "images/red-question.png";
+				}
+			}
 		}
-		if (participantAnswer != null) {
-			if (participantAnswer.getAnswer().equals(
-					((Question) positionable).getCorrectAnswer())) {
+		else if(question.getQuestionTypeAsEnum() == TYPE.OPEN_QUESTION){
+			if (participantAnswer == null) {
+				objectUrl = baseUrl + "images/blue-question.png";
+			}
+			if (participantAnswer != null) {
 				objectUrl = baseUrl + "images/green-question.png";
-			} else {
-				objectUrl = baseUrl + "images/red-question.png";
 			}
 		}
 		return objectUrl;

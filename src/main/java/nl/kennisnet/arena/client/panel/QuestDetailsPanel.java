@@ -15,6 +15,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -50,8 +51,8 @@ public class QuestDetailsPanel extends SidePanel implements RefreshQuestEvent.Ha
       formPanel=new FormTablePanel();
       designerBox=new TextBox();
       questNameBox=new TextBox();
-      formPanel.addField("naam", questNameBox);
-      formPanel.addField("email", designerBox);
+      formPanel.addField(new Label("naam"), questNameBox);
+      formPanel.addField(new Label("email"), designerBox);
    }
    
    private void refreshValues() {
