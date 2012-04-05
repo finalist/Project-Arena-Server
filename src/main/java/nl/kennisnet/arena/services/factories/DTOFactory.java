@@ -72,7 +72,7 @@ public class DTOFactory {
       ActionDTO action= new ActionDTO();
       action.setAction(log.getAction());
       if (log.getAnswer()!=null){
-         action.setAnswer(log.getAnswer().substring(1, 2));
+         action.setAnswer(log.getAnswer());
       }
       action.setPoint(GeomUtil.createSimplePoint(log.getLocation()));
       action.setTeamName(log.getParticipation().getParticipant().getName());

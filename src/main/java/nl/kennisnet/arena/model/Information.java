@@ -6,7 +6,6 @@ import javax.persistence.Lob;
 @Entity
 public class Information extends Positionable implements DomainObject {
 
-	@Lob
 	private String text;
 
 	public Information() {

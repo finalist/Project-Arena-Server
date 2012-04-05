@@ -1,13 +1,16 @@
 package nl.kennisnet.arena.web.mixare;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import nl.kennisnet.arena.model.Information;
+import nl.kennisnet.arena.model.ParticipationLog;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.model.Question.TYPE;
 import nl.kennisnet.arena.services.ParticipantService;
 import nl.kennisnet.arena.services.QuestService;
+import nl.kennisnet.arena.services.factories.GeomUtil;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,7 +131,7 @@ public class ItemController {
 		log.debug("answering: questId = " + questId + ", questionId = "
 				+ questionId + "," + " quest = " + quest + ", question = "
 				+ question + " answer = " + answer);
-
+		
 		ModelAndView mv = null;
 		if(question.getQuestionTypeAsEnum() == TYPE.MULTIPLE_CHOICE){
 			mv = processMultipleChoiceQuestion(participationId, question, Integer.parseInt(answer));
@@ -144,6 +147,8 @@ public class ItemController {
 		participantService.storeParticipationAnswer(participationId, question,
 				answer);
 
+		addAnswerToLog(participationId, question, answer+ "");
+		
 		HashMap<String, String> model = new HashMap<String, String>();
 		if (question.getCorrectAnswer() == answer) {
 			model.put("correct", "correct");
@@ -159,11 +164,15 @@ public class ItemController {
 	private ModelAndView processOpenQuestion(long participationId, Question question, String answer){
 		participantService.storeParticipationTextAnswer(participationId, question,
 				answer);
-
+		addAnswerToLog(participationId, question, answer);
 		HashMap<String, String> model = new HashMap<String, String>();
 		model.put("question_submitted", "Question submitted");
 		return new ModelAndView(new InternalResourceView(
 				"../../../../question-result.jsp"), model);
 	}	
-
+	
+	private void addAnswerToLog(long participationId, Question question, String answer){
+		participantService.addParticipationLogAnswer(participationId, new Date().getTime(), "Vraag", null, question, " "+answer);
+	}
+	
 }

@@ -22,10 +22,12 @@
 
 .FlexTable-Cell {
 	padding: 7px;
+	width: 190px;
 }
 
 .FlexTable-column-label {
 	font-weight: bold;
+	text-align: center;
 }
 
 .FlexTable-row-label {
@@ -615,4 +617,9 @@ img {
 
 .information{
 	margin: 10 auto;	
+}
+
+.question-view{
+	font-weight: bold;
+	text-decoration: underline;
 }

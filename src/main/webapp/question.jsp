@@ -49,7 +49,7 @@
 						<c:if test="${answer == 'true'}">
 							<tr>
 								<td>
-									<textarea rows="2" cols="50" name="answer"></textarea>
+									<textarea rows="2" cols="40" name="answer"></textarea>
 								</td>
 							</tr>
 						</c:if>

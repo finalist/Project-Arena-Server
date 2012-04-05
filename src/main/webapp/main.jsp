@@ -23,8 +23,22 @@
 <!--                                           -->
 <title>ARena</title>
 <script
-	src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true&amp;key=<c:out value='${googleMapsAPIkey}'/>"
+	src="https://maps.googleapis.com/maps/api/js?sensor=true&key=<c:out value='${googleMapsAPIkey}'/>"
 	type="text/javascript"></script>
+<script type="text/javascript">
+      var map;
+      function initialize() {
+        var myOptions = {
+          zoom: 8,
+          center: new google.maps.LatLng(-34.397, 150.644),
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById('map_canvas'),
+            myOptions);
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
 
 <!--                                           -->
 <!-- This script loads your compiled module.   -->

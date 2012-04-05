@@ -78,5 +78,4 @@ public class Participation implements DomainObject {
 		this.participationLogs = participationLogs;
 	}
 	
-	
 }

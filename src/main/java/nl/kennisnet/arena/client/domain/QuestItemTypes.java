@@ -3,8 +3,8 @@ package nl.kennisnet.arena.client.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.maps.client.geom.Point;
-import com.google.gwt.maps.client.overlay.Icon;
+import com.google.maps.gwt.client.MarkerImage;
+import com.google.maps.gwt.client.Point;
 
 public class QuestItemTypes {
 
@@ -24,9 +24,9 @@ public class QuestItemTypes {
       types.add(new QuestItemType(QUEST_TYPE_QUESTION, "question.png", "00a700"));
    }
 
-   private static Icon createIcon(String imageURL) {
-      Icon result = Icon.newInstance(imageURL);
-      result.setIconAnchor(Point.newInstance(16, 35));
+   private static MarkerImage createIcon(String imageURL) {
+	  MarkerImage result = MarkerImage.create(imageURL);
+      result.setAnchor(Point.create(16, 35));
       return result;
    }
 
@@ -38,7 +38,7 @@ public class QuestItemTypes {
       return result;
    }
 
-   public static Icon getIcon(String typeName) {
+   public static MarkerImage getIcon(String typeName) {
       return getType(typeName).getIcon();
    }
    
@@ -58,7 +58,7 @@ public class QuestItemTypes {
    private static class QuestItemType {
 
       private final String name;
-      private final Icon icon;
+      private final MarkerImage icon;
       private final String hexColor;
 
       public QuestItemType(String name, String iconUrl, String color) {
@@ -71,7 +71,7 @@ public class QuestItemTypes {
          return name;
       }
 
-      public Icon getIcon() {
+      public MarkerImage getIcon() {
          return icon;
       }
 

@@ -46,7 +46,7 @@ public class ImageQuestItemDialog extends QuestItemDialog {
       Panel panel = new HorizontalPanel();
 
       result.add(panel);
-      imageDisplay = new Image(null, 0, 0, 320, 200);
+      imageDisplay = new Image("", 0, 0, 320, 200);
       result.add(imageDisplay);
       return new FormTablePanel.Element("", result);
    }

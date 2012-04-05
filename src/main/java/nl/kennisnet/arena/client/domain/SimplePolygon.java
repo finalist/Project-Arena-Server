@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.maps.client.geom.LatLng;
-
 public class SimplePolygon implements Serializable{
 
    /**
@@ -20,7 +18,7 @@ public class SimplePolygon implements Serializable{
       super();
    }
    
-   public SimplePolygon(LatLng[] points){
+   public SimplePolygon(com.google.maps.gwt.client.LatLng[] points){
       super();
       if (points!=null&&points.length>0){
          this.points=new ArrayList<SimplePoint>(points.length);

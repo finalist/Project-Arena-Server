@@ -15,34 +15,40 @@ import nl.kennisnet.arena.client.event.TeamFilterEvent;
 import nl.kennisnet.arena.client.util.GeomUtil;
 import nl.kennisnet.arena.client.widget.QuestItemMarker;
 
-import com.google.gwt.maps.client.geom.LatLng;
-import com.google.gwt.maps.client.overlay.Marker;
-import com.google.gwt.maps.client.overlay.MarkerOptions;
-import com.google.gwt.maps.client.overlay.PolyStyleOptions;
-import com.google.gwt.maps.client.overlay.Polygon;
-import com.google.gwt.maps.client.overlay.Polyline;
+import com.google.maps.gwt.client.LatLng;
+import com.google.maps.gwt.client.MVCArray;
+import com.google.maps.gwt.client.Marker;
+import com.google.maps.gwt.client.MarkerOptions;
+import com.google.maps.gwt.client.Polygon;
+import com.google.maps.gwt.client.Polyline;
+import com.google.maps.gwt.client.PolylineOptions;
 
-public class MonitorMapPanel extends AbstractMapPanel implements RefreshQuestLogEvent.Handler, TeamFilterEvent.Handler {
+public class MonitorMapPanel extends AbstractMapPanel implements
+		RefreshQuestLogEvent.Handler, TeamFilterEvent.Handler {
 
-   public MonitorMapPanel() {
-      super();
-      EventBus.get().addHandler(RefreshQuestLogEvent.TYPE, this);
-      EventBus.get().addHandler(TeamFilterEvent.TYPE, this);
-      triggerZoomForTheFirstTime();
-   }
+	public MonitorMapPanel() {
+		super();
+		EventBus.get().addHandler(RefreshQuestLogEvent.TYPE, this);
+		EventBus.get().addHandler(TeamFilterEvent.TYPE, this);
+		triggerZoomForTheFirstTime();
+	}
 
-   protected void refresh() {
-      getMapWidget().clearOverlays();
+	protected void refresh() {
+	  clearMap();
       QuestDTO questDTO = QuestState.getInstance().getState();
       if (questDTO != null && questDTO.getItems() != null) {
          for (QuestItemDTO itemDTO : questDTO.getItems()) {
-            new QuestItemMarker(getMapWidget(), itemDTO, true);
+            QuestItemMarker questItemMarker = new QuestItemMarker(getMapWidget(), itemDTO, true);
+            markerObjects.add(questItemMarker.getMarker());
+            polygonObjects.add(questItemMarker.getPolygon());
          }
       }
 
       if (questDTO.getBorder() != null) {
-         Polygon polygon = new Polygon(GeomUtil.createGWTPolygon(questDTO.getBorder()));
-         getMapWidget().addOverlay(polygon);
+         Polygon polygon = Polygon.create();
+         polygon.setPath(polygonArrayToMvcArray(GeomUtil.createGWTPolygon(questDTO.getBorder())));
+         polygonObjects.add(polygon);
+         polygon.setMap(getMapWidget());
       }
 
       LogDTO log = QuestState.getInstance().getLog();
@@ -53,60 +59,78 @@ public class MonitorMapPanel extends AbstractMapPanel implements RefreshQuestLog
          for (TeamDTO team : teams) {
             if (QuestState.getInstance().isTeamVisible(team.getName())) {
                List<ActionDTO> teamActions = log.getTeamActions(team.getName());
-               Polyline trail = createTeamTrail(teamActions);
+               final Polyline trail = createTeamTrail(teamActions);
                if (trail != null) {
-                  getMapWidget().addOverlay(trail);
-                  trail.setStrokeStyle(getStyleForTeam(team));
-                  getMapWidget().addOverlay(createLastPositionMarker(teamActions));
+            	   trail.setOptions(getStyleForTeam(team));
+            	   createLastPositionMarker(teamActions).setMap(getMapWidget());
+            	   polylineObjects.add(trail);
+            	   trail.setMap(getMapWidget());
                }
             }
          }
       }
    }
 
-   private PolyStyleOptions getStyleForTeam(TeamDTO team) {
-      PolyStyleOptions result = PolyStyleOptions.newInstance(team.getColor(), 2, 1.0);
-      return result;
-   }
+	private PolylineOptions getStyleForTeam(TeamDTO team) {
+		PolylineOptions polylineOptions = PolylineOptions.create();
+		polylineOptions.setStrokeColor(team.getColor());
+		polylineOptions.setStrokeWeight(2);
+		polylineOptions.setStrokeOpacity(1.0);
+		return polylineOptions;
+	}
 
-   private Marker createLastPositionMarker(List<ActionDTO> actionlog) {
-      ActionDTO actionDTO = actionlog.get(actionlog.size() - 1);
-      MarkerOptions options = MarkerOptions.newInstance();
-      options.setDraggable(false);
-      options.setTitle("Laatst bekende locatie team : " + actionDTO.getTeamName());
-      Marker result = new Marker(GeomUtil.createGWTPoint(actionDTO.getPoint()), options);
-      return result;
-   }
+	private Marker createLastPositionMarker(List<ActionDTO> actionlog) {
+		ActionDTO actionDTO = actionlog.get(actionlog.size() - 1);
+		MarkerOptions options = MarkerOptions.create();
+		options.setDraggable(false);
+		options.setTitle("Laatst bekende locatie team : "
+				+ actionDTO.getTeamName());
+		Marker result = Marker.create();
+		result.setPosition(LatLng.create(actionDTO.getPoint().getLatitude(), actionDTO.getPoint().getLongitude()));
+		result.setOptions(options);
+		markerObjects.add(result);
+		return result;
+	}
 
-   private Polyline createTeamTrail(List<ActionDTO> actions) {
-      if (actions != null) {
-         LatLng[] result = new LatLng[actions.size()];
-         for (int i = 0; i < actions.size(); i++) {
-            SimplePoint point = actions.get(i).getPoint();
-            result[i] = GeomUtil.createGWTPoint(point);
-         }
-         return new Polyline(result);
-      }
-      return null;
-   }
+	private Polyline createTeamTrail(List<ActionDTO> actions) {
+		if (actions != null) {
+			LatLng[] result = new LatLng[actions.size()];
+			for (int i = 0; i < actions.size(); i++) {
+				SimplePoint point = actions.get(i).getPoint();
+				result[i] = GeomUtil.createGWTPoint(point);
+			}
+			Polyline polyline = Polyline.create();
+			polyline.setPath(polygonArrayToMvcArray(result));
+			return polyline;
+		}
+		return null;
+	}
 
-   @Override
-   public void onRefreshQuestLog(RefreshQuestLogEvent p) {
-      refresh();
-   }
+	public MVCArray<LatLng> polygonArrayToMvcArray(LatLng[] latlngArray) {
+		MVCArray<LatLng> mvcArray = MVCArray.create();
+		for (LatLng latLng : latlngArray) {
+			mvcArray.push(latLng);
+		}
+		return mvcArray;
+	}
 
-   @Override
-   public void onTeamFilter(TeamFilterEvent p) {
-      refresh();
-   }
-   
-   protected int getViewId() {
-      return QuestState.MONITOR_VIEW;
-   }
-   
-   public void resize(int x, int y) {
-      super.resize(x,y);
-      zoomIfNeeded();
-   }
+	@Override
+	public void onRefreshQuestLog(RefreshQuestLogEvent p) {
+		refresh();
+	}
+
+	@Override
+	public void onTeamFilter(TeamFilterEvent p) {
+		refresh();
+	}
+
+	protected int getViewId() {
+		return QuestState.MONITOR_VIEW;
+	}
+
+	public void resize(int x, int y) {
+		super.resize(x, y);
+		zoomIfNeeded();
+	}
 
 }

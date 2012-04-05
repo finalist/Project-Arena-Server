@@ -38,7 +38,7 @@ public class LogTablePanel extends SimplePanel implements RefreshQuestLogEvent.H
 
    private final static String ORDER_NAME = "name";
    private final static String ORDER_SCORE = "score";
-   
+     
    private ScrollPanel container=new ScrollPanel();
 
    public LogTablePanel() {
@@ -102,7 +102,7 @@ public class LogTablePanel extends SimplePanel implements RefreshQuestLogEvent.H
          for (ActionDTO action : log.getTypeActions("Vraag")) {
             int x = itemIndex.indexOf(action.getPositionableId()) + 1;
             int y = teamIndex.indexOf(action.getTeamName()) + 1;
-            setHTML(result, x, y, action.getAnswer(),"FlexTable-value");
+            setHTML(result, x, y, answerIntToLetter(action.getAnswer()),"FlexTable-value");
          }
       }
       return result;
@@ -286,6 +286,23 @@ public class LogTablePanel extends SimplePanel implements RefreshQuestLogEvent.H
    public void resize(int x, int y) {
       container.setHeight(y + "px");
       container.setWidth(x + "px");
+   }
+   
+   private String answerIntToLetter(String answer){
+	   try{
+		   int q = Integer.parseInt(answer.trim());
+			switch (q) {
+			case 1:	return "A";
+			case 2:	return "B";
+			case 3:	return "C";
+			case 4:	return "D";
+			default:return "";
+			}
+	   }catch (NumberFormatException ne){
+		   return answer;
+	   }catch (IndexOutOfBoundsException ie){
+		   return answer;
+	   }
    }
 
 }

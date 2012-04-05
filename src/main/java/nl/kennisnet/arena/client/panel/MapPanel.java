@@ -16,13 +16,12 @@ import nl.kennisnet.arena.client.event.WallToggleEvent;
 import nl.kennisnet.arena.client.util.GeomUtil;
 import nl.kennisnet.arena.client.widget.QuestItemMarker;
 
-import com.google.gwt.maps.client.event.MapClickHandler;
-import com.google.gwt.maps.client.event.PolygonClickHandler;
-import com.google.gwt.maps.client.geom.LatLng;
-import com.google.gwt.maps.client.geom.LatLngBounds;
-import com.google.gwt.maps.client.overlay.Marker;
-import com.google.gwt.maps.client.overlay.Overlay;
-import com.google.gwt.maps.client.overlay.Polygon;
+import com.google.maps.gwt.client.GoogleMap.ClickHandler;
+import com.google.maps.gwt.client.LatLng;
+import com.google.maps.gwt.client.LatLngBounds;
+import com.google.maps.gwt.client.MVCArray;
+import com.google.maps.gwt.client.MouseEvent;
+import com.google.maps.gwt.client.Polygon;
 
 public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handler, ItemFilterEvent.Handler,
       MoveQuestItemEvent.Handler, ClickPolygonEvent.Handler, UpdateQuestItemEvent.Handler {
@@ -37,19 +36,15 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
       EventBus.get().addHandler(ClickPolygonEvent.TYPE, this);
       EventBus.get().addHandler(UpdateQuestItemEvent.TYPE, this);
 
-      getMapWidget().addMapClickHandler(new MapClickHandler() {
-         public void onClick(MapClickEvent e) {
-            Overlay overlay = e.getOverlay();
-            LatLng point = e.getLatLng();
-            if (overlay == null) {
-               createQuestItem(point);
-            } else if (overlay instanceof Polygon) {
 
-            } else if (overlay instanceof Marker) {
-
-            }
-         }
-      });
+      getMapWidget().addClickListener(new ClickHandler() {
+		
+    	@Override
+		public void handle(MouseEvent event) {
+            LatLng point = event.getLatLng();
+            createQuestItem(point);     
+		}
+	});
    }
 
    private void createQuestItem(LatLng point) {
@@ -62,7 +57,10 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
          itemDTO.setPoint(new SimplePoint(point));
          itemDTO.setRadius(250.0);
 
-         new QuestItemMarker(getMapWidget(), itemDTO, false);
+         QuestItemMarker questItemMarker = new QuestItemMarker(getMapWidget(), itemDTO, false);
+         markerObjects.add(questItemMarker.getMarker());
+         polygonObjects.add(questItemMarker.getPolygon());
+         
          QuestState.getInstance().getState().addItem(itemDTO);
          CreateQuestItemEvent eventQI = new CreateQuestItemEvent();
 
@@ -77,7 +75,7 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
    }
 
    protected void refresh() {
-      getMapWidget().clearOverlays();
+	  clearMap();
       QuestDTO questDTO = QuestState.getInstance().getState();
       if (questDTO!=null){
          if (questDTO.getBorder() != null) {
@@ -87,25 +85,39 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
          if (questDTO != null && questDTO.getItems() != null) {
             for (QuestItemDTO itemDTO : questDTO.getItems()) {
                if (QuestState.getInstance().isTypeVisible(itemDTO.getTypeName())) {
-                  new QuestItemMarker(getMapWidget(), itemDTO, false);
+                  QuestItemMarker questItemMarker = new QuestItemMarker(getMapWidget(), itemDTO, false);
+                  markerObjects.add(questItemMarker.getMarker());
+                  polygonObjects.add(questItemMarker.getPolygon());
                }
             }
          }
    
          if (questDTO.getBorder() != null) {
-            Polygon polygon = new Polygon(GeomUtil.createGWTPolygon(questDTO.getBorder()));
-            polygon.addPolygonClickHandler(new PolygonClickHandler() {
-               @Override
-               public void onClick(PolygonClickEvent event) {
-                  ClickPolygonEvent qi = new ClickPolygonEvent();
-                  qi.setClickPoint(event.getLatLng());
-                  qi.setSender(event.getSender());
-                  EventBus.get().fireEvent(qi);
-               }
-            });
-            getMapWidget().addOverlay(polygon);
+            final Polygon polygon = Polygon.create();
+            polygon.setPath(polygonArrayToMvcArray(GeomUtil.createGWTPolygon(questDTO.getBorder())));
+            polygon.addClickListener(new Polygon.ClickHandler() {
+				            	
+				@Override
+				public void handle(MouseEvent event) {
+					ClickPolygonEvent qi = new ClickPolygonEvent();
+					qi.setClickPoint(event.getLatLng());
+	                //TODO
+					//qi.setSender(event.getSender());
+	                EventBus.get().fireEvent(qi);
+				}
+			});
+            polygon.setMap(getMapWidget());
+            polygonObjects.add(polygon);
          }
       }
+   }
+   
+   public MVCArray<LatLng> polygonArrayToMvcArray(LatLng[] latlngArray){
+	   MVCArray<LatLng> mvcArray = MVCArray.create();
+       for(LatLng latLng: latlngArray){
+    	   mvcArray.push(latLng);	   
+       }
+       return mvcArray;
    }
 
    @Override
@@ -122,7 +134,7 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
    }
 
    private SimplePolygon createWall(QuestDTO questDTO) {
-      LatLngBounds border = LatLngBounds.newInstance();
+      LatLngBounds border = LatLngBounds.create();
       for (QuestItemDTO itemDTO : questDTO.getItems()) {
          border.extend(GeomUtil.createGWTPoint(itemDTO.getPoint()));
       }

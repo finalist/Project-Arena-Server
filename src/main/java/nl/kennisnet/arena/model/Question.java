@@ -16,7 +16,6 @@ public class Question extends Positionable implements DomainObject {
 		OPEN_QUESTION, MULTIPLE_CHOICE
 	}
 	
-	@Lob
 	private String text;
 	private String answer1;
 	private String answer2;

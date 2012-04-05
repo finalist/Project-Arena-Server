@@ -1,15 +1,15 @@
 package nl.kennisnet.arena.client.widget;
 
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import com.google.maps.gwt.client.MarkerImage;
 
-import com.google.gwt.maps.client.overlay.Icon;
+import nl.kennisnet.arena.client.domain.QuestItemDTO;
 
 public class QuestItemToggleButton extends ExtendedToggleButton {
 
    private QuestItemDTO item;
 
-   public QuestItemToggleButton(QuestItemDTO item,Icon icon) {
-      super(item.getName(), null, icon.getImageURL());
+   public QuestItemToggleButton(QuestItemDTO item,MarkerImage icon) {
+      super(item.getName(), null, icon.getUrl());
       this.item = item;
    }
 

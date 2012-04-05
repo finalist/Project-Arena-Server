@@ -3,7 +3,7 @@
 <module rename-to='arenaserver'>
   <!-- Inherit the core Web Toolkit stuff.                        -->
   <inherits name='com.google.gwt.user.User'/>
-  <inherits name="com.google.gwt.maps.GoogleMaps" />
+  <inherits name="com.google.maps.gwt.GoogleMaps" />
   <inherits name="com.google.gwt.i18n.I18N"/>
   
   <!-- Dutch language, independent of country -->

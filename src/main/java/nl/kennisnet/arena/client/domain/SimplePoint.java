@@ -2,7 +2,8 @@ package nl.kennisnet.arena.client.domain;
 
 import java.io.Serializable;
 
-import com.google.gwt.maps.client.geom.LatLng;
+import com.google.maps.gwt.client.LatLng;
+
 
 public class SimplePoint implements Serializable{
    
@@ -28,8 +29,8 @@ public class SimplePoint implements Serializable{
    
    public SimplePoint(LatLng point) {
       super();
-      this.latitude = point.getLatitude();
-      this.longitude = point.getLongitude();
+      this.latitude = point.lat();
+      this.longitude = point.lng();
    }
 
    public Double getLatitude() {

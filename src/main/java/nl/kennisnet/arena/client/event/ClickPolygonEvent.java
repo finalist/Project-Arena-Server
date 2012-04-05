@@ -2,8 +2,8 @@ package nl.kennisnet.arena.client.event;
 
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
-import com.google.gwt.maps.client.geom.LatLng;
-import com.google.gwt.maps.client.overlay.Overlay;
+import com.google.maps.gwt.client.InfoWindow;
+import com.google.maps.gwt.client.LatLng;
 
 public class ClickPolygonEvent extends GwtEvent<ClickPolygonEvent.Handler> {
 
@@ -27,7 +27,7 @@ public class ClickPolygonEvent extends GwtEvent<ClickPolygonEvent.Handler> {
    public static final GwtEvent.Type<ClickPolygonEvent.Handler> TYPE = new GwtEvent.Type<ClickPolygonEvent.Handler>();
 
    private LatLng clickPoint;
-   private Overlay sender;
+   private InfoWindow sender;
    public LatLng getClickPoint() {
       return clickPoint;
    }
@@ -36,11 +36,11 @@ public class ClickPolygonEvent extends GwtEvent<ClickPolygonEvent.Handler> {
       this.clickPoint = clickPoint;
    }
 
-   public Overlay getSender() {
+   public InfoWindow getSender() {
       return sender;
    }
 
-   public void setSender(Overlay sender) {
+   public void setSender(InfoWindow sender) {
       this.sender = sender;
    }
    

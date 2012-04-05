@@ -111,20 +111,13 @@ public class ParticipantService extends HibernateAwareService {
 
 	public ParticipationLog addParticipationLogAnswer(
 			final long participationId, final Long time, final String action,
-			final Point location, final String positionable, final String answer) {
+			Point location, final Question question, final String answer) {
 		Participation participation = get(Participation.class, participationId);
-		Long id = Long.valueOf(answer.substring(3, answer.length()));
 
-		Criteria criteria = getSession().createCriteria(Question.class);
-		criteria.add(Restrictions.eq("id", id));
-		criteria.setMaxResults(1);
-
-		List<Question> questions = criteria.list();
-		Question question = new Question();
-		if (questions.size() > 0) {
-			question = questions.get(0);
+		if(location == null){
+			location = question.getLocation().getPoint();
 		}
-
+		
 		ParticipationLog participationLog = new ParticipationLog(participation,
 				new Date(time), action, location, question, answer);
 		return merge(participationLog);
@@ -168,8 +161,11 @@ public class ParticipantService extends HibernateAwareService {
 				MultiKey teamItemKey = new MultiKey(log.getPositionable()
 						.getId(), log.getParticipation().getParticipant()
 						.getId());
+				try{
 				teamItemAnswers.put(teamItemKey,
 						Integer.valueOf(log.getAnswer().substring(1, 2)));
+				}catch(NumberFormatException ne){
+				}
 			}
 		}
 		return teamItemAnswers;
