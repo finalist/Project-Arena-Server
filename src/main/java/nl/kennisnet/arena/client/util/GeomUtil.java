@@ -3,12 +3,12 @@ package nl.kennisnet.arena.client.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.kennisnet.arena.client.domain.SimplePoint;
+import nl.kennisnet.arena.client.domain.SimplePolygon;
+
 import com.google.maps.gwt.client.LatLng;
 import com.google.maps.gwt.client.LatLngBounds;
 import com.google.maps.gwt.client.geometry.Spherical;
-
-import nl.kennisnet.arena.client.domain.SimplePoint;
-import nl.kennisnet.arena.client.domain.SimplePolygon;
 
 
 public class GeomUtil {

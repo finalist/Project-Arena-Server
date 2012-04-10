@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.maps.gwt.client.GoogleMap;
 import com.google.maps.gwt.client.LatLng;
 import com.google.maps.gwt.client.LatLngBounds;
-import com.google.maps.gwt.client.MVCObject;
 import com.google.maps.gwt.client.MapOptions;
 import com.google.maps.gwt.client.MapTypeId;
 import com.google.maps.gwt.client.Marker;

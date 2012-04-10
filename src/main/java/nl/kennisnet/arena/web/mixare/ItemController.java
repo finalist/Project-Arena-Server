@@ -4,13 +4,11 @@ import java.util.Date;
 import java.util.HashMap;
 
 import nl.kennisnet.arena.model.Information;
-import nl.kennisnet.arena.model.ParticipationLog;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.model.Question.TYPE;
 import nl.kennisnet.arena.services.ParticipantService;
 import nl.kennisnet.arena.services.QuestService;
-import nl.kennisnet.arena.services.factories.GeomUtil;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

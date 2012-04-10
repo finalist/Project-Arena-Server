@@ -4,10 +4,11 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
-import nl.kennisnet.arena.client.domain.QuestItemDTO.TYPE;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 public class Question extends Positionable implements DomainObject {
@@ -24,7 +25,8 @@ public class Question extends Positionable implements DomainObject {
 	private Integer questionType = 0;
 	private Integer correctAnswer;
 	
-	@OneToMany(mappedBy="participationAnswerPrimaryKey.question", cascade=CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(mappedBy="participationAnswerPrimaryKey.question",cascade=CascadeType.ALL)
 	private List<ParticipantAnswer> participantAnswers;
 
 	public Question() {

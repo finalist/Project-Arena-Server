@@ -72,12 +72,12 @@ img {
 	-moz-background-clip: border;
 	-moz-background-inline-policy: continuous;
 	-moz-background-origin: padding;
-	background: #0099ee url(gfx/menu3.gif) 0 100% no-repeat;
+	background: #0099ee url(gfx/menu3.gif) 0 100% repeat-x;
 	margin-bottom: 12px;
 	padding-bottom: 10px;
 	padding-top: 10px;
 	margin: auto;
-	width:404px;
+	width:505px;
 }
 
 #header {
@@ -619,7 +619,78 @@ img {
 	margin: 10 auto;	
 }
 
+.question-container-view{
+	width: 600px;
+	height: 20px;
+	border:1px solid #000;
+	border-top-right-radius:10px;
+	border-top-left-radius:10px;
+	-moz-border-top-right-radius:10px; /* Firefox 3.6 and earlier */	
+	-moz-border-top-left-radius:10px; /* Firefox 3.6 and earlier */	
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.answer-container-view{
+	width: 600px;
+	border:1px solid #000;	
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 20px;
+}
+
 .question-view{
 	font-weight: bold;
-	text-decoration: underline;
+	text-align: center;	
+}
+
+.answer-view{
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.answer{	
+	font-weight: bold;
+}
+
+.answer-page-view{
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.zwart{
+	background-color: #000000;
+}
+.groen{
+	background-color: #00ff00;	
+}
+.rood{
+	background-color: #ff0000;	
+}
+.blauw{
+	background-color: #0000ff;	
+}
+.oranje{
+	background-color: #ffaa00;	
+}
+.geel{
+	background-color: #ffff00;	
+}
+.indigo{
+	background-color: #6f00ff;	
+}
+.violet{
+	background-color: #ee82ee;	
+}
+.azure{
+	background-color: #007fff;
+}
+.bruin{
+	background-color: #6d351a;
+}
+.violet{
+	background-color: #ee82ee;	
+}
+	
 }

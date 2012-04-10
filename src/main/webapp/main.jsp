@@ -23,7 +23,7 @@
 <!--                                           -->
 <title>ARena</title>
 <script
-	src="https://maps.googleapis.com/maps/api/js?sensor=true&key=<c:out value='${googleMapsAPIkey}'/>"
+	src="https://maps.googleapis.com/maps/api/js?sensor=true&key=AIzaSyAznPQJZawn-phM6UTge2tMeUEVQ3B63wI"
 	type="text/javascript"></script>
 <script type="text/javascript">
       var map;

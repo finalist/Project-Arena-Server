@@ -1,8 +1,8 @@
 package nl.kennisnet.arena.client.widget;
 
-import com.google.maps.gwt.client.MarkerImage;
-
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
+
+import com.google.maps.gwt.client.MarkerImage;
 
 public class QuestItemToggleButton extends ExtendedToggleButton {
 

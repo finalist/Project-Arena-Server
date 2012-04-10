@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 import nl.kennisnet.arena.client.domain.ActionDTO;
+import nl.kennisnet.arena.client.domain.AnswerDTO;
+import nl.kennisnet.arena.client.domain.AnswerDTO.AnswerType;
 import nl.kennisnet.arena.client.domain.LogDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.TeamDTO;
@@ -16,6 +18,7 @@ import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.ParticipantAnswer;
+import nl.kennisnet.arena.model.ParticipantAnswer.Result;
 import nl.kennisnet.arena.model.Participation;
 import nl.kennisnet.arena.model.ParticipationLog;
 import nl.kennisnet.arena.model.Positionable;
@@ -242,8 +245,14 @@ public class ParticipantService extends HibernateAwareService {
 			Question question, int answer) {
 		ParticipantAnswer participantAnswer = new ParticipantAnswer();
 		participantAnswer.setAnswer(answer);
-		participantAnswer.setParticipationtId(participationId);
+		Participation participation = get(Participation.class, participationId);
+		participantAnswer.setParticipation(participation);
 		participantAnswer.setQuestion(question);
+		if(answer == question.getCorrectAnswer()){
+			participantAnswer.setResult(Result.CORRECT.name());
+		}else{
+			participantAnswer.setResult(Result.INCORRECT.name());
+		}
 		merge(participantAnswer);
 	}
 	
@@ -251,15 +260,16 @@ public class ParticipantService extends HibernateAwareService {
 			Question question, String textAnswer){
 		ParticipantAnswer participantAnswer = new ParticipantAnswer();
 		participantAnswer.setTextAnswer(textAnswer);
-		participantAnswer.setParticipationtId(participationId);
+		Participation participation = get(Participation.class, participationId);
+		participantAnswer.setParticipation(participation);
 		participantAnswer.setQuestion(question);
+		participantAnswer.setResult(Result.ANSWERED.name());
 		merge(participantAnswer);
 	}
 
 	public ParticipantAnswer getParticipationAnswer(long participationId,
 			Question question) {
-		Criteria criteria = getSession().createCriteria(ParticipantAnswer.class);
-		List<ParticipantAnswer> participants = criteria.list();
+		List<ParticipantAnswer> participants = question.getParticipantAnswers();
 		for (ParticipantAnswer p : participants){
 			if(p.getParticipationtId() == (participationId) && p.getQuestion().equals(question)){
 				getSession().evict(participants.get(0));
@@ -306,6 +316,37 @@ public class ParticipantService extends HibernateAwareService {
 
 		return new LogDTO(actions, teams, items);
 	}
+	
+	public List<AnswerDTO> getAnswerDTO(final long questId){
+		List<AnswerDTO> answerDTOs = new ArrayList<AnswerDTO>();
+		Quest quest = (Quest) getSession().get(Quest.class, questId);
+		for(Positionable positionable : quest.getPositionables()){
+			if(positionable instanceof Question){
+				Question question = (Question)positionable;
+				for(ParticipantAnswer participantAnswer : question.getParticipantAnswers()){
+					AnswerDTO answerDTO = new AnswerDTO();
+					if(question.getQuestionTypeAsEnum() == Question.TYPE.OPEN_QUESTION){
+						answerDTO.setTextAnswer(participantAnswer.getTextAnswer());
+						answerDTO.setAnswerType(AnswerType.TEXT_ANSWER);
+					}
+					else{
+						answerDTO.setAnswer(participantAnswer.getAnswer());		
+						answerDTO.setAnswerType(AnswerType.MULTIPLE_CHOICE);
+					}
+					answerDTO.setPlayerColor(participantAnswer.getParticipation().getParticipant().getHexColor());
+					answerDTO.setPlayerName(participantAnswer.getParticipation().getParticipant().getName());
+					answerDTO.setQuestionName(question.getName());
+					answerDTO.setQuestionDescription(question.getText());
+					answerDTO.setResult(participantAnswer.getResult());
+					answerDTO.setQuestId(questId);
+					answerDTO.setQuestionId(participantAnswer.getQuestion().getId());
+					answerDTO.setParticipationId(participantAnswer.getParticipation().getId());
+					answerDTOs.add(answerDTO);
+				}
+			}
+		}
+		return answerDTOs;
+	}
 
 	public void clearQuestLog(final Long questId) {
 		List<ParticipationLog> log = getParticipationLogs(questId);
@@ -322,5 +363,13 @@ public class ParticipantService extends HibernateAwareService {
 	public Information getInformation(long informationId){
 		Information information = get(Information.class, informationId);
 		return information;
+	}
+
+	public AnswerDTO updateAnswerDto(AnswerDTO answerDto, Quest quest) {
+		ParticipantAnswer participantAnswer = getParticipationAnswer(answerDto.getParticipationId(), 
+				getQuestion(answerDto.getQuestionId(), quest));
+		participantAnswer.setResult(answerDto.getResult());
+		merge(participantAnswer);
+		return answerDto;
 	}
 }

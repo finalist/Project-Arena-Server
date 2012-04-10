@@ -3,7 +3,6 @@ package nl.kennisnet.arena.client.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO.TYPE;
 import nl.kennisnet.arena.client.widget.FormTablePanel;

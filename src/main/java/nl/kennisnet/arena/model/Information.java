@@ -1,7 +1,6 @@
 package nl.kennisnet.arena.model;
 
 import javax.persistence.Entity;
-import javax.persistence.Lob;
 
 @Entity
 public class Information extends Positionable implements DomainObject {

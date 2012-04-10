@@ -30,6 +30,7 @@ public class MenuPanel extends SimplePanel implements
 		if (QuestState.getInstance().getState() != null
 				&& QuestState.getInstance().getState().getId() != null) {
 			menu.addOption(QuestState.MONITOR_VIEW, "Monitor");
+			menu.addOption(QuestState.ANSWER_VIEW, "Antwoorden");
 			menu.addOption(QuestState.SCORE_VIEW, "Scoreboard");
 		}
 

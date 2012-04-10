@@ -10,116 +10,134 @@ import nl.kennisnet.arena.client.event.EventBus;
 import nl.kennisnet.arena.client.event.LogEvent;
 
 public class QuestState {
-   
-   public static final int DESIGNER_VIEW=1;
-   public static final int MONITOR_VIEW=2;
-   public static final int SCORE_VIEW=3;
-   
-   private int currentView=DESIGNER_VIEW;
 
-   private static final QuestState INSTANCE = new QuestState();
-   private QuestDTO state;
-   private Map<String, Integer> typeCounter = new HashMap<String, Integer>();
-   private String selectedQuestType=QuestItemTypes.QUEST_TYPE_STORY;
-   private Set<String> hiddenTypes=new HashSet<String>();
-   private Set<String> hiddenTeams=new HashSet<String>();
-   private LogDTO log;
-   public LogDTO getLog() {
-      return log;
-   }
+	public static final int DESIGNER_VIEW = 1;
+	public static final int MONITOR_VIEW = 2;
+	public static final int ANSWER_VIEW = 3;
+	public static final int SCORE_VIEW = 4;
 
-   public void setLog(LogDTO log) {
-      this.log = log;
-   }
+	private int currentView = DESIGNER_VIEW;
 
+	private static final QuestState INSTANCE = new QuestState();
+	private QuestDTO state;
+	private Map<String, Integer> typeCounter = new HashMap<String, Integer>();
+	private String selectedQuestType = QuestItemTypes.QUEST_TYPE_STORY;
+	private Set<String> hiddenTypes = new HashSet<String>();
+	private Set<String> hiddenTeams = new HashSet<String>();
+	private LogDTO log;
+	private List<AnswerDTO> answers;
 
-   public String getSelectedQuestType() {
-      return selectedQuestType;
-   }
+	public LogDTO getLog() {
+		return log;
+	}
 
-   public void setSelectedQuestType(String selectedQuestType) {
-      this.selectedQuestType = selectedQuestType;
-   }
+	public void setLog(LogDTO log) {
+		this.log = log;
+	}
 
-   // Private constructor prevents instantiation from other classes
-   private QuestState() {
-   }
+	public String getSelectedQuestType() {
+		return selectedQuestType;
+	}
 
-   public static QuestState getInstance() {
-      return INSTANCE;
-   }
+	public void setSelectedQuestType(String selectedQuestType) {
+		this.selectedQuestType = selectedQuestType;
+	}
 
-   public void setState(QuestDTO quest) {
-      this.state = quest;
-   }
+	// Private constructor prevents instantiation from other classes
+	private QuestState() {
+	}
 
-   public QuestDTO getState() {
-      return state;
-   }
+	public static QuestState getInstance() {
+		return INSTANCE;
+	}
 
-   public Integer getNumber(String itemType) {
-      if (typeCounter.get(itemType) == null) {
-         typeCounter.put(itemType, 1);
-      }
-      Integer result = typeCounter.get(itemType);
-      typeCounter.put(itemType, result + 1);
-      return result;
-   }
+	public void setState(QuestDTO quest) {
+		this.state = quest;
+	}
 
-   public void clearActionLog() {
-      log=null;
-   }
+	public QuestDTO getState() {
+		return state;
+	}
 
-   public List<ActionDTO> getActionList(String teamName) {
-      return log.getTeamActions(teamName);
-   }
+	public Integer getNumber(String itemType) {
+		if (typeCounter.get(itemType) == null) {
+			typeCounter.put(itemType, 1);
+		}
+		Integer result = typeCounter.get(itemType);
+		typeCounter.put(itemType, result + 1);
+		return result;
+	}
 
-   public boolean isTeamVisible(String teamName) {
-      boolean result = false;
-      if (hiddenTeams != null) {
-         result = !hiddenTeams.contains(teamName);
-         EventBus.get().fireEvent(new LogEvent("team "+teamName+" is checked against :"+hiddenTeams));
-      }
-      return result;
-   }
+	public void clearActionLog() {
+		log = null;
+	}
 
-   public void toggleTeamVisible(String teamName){
-      if (isTeamVisible(teamName)){
-         hiddenTeams.add(teamName);
-         EventBus.get().fireEvent(new LogEvent("team "+teamName+" is added to hidden teams :"+hiddenTeams));
-      } else {
-         hiddenTeams.remove(teamName);
-         EventBus.get().fireEvent(new LogEvent("team "+teamName+" is removed from hidden teams :"+hiddenTeams));
-      }
-   }
+	public List<ActionDTO> getActionList(String teamName) {
+		return log.getTeamActions(teamName);
+	}
 
-   
-   public boolean isTypeVisible(String typeName) {
-      boolean result = false;
-      result = !hiddenTypes.contains(typeName);
-      EventBus.get().fireEvent(new LogEvent("type "+typeName+" is checked against :"+hiddenTeams));
-      return result;
-   }
+	public boolean isTeamVisible(String teamName) {
+		boolean result = false;
+		if (hiddenTeams != null) {
+			result = !hiddenTeams.contains(teamName);
+			EventBus.get().fireEvent(
+					new LogEvent("team " + teamName + " is checked against :"
+							+ hiddenTeams));
+		}
+		return result;
+	}
 
-   public void toggleTypeVisible(String typeName){
-      if (isTypeVisible(typeName)){
-         hiddenTypes.add(typeName);
-         EventBus.get().fireEvent(new LogEvent("type "+typeName+" is added to hidden types :"+hiddenTypes));
-      } else {
-         hiddenTypes.remove(typeName);
-         EventBus.get().fireEvent(new LogEvent("type "+typeName+" is removed from hidden types :"+hiddenTypes));
-      }
-   }
+	public void toggleTeamVisible(String teamName) {
+		if (isTeamVisible(teamName)) {
+			hiddenTeams.add(teamName);
+			EventBus.get().fireEvent(
+					new LogEvent("team " + teamName
+							+ " is added to hidden teams :" + hiddenTeams));
+		} else {
+			hiddenTeams.remove(teamName);
+			EventBus.get().fireEvent(
+					new LogEvent("team " + teamName
+							+ " is removed from hidden teams :" + hiddenTeams));
+		}
+	}
 
-   public int getCurrentView() {
-      return currentView;
-   }
+	public boolean isTypeVisible(String typeName) {
+		boolean result = false;
+		result = !hiddenTypes.contains(typeName);
+		EventBus.get().fireEvent(
+				new LogEvent("type " + typeName + " is checked against :"
+						+ hiddenTeams));
+		return result;
+	}
 
-   public void setCurrentView(int currentView) {
-      this.currentView = currentView;
-   }
-   
-   
+	public void toggleTypeVisible(String typeName) {
+		if (isTypeVisible(typeName)) {
+			hiddenTypes.add(typeName);
+			EventBus.get().fireEvent(
+					new LogEvent("type " + typeName
+							+ " is added to hidden types :" + hiddenTypes));
+		} else {
+			hiddenTypes.remove(typeName);
+			EventBus.get().fireEvent(
+					new LogEvent("type " + typeName
+							+ " is removed from hidden types :" + hiddenTypes));
+		}
+	}
 
-   
+	public int getCurrentView() {
+		return currentView;
+	}
+
+	public void setCurrentView(int currentView) {
+		this.currentView = currentView;
+	}
+
+	public void setAnswers(List<AnswerDTO> answers) {
+		this.answers = answers;
+	}
+
+	public List<AnswerDTO> getAnswers() {
+		return answers;
+	}
+
 }

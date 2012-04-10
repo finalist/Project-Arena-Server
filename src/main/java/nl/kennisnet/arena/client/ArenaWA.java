@@ -1,5 +1,8 @@
 package nl.kennisnet.arena.client;
 
+import java.util.List;
+
+import nl.kennisnet.arena.client.domain.AnswerDTO;
 import nl.kennisnet.arena.client.domain.LogDTO;
 import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
@@ -7,6 +10,7 @@ import nl.kennisnet.arena.client.event.EventBus;
 import nl.kennisnet.arena.client.event.RefreshQuestEvent;
 import nl.kennisnet.arena.client.event.RefreshQuestLogEvent;
 import nl.kennisnet.arena.client.event.ScreenSwitchEvent;
+import nl.kennisnet.arena.client.panel.AnswerCheckPanel;
 import nl.kennisnet.arena.client.panel.HeaderPanel;
 import nl.kennisnet.arena.client.panel.LogTablePanel;
 import nl.kennisnet.arena.client.panel.ResizablePanel;
@@ -32,6 +36,7 @@ public class ArenaWA implements EntryPoint, ScreenSwitchEvent.Handler, RefreshQu
    private SimplePanel contentView;
    private ArenaDesigner designerPanel = new ArenaDesigner();
    private ArenaMonitor monitorPanel;
+   private Panel answerCheckPanel;
    private Panel scorePanel;
    private HeaderPanel headerPanel;
    private Timer logRefreshTrigger;
@@ -73,6 +78,10 @@ public class ArenaWA implements EntryPoint, ScreenSwitchEvent.Handler, RefreshQu
          contentView.add(getMonitorPanel());
          trackerUrl = "Monitor";
          break;
+      case QuestState.ANSWER_VIEW:
+          contentView.add(getAnswerCheckPanel());
+          trackerUrl = "Antwoorden";
+          break;
       case QuestState.SCORE_VIEW:
          contentView.add(getScorePanel());
          trackerUrl = "Score";
@@ -108,6 +117,7 @@ public class ArenaWA implements EntryPoint, ScreenSwitchEvent.Handler, RefreshQu
                   QuestState.getInstance().setState(arg0);
                   EventBus.get().fireEvent(new RefreshQuestEvent());
                   refreshActionLog();
+                  refreshAnswers();
                   resize();
                   designerPanel.zoomMap();
                }
@@ -122,7 +132,27 @@ public class ArenaWA implements EntryPoint, ScreenSwitchEvent.Handler, RefreshQu
             com.google.gwt.user.client.Window.alert("error: " + e.getMessage());
          }
       }
+   }
+   
+   private void refreshAnswers(){
+	   final QuestDTO quest = QuestState.getInstance().getState();
+	   if (quest != null && quest.getId() != null) {
+		   GWTQuestServiceAsync questService = (GWTQuestServiceAsync) GWT.create(GWTQuestService.class);
+		   try {
+	            questService.getAnswer(quest.getId(), new AsyncCallback<List<AnswerDTO>>() {
+	            	@Override
+	                public void onFailure(Throwable arg0) {
+	                   Window.alert("Het laden van de antwoorden is mislukt: " + arg0.getLocalizedMessage());
+	                }
 
+					@Override
+					public void onSuccess(List<AnswerDTO> arg0) {
+						QuestState.getInstance().setAnswers(arg0);
+					}
+	            });	      
+	       } catch (Exception e) {
+	       }	
+	   }
    }
 
    private void refreshActionLog() {
@@ -158,6 +188,7 @@ public class ArenaWA implements EntryPoint, ScreenSwitchEvent.Handler, RefreshQu
             @Override
             public void run() {
                refreshActionLog();
+               refreshAnswers();
             }
 
          };
@@ -170,6 +201,13 @@ public class ArenaWA implements EntryPoint, ScreenSwitchEvent.Handler, RefreshQu
          monitorPanel = new ArenaMonitor();
       }
       return monitorPanel;
+   }
+
+   public Panel getAnswerCheckPanel() {
+      if (answerCheckPanel == null) {
+    	  answerCheckPanel = new AnswerCheckPanel();
+      }
+      return answerCheckPanel;
    }
 
    public Panel getScorePanel() {

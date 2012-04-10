@@ -18,6 +18,15 @@ public class ParticipantAnswer implements DomainObject {
 	
 	private String textAnswer;
 	
+	public enum Result{
+		CORRECT,
+		INCORRECT,
+		ANSWERED,
+		UNANSWERED
+	}
+	
+	private String result = Result.UNANSWERED.name();
+	
 	public ParticipationAnswerPrimaryKey getParticipationAnswerPrimaryKey() {
 		return participationAnswerPrimaryKey;
 	}
@@ -28,12 +37,17 @@ public class ParticipantAnswer implements DomainObject {
 	}
 	
 	public long getParticipationtId() {
-		return participationAnswerPrimaryKey.participationtId;
+		return participationAnswerPrimaryKey.getParticipationtId();
 	}
 	
-	public void setParticipationtId(long participationtId) {
-		participationAnswerPrimaryKey.participationtId = participationtId;
+	public Participation getParticipation() {
+		return participationAnswerPrimaryKey.participation;
 	}
+	
+	public void setParticipation(Participation participation) {
+		participationAnswerPrimaryKey.participation = participation;
+	}
+	
 	
 	public Question getQuestion() {
 		return participationAnswerPrimaryKey.question;
@@ -59,6 +73,14 @@ public class ParticipantAnswer implements DomainObject {
 	public String getTextAnswer() {
 		return textAnswer;
 	}
+	
+	public void setResult(String result) {
+		this.result = result;
+	}
+	
+	public String getResult() {
+		return result;
+	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -76,17 +98,23 @@ public class ParticipantAnswer implements DomainObject {
 
 		private static final long serialVersionUID = 1L;
 
-		private long participationtId;
+		@OneToOne(cascade = {CascadeType.ALL}, orphanRemoval=true)
+		private Participation participation;
 		
 		@OneToOne(cascade = {CascadeType.ALL}, orphanRemoval=true)
 		private Question question;
 		
-		public long getParticipationtId() {
-			return participationtId;
+		
+		public Participation getParticipation() {
+			return participation;
 		}
-
-		public void setParticipationtId(long participationtId) {
-			this.participationtId = participationtId;
+		
+		public void setParticipation(Participation participation) {
+			this.participation = participation;
+		}
+		
+		public long getParticipationtId() {
+			return participation.getId();
 		}
 
 		public Question getQuestion() {

@@ -15,7 +15,6 @@ import javax.persistence.OneToMany;
 import nl.kennisnet.arena.services.factories.GeomUtil;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.hibernate.annotations.IndexColumn;
 import org.hibernate.annotations.Type;
 
 import com.vividsolutions.jts.geom.Point;
