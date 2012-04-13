@@ -12,8 +12,8 @@ import nl.kennisnet.arena.client.event.RefreshQuestLogEvent;
 import nl.kennisnet.arena.client.event.ScreenSwitchEvent;
 import nl.kennisnet.arena.client.panel.AnswerCheckPanel;
 import nl.kennisnet.arena.client.panel.HeaderPanel;
-import nl.kennisnet.arena.client.panel.LogTablePanel;
 import nl.kennisnet.arena.client.panel.ResizablePanel;
+import nl.kennisnet.arena.client.panel.ScoreGridPanel;
 import nl.kennisnet.arena.client.service.GWTQuestService;
 import nl.kennisnet.arena.client.service.GWTQuestServiceAsync;
 import nl.kennisnet.arena.client.util.AnalyticsUtil;
@@ -212,7 +212,7 @@ public class ArenaWA implements EntryPoint, ScreenSwitchEvent.Handler, RefreshQu
 
    public Panel getScorePanel() {
       if (scorePanel == null) {
-         scorePanel = new LogTablePanel();
+         scorePanel = new ScoreGridPanel();
       }
       return scorePanel;
    }

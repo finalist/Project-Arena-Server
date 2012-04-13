@@ -5,11 +5,7 @@ import java.util.List;
 
 import nl.kennisnet.arena.client.domain.AnswerDTO;
 import nl.kennisnet.arena.client.domain.AnswerDTO.Result;
-import nl.kennisnet.arena.client.domain.QuestDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
-import nl.kennisnet.arena.client.event.EventBus;
-import nl.kennisnet.arena.client.event.RefreshQuestEvent;
 import nl.kennisnet.arena.client.event.RefreshQuestLogEvent;
 import nl.kennisnet.arena.client.service.GWTQuestService;
 import nl.kennisnet.arena.client.service.GWTQuestServiceAsync;

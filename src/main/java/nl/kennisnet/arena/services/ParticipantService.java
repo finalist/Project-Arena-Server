@@ -179,16 +179,19 @@ public class ParticipantService extends HibernateAwareService {
 		Map<Long, Integer> result = new HashMap<Long, Integer>();
 		Quest quest = get(Quest.class, questId);
 
-		for (MultiKey teamItem : answers.keySet()) {
-			Long positionableId = (Long) teamItem.getKey(0);
-			if (result.get(positionableId) == null) {
-				result.put(positionableId, Integer.valueOf(0));
-			}
-			// Ignore answers of deleted questions.
-			if (getQuestion(positionableId, quest) != null) {
-				if (answers.get(teamItem).equals(
-						getQuestion(positionableId, quest).getCorrectAnswer())) {
-					result.put(positionableId, result.get(positionableId) + 1);
+		Set<Positionable> positionables = new HashSet<Positionable>(quest.getPositionables());
+		for(Positionable positionable : positionables){
+			if(positionable instanceof Question){
+				Question question = (Question)positionable;
+				for(ParticipantAnswer participantAnswer : question.getParticipantAnswers()){
+					long positionableId = participantAnswer.getQuestion().getId();
+					if(result.get(positionableId) == null){
+						result.put(positionableId, 0);
+					}
+					if(participantAnswer.getResult().equals(ParticipantAnswer.Result.CORRECT.name())){
+						result.put(positionableId,result.get(positionableId) + 1);
+					}
+					
 				}
 			}
 		}
@@ -200,18 +203,19 @@ public class ParticipantService extends HibernateAwareService {
 		Map<Long, Integer> result = new HashMap<Long, Integer>();
 		Quest quest = get(Quest.class, questId);
 
-		for (MultiKey teamItem : answers.keySet()) {
-			Long teamId = (Long) teamItem.getKey(1);
-			Long positionableId = (Long) teamItem.getKey(0);
-			if (result.get(teamId) == null) {
-				result.put(teamId, Integer.valueOf(0));
-			}
-			// Check if the question was not deleted after answering the
-			// question.
-			if (getQuestion(positionableId, quest) != null) {
-				if (answers.get(teamItem).equals(
-						getQuestion(positionableId, quest).getCorrectAnswer())) {
-					result.put(teamId, result.get(teamId) + 1);
+		Set<Positionable> positionables = new HashSet<Positionable>(quest.getPositionables());
+		for(Positionable positionable : positionables){
+			if(positionable instanceof Question){
+				Question question = (Question)positionable;
+				for(ParticipantAnswer participantAnswer : question.getParticipantAnswers()){
+					long teamId = participantAnswer.getParticipation().getParticipant().getId();
+					if(result.get(teamId) == null){
+						result.put(teamId, 0);
+					}
+					if(participantAnswer.getResult().equals(ParticipantAnswer.Result.CORRECT.name())){
+						result.put(teamId,result.get(teamId) + 1);
+					}
+					
 				}
 			}
 		}
@@ -278,7 +282,7 @@ public class ParticipantService extends HibernateAwareService {
 			}			
 		}		
 		return null;
-	}
+	}	
 
 	public LogDTO getParticipationLog(final Long questId) {
 		List<ParticipationLog> log = getParticipationLogs(questId);
