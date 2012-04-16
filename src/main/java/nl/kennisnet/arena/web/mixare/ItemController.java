@@ -160,11 +160,15 @@ public class ItemController {
 	}
 	
 	private ModelAndView processOpenQuestion(long participationId, Question question, String answer){
-		participantService.storeParticipationTextAnswer(participationId, question,
-				answer);
-		addAnswerToLog(participationId, question, answer);
 		HashMap<String, String> model = new HashMap<String, String>();
-		model.put("question_submitted", "Question submitted");
+		if(answer.length() > 0){
+			participantService.storeParticipationTextAnswer(participationId, question, answer);
+			addAnswerToLog(participationId, question, answer);
+			model.put("question_submitted", "Question submitted");
+			
+		}else{
+			model.put("question_submitted", "Answer is too short");
+		}
 		return new ModelAndView(new InternalResourceView(
 				"../../../../question-result.jsp"), model);
 	}	
