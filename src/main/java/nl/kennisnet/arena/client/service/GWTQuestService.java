@@ -13,7 +13,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 public interface GWTQuestService extends RemoteService{
    
    QuestDTO load(Long id);
-   QuestDTO save(QuestDTO quest);
+   QuestDTO save(QuestDTO quest, boolean sendNotification);
    AnswerDTO update(AnswerDTO answerDto);
    LogDTO getLog(Long questId);
    LogDTO clearLog(Long id);

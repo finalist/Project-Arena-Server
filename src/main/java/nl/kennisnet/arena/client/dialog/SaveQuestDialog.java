@@ -50,7 +50,7 @@ public class SaveQuestDialog extends DialogBox {
          public void onClick(ClickEvent arg0) {
             fillItemFromForm();
             GWTQuestServiceAsync questService = (GWTQuestServiceAsync) GWT.create(GWTQuestService.class);
-            questService.save(QuestState.getInstance().getState(),  new AsyncCallback<QuestDTO>() {
+            questService.save(QuestState.getInstance().getState(), true, new AsyncCallback<QuestDTO>() {
                @Override
                public void onSuccess(QuestDTO arg0) {
 //                  com.google.gwt.user.client.Window.alert("Saving of Areana succeded!");

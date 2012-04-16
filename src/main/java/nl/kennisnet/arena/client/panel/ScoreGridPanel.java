@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import nl.kennisnet.arena.client.domain.ActionDTO;
-import nl.kennisnet.arena.client.domain.AnswerDTO;
 import nl.kennisnet.arena.client.domain.LogDTO;
 import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;

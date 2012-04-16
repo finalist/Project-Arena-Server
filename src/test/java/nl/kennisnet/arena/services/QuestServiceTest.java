@@ -51,7 +51,7 @@ public class QuestServiceTest {
         List<QuestItemDTO> items = new ArrayList<QuestItemDTO>();
         items.add(itemDTO);
         questDTO.setItems(items);
-        existingQuest = questService.save(questDTO);
+        existingQuest = questService.save(questDTO, true);
         existingId = existingQuest.getId();
     }
 
@@ -68,7 +68,7 @@ public class QuestServiceTest {
         questDTO.setId(existingId);
         questDTO.setName(name);
         questDTO.setEmailOwner(email);
-        QuestDTO saved = questService.save(questDTO);
+        QuestDTO saved = questService.save(questDTO, true);
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
         Assert.assertEquals(existingId, saved.getId());
@@ -85,7 +85,7 @@ public class QuestServiceTest {
         questDTO.setName(name);
         QuestItemDTO questItemDTO = questDTO.getItems().get(0);
         questItemDTO.setPoint(new SimplePoint(4.4D,2.2D));
-        QuestDTO saved = questService.save(questDTO);
+        QuestDTO saved = questService.save(questDTO, true);
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
         Assert.assertEquals(existingId, saved.getId());
@@ -105,7 +105,7 @@ public class QuestServiceTest {
         questItemDTO.setPoint(new SimplePoint(6.6D,3.3D));
 
         questDTO.getItems().add(questItemDTO);
-        QuestDTO saved = questService.save(questDTO);
+        QuestDTO saved = questService.save(questDTO, true);
         Assert.assertEquals(2, saved.getItems().size());
         Assert.assertEquals(new Double(3.3D), saved.getItems().get(1).getPoint().getLongitude());
         Assert.assertEquals(new Double(6.6D), saved.getItems().get(1).getPoint().getLatitude());
@@ -119,7 +119,7 @@ public class QuestServiceTest {
 
         questItemDTO.setPoint(new SimplePoint(6.6D,3.3D));
         questDTO.getItems().add(questItemDTO);
-        QuestDTO saved = questService.save(questDTO);
+        QuestDTO saved = questService.save(questDTO, true);
         Assert.assertEquals(1, saved.getItems().size());
         Assert.assertEquals(new Double(3.3D), saved.getItems().get(0).getPoint().getLongitude());
         Assert.assertEquals(new Double(6.6D), saved.getItems().get(0).getPoint().getLatitude());
@@ -131,7 +131,7 @@ public class QuestServiceTest {
         QuestDTO questDTO = new QuestDTO();
         questDTO.setName(name);
         questDTO.setEmailOwner(email);
-        QuestDTO saved = questService.save(questDTO);
+        QuestDTO saved = questService.save(questDTO, true);
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
         Assert.assertEquals(name, questDTO.getName());

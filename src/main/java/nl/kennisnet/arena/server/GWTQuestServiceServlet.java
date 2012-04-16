@@ -42,8 +42,8 @@ public class GWTQuestServiceServlet extends RemoteServiceServlet implements
 	}
 
 	@Override
-	public QuestDTO save(QuestDTO quest) {
-		return questService.save(quest);
+	public QuestDTO save(QuestDTO quest, boolean sendNotification) {
+		return questService.save(quest, sendNotification);
 
 	}
 

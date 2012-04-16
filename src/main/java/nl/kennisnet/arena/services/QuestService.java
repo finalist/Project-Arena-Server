@@ -97,7 +97,7 @@ public class QuestService extends HibernateAwareService {
 		}
 	}
 
-	public QuestDTO save(QuestDTO questDTO) {
+	public QuestDTO save(QuestDTO questDTO, boolean sendNotification) {
 		Quest originalQuest = null;
 		if (questDTO.getId() != null) {
 			originalQuest = get(Quest.class, questDTO.getId());
@@ -119,7 +119,9 @@ public class QuestService extends HibernateAwareService {
 		}
 
 		quest = merge(quest);
-		sendNotification(quest);
+		if(sendNotification){
+			sendNotification(quest);
+		}
 		return DTOFactory.create(quest);
 	}
 
