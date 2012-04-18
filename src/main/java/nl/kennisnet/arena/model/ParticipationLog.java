@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.Type;
 
 import com.vividsolutions.jts.geom.Point;

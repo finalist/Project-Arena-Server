@@ -1,5 +1,8 @@
 package nl.kennisnet.arena.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.Cascade;
@@ -27,6 +31,10 @@ public class Positionable {
 	
 	@ManyToOne()
 	private Quest quest;
+	
+	@OneToMany(mappedBy = "positionable", cascade = javax.persistence.CascadeType.REMOVE)
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private List<ParticipationLog> participationlogs = new ArrayList<ParticipationLog>();
 	
 	public Location getLocation() {
 		return location;
@@ -66,6 +74,14 @@ public class Positionable {
 	
 	public void setQuest(Quest quest) {
 		this.quest = quest;
+	}
+	
+	public void setParticipationlogs(List<ParticipationLog> participationlogs) {
+		this.participationlogs = participationlogs;
+	}
+	
+	public List<ParticipationLog> getParticipationlogs() {
+		return participationlogs;
 	}
 	
 	@Override
