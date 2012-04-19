@@ -19,6 +19,7 @@ public class Arena {
 	@SerializedName("stats")
 	private String stats;
 
+	@SuppressWarnings("unused")
 	@SerializedName("num_results")
 	private int numResults = 0;
 
@@ -118,6 +119,7 @@ public class Arena {
 			String baseUrl, ArenaDataBean data) {
 		if(!webPageNeeded(data, positionable)){
 			result.setObjectUrl(baseUrl + "images/too-far.png");
+			result.setTitle("Onbekend (afstand te groot)");
 		} else if (positionable instanceof Question) {
 
 			ParticipantAnswer participantAnswer = data.getParticipantService()
