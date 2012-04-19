@@ -29,6 +29,7 @@ public class QuestItemDialog extends DialogBox {
 
    private TextBox nameTextBox = new TextBox();
    private TextBox radiusTextBox = new TextBox();
+   private TextBox visibleRadiusTexBox = new TextBox(); 
    private QuestItemDTO itemDTO;
    private final boolean readOnlyDialog;
    private final boolean create;
@@ -120,6 +121,7 @@ public class QuestItemDialog extends DialogBox {
       List<FormTablePanel.Element> result = new ArrayList<FormTablePanel.Element>();
       result.add(createNamePanel());
       result.add(createRadiusPanel());
+      result.add(createVisibleRadiusPanel());
       return result;
 
    }
@@ -127,11 +129,13 @@ public class QuestItemDialog extends DialogBox {
    protected void fillFormFromItem(QuestItemDTO itemDTO) {
       nameTextBox.setText(itemDTO.getName());
       radiusTextBox.setText("" + itemDTO.getRadius());
+      visibleRadiusTexBox.setText(""+ itemDTO.getVisibleRadius());
    }
 
    protected QuestItemDTO fillItemFromForm(QuestItemDTO itemDTO) {
       itemDTO.setName(nameTextBox.getText().trim());
       itemDTO.setRadius(Double.valueOf(radiusTextBox.getText()));
+      itemDTO.setVisibleRadius(Double.valueOf(visibleRadiusTexBox.getText()));
       return itemDTO;
    }
 
@@ -140,7 +144,11 @@ public class QuestItemDialog extends DialogBox {
    }
 
    protected FormTablePanel.Element createRadiusPanel() {
-      return new FormTablePanel.Element("Radius", radiusTextBox);
+      return new FormTablePanel.Element("Vindbaar Radius", radiusTextBox);
+   }
+   
+   protected FormTablePanel.Element createVisibleRadiusPanel(){
+	  return new FormTablePanel.Element("Toepasbaar Radius", visibleRadiusTexBox);
    }
 
    public QuestItemDTO getQuestItemDTO() {

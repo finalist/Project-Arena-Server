@@ -38,6 +38,7 @@ public class ImageQuestItemDialog extends QuestItemDialog {
       result.add(fileUploadPanel());
       result.add(createImagePanel());
       result.add(createRadiusPanel());
+      result.add(createVisibleRadiusPanel());
       return result;
    }
 

@@ -16,6 +16,7 @@ public class QuestItemDTO implements Serializable {
 	private String name;
 	private String typeName;
 	private Double radius;
+	private Double visibleRadius;
 	private Double alt;
 	private SimplePoint point;
 	private String description;
@@ -57,6 +58,14 @@ public class QuestItemDTO implements Serializable {
 
 	public void setRadius(Double radius) {
 		this.radius = radius;
+	}
+	
+	public Double getVisibleRadius() {
+		return visibleRadius;
+	}
+	
+	public void setVisibleRadius(Double visibleRadius) {
+		this.visibleRadius = visibleRadius;
 	}
 
 	public String getDescription() {

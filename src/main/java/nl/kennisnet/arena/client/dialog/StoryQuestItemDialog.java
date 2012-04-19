@@ -26,6 +26,7 @@ public class StoryQuestItemDialog extends QuestItemDialog {
       result.add(createNamePanel());
       result.add(createStoryPanel("Verhaal"));
       result.add(createRadiusPanel());
+      result.add(createVisibleRadiusPanel());
       return result;
    }
    

@@ -40,7 +40,8 @@ public class MonitorMapPanel extends AbstractMapPanel implements
          for (QuestItemDTO itemDTO : questDTO.getItems()) {
             QuestItemMarker questItemMarker = new QuestItemMarker(getMapWidget(), itemDTO, true);
             markerObjects.add(questItemMarker.getMarker());
-            polygonObjects.add(questItemMarker.getPolygon());
+            polygonObjects.add(questItemMarker.getPolygon()[0]);
+            polygonObjects.add(questItemMarker.getPolygon()[1]);
          }
       }
 

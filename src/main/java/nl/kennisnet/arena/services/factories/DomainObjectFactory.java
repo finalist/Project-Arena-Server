@@ -55,7 +55,7 @@ public class DomainObjectFactory {
 			result.setName(questItemDTO.getName());
 			Location location = new Location(
 					GeomUtil.createJTSPoint(questItemDTO.getPoint()),
-					questItemDTO.getAlt(), questItemDTO.getRadius());
+					questItemDTO.getAlt(), questItemDTO.getRadius(), questItemDTO.getVisibleRadius());
 			result.setLocation(location);
 		}
 		result.setQuest(quest);
@@ -67,6 +67,7 @@ public class DomainObjectFactory {
 		result.setId(questDTO.getId());
 		result.setName(questDTO.getName());
 		result.setEmailOwner(questDTO.getEmailOwner());
+
 		if (questDTO.getItems() != null) {
 			List<Positionable> items = new ArrayList<Positionable>();
 			for (QuestItemDTO questItemDTO : questDTO.getItems()) {

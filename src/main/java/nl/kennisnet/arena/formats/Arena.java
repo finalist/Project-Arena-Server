@@ -9,6 +9,7 @@ import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.model.Question.TYPE;
+import nl.kennisnet.arena.services.factories.GeomUtil;
 import nl.kennisnet.arena.utils.ArenaDataBean;
 
 import com.google.gson.annotations.SerializedName;
@@ -20,11 +21,11 @@ public class Arena {
 
 	@SerializedName("num_results")
 	private int numResults = 0;
-	
+
 	private enum STATS {
 		OK, NO_OBJECTS
 	}
-	
+
 	@SerializedName("results")
 	private List<Result> results = new ArrayList<Result>();
 
@@ -55,7 +56,7 @@ public class Arena {
 	public void addResult(Result result) {
 		results.add(result);
 	}
-	
+
 	public int getNumResults() {
 		return results.size();
 	}
@@ -70,32 +71,39 @@ public class Arena {
 			result = buildPositionableType(result, positionable);
 			result = buildObjectImage(result, positionable, baseUrl, data);
 			results.add(result);
+			numResults++;
 		}
 	}
-	
-	private Result buildResultData(Result result, Positionable positionable){
+
+	private Result buildResultData(Result result, Positionable positionable) {
 		result.setId(positionable.getId());
 		result.setLat((float) positionable.getLocation().getPoint().getY());
 		result.setLng((float) positionable.getLocation().getPoint().getX());
 		result.setTitle(positionable.getName());
-		result.setHasDetailPage(true);		
 		return result;
 	}
-	
-	private Result buildWebPage(Result result, Positionable positionable, String baseUrl, ArenaDataBean data){
-		if (positionable instanceof Question) {
-			result.setWebpage(baseUrl + "item/show/" + data.getQuestId() + "/"
-					+ positionable.getId() + "/" + data.getPlayer() + ".item");
-		} else if (positionable instanceof Information){
-			result.setWebpage(baseUrl + "item/show/"+ positionable.getId() +".item");
-		}
-		else if (positionable instanceof Image){
-			result.setWebpage(((Image) positionable).getUrl());
+
+	private Result buildWebPage(Result result, Positionable positionable,
+			String baseUrl, ArenaDataBean data) {
+		if(webPageNeeded(data, positionable)){
+			result.setHasDetailPage(true);
+			if (positionable instanceof Question) {
+				result.setWebpage(baseUrl + "item/show/" + data.getQuestId() + "/"
+						+ positionable.getId() + "/" + data.getPlayer() + ".item");
+			} else if (positionable instanceof Information) {
+				result.setWebpage(baseUrl + "item/show/" + positionable.getId()
+						+ ".item");
+			} else if (positionable instanceof Image) {
+				result.setWebpage(((Image) positionable).getUrl());
+			}
+		}else{
+			result.setHasDetailPage(false);
 		}
 		return result;
 	}
 
-	private Result buildPositionableType(Result result, Positionable positionable) {
+	private Result buildPositionableType(Result result,
+			Positionable positionable) {
 		if (positionable instanceof Image) {
 			result.setObjectType("image");
 		} else if (positionable instanceof Information) {
@@ -107,27 +115,31 @@ public class Arena {
 	}
 
 	private Result buildObjectImage(Result result, Positionable positionable,
-								  String baseUrl, ArenaDataBean data) {
-		if (positionable instanceof Question) {
-			
+			String baseUrl, ArenaDataBean data) {
+		if(!webPageNeeded(data, positionable)){
+			result.setObjectUrl(baseUrl + "images/too-far.png");
+		} else if (positionable instanceof Question) {
+
 			ParticipantAnswer participantAnswer = data.getParticipantService()
-									.getParticipationAnswer(data.getParticipationId(),
-									(Question) positionable);			
-			
-			result.setObjectUrl(buildQuestionImage(positionable, participantAnswer, baseUrl));
-		
-		} else if (positionable instanceof Information){			
-			result.setObjectUrl(buildInformationImage(baseUrl));			
-		} else if (positionable instanceof Image){
+					.getParticipationAnswer(data.getParticipationId(),
+							(Question) positionable);
+
+			result.setObjectUrl(buildQuestionImage(positionable,
+					participantAnswer, baseUrl));
+
+		} else if (positionable instanceof Information) {
+			result.setObjectUrl(buildInformationImage(baseUrl));
+		} else if (positionable instanceof Image) {
 			result.setObjectUrl(buildPhotoImage(positionable, baseUrl, data));
 		}
 		return result;
 	}
-	
-	private String buildQuestionImage(Positionable positionable, ParticipantAnswer participantAnswer, String baseUrl){
+
+	private String buildQuestionImage(Positionable positionable,
+			ParticipantAnswer participantAnswer, String baseUrl) {
 		String objectUrl = "";
-		Question question = (Question)positionable;
-		if(question.getQuestionTypeAsEnum() == TYPE.MULTIPLE_CHOICE){
+		Question question = (Question) positionable;
+		if (question.getQuestionTypeAsEnum() == TYPE.MULTIPLE_CHOICE) {
 			if (participantAnswer == null) {
 				objectUrl = baseUrl + "images/blue-question.png";
 			}
@@ -139,8 +151,7 @@ public class Arena {
 					objectUrl = baseUrl + "images/red-question.png";
 				}
 			}
-		}
-		else if(question.getQuestionTypeAsEnum() == TYPE.OPEN_QUESTION){
+		} else if (question.getQuestionTypeAsEnum() == TYPE.OPEN_QUESTION) {
 			if (participantAnswer == null) {
 				objectUrl = baseUrl + "images/blue-question.png";
 			}
@@ -150,14 +161,24 @@ public class Arena {
 		}
 		return objectUrl;
 	}
-	
-	private String buildInformationImage(String baseUrl){
+
+	private String buildInformationImage(String baseUrl) {
 		return baseUrl + "images/information.png";
 	}
-	
-	private String buildPhotoImage(Positionable positionable, String baseUrl, ArenaDataBean data){
-		String url = data.getParticipantService().getImageUrl((positionable).getId());
+
+	private String buildPhotoImage(Positionable positionable, String baseUrl,
+			ArenaDataBean data) {
+		String url = data.getParticipantService().getImageUrl(
+				(positionable).getId());
 		return url;
 	}
 	
+	private boolean webPageNeeded(ArenaDataBean data, Positionable positionable){
+		if ( positionable.getLocation().getVisibleRadius() == null || GeomUtil.calculateDistanceInMeters(
+				data.getLocation(),	positionable.getLocation().getPoint()
+				) < positionable.getLocation().getVisibleRadius()) {
+			return true;
+		}
+		return false;
+	}
 }

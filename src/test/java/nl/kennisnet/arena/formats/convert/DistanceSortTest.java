@@ -33,7 +33,7 @@ public class DistanceSortTest {
       double distance=number;
       distance=distance/1000;
       Point point=GeomUtil.createJTSPoint(5, 50+distance);
-      information.setLocation(new Location(point, 0.0, 100000.0));
+      information.setLocation(new Location(point, 0.0, 100000.0, 100000.0));
       return information;
       
    }

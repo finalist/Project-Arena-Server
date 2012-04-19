@@ -23,6 +23,7 @@ public class Location {
 	private Point point;
 	private Double alt;
 	private Double radius;
+	private Double visibleRadius;
 	private Boolean onRadar;
 	
 	@OneToMany
@@ -32,17 +33,19 @@ public class Location {
 		
 	}
 	
-	public Location(Point point, Double alt, Double radius) {
+	public Location(Point point, Double alt, Double radius, Double visibleRadius) {
 		this.point = point;
 		this.alt = alt;
 		this.radius = radius;
+		this.visibleRadius = visibleRadius;
 		this.onRadar = true;
 	}
 	
-	public Location(Point point, Double alt, Double radius, Boolean onRadar) {
+	public Location(Point point, Double alt, Double radius, Double visibleRadius, Boolean onRadar) {
 		this.point = point;
 		this.alt = alt;
 		this.radius = radius;
+		this.visibleRadius = visibleRadius;
 		this.onRadar = onRadar;
 	}
 	
@@ -76,6 +79,14 @@ public class Location {
 
 	public void setOnRadar(Boolean onRadar) {
 		this.onRadar = onRadar;
+	}
+	
+	public void setVisibleRadius(Double visibleRadius) {
+		this.visibleRadius = visibleRadius;
+	}
+	
+	public Double getVisibleRadius() {
+		return visibleRadius;
 	}
 
 	public void setPositionables(List<Positionable> positionables) {

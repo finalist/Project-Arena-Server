@@ -12,6 +12,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import nl.kennisnet.arena.client.domain.QuestDTO;
+import nl.kennisnet.arena.model.Location;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Participation;
 import nl.kennisnet.arena.model.Positionable;
@@ -109,7 +110,12 @@ public class QuestService extends HibernateAwareService {
 		} else {
 			quest = DomainObjectFactory.update(questDTO, originalQuest);
 			deletingPos = DomainObjectFactory.delete(quest, originalQuest);
+			List<Location> deletingLocations = new ArrayList<Location>();
+			for(Positionable positionable: originalQuest.getPositionables() ){
+				deletingLocations.add(positionable.getLocation());
+			}
 			delete(deletingPos);
+			delete(deletingLocations);
 		}
 
 		if (quest.getId() != null) {

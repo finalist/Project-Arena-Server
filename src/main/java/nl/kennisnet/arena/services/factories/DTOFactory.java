@@ -60,6 +60,7 @@ public class DTOFactory {
          }
          if (result!=null){
             result.setRadius(positionable.getLocation().getRadius());
+            result.setVisibleRadius(positionable.getLocation().getVisibleRadius());            
             result.setPoint(GeomUtil.createSimplePoint(positionable.getLocation().getPoint()));
             result.setId(positionable.getId());
          }

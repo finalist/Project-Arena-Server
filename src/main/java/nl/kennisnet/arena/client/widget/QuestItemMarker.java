@@ -17,10 +17,11 @@ import com.google.maps.gwt.client.MarkerImage;
 import com.google.maps.gwt.client.MarkerOptions;
 import com.google.maps.gwt.client.MouseEvent;
 import com.google.maps.gwt.client.Polygon;
+import com.google.maps.gwt.client.PolygonOptions;
 
 public class QuestItemMarker {
 
-	private Polygon polygon;
+	private Polygon[] polygon = new Polygon[2];
 	private Marker marker;
 
 	public QuestItemMarker(final GoogleMap map, final QuestItemDTO item, final boolean readonly) {
@@ -29,7 +30,11 @@ public class QuestItemMarker {
 	  marker.setOptions(createOptions(item));    
 	  marker.setMap(map);
       createAndSetRadius(item.getRadius(), GeomUtil.createGWTPoint(item.getPoint()), map, QuestItemTypes.getColor(item
-            .getTypeName()));
+            .getTypeName()), 0);
+      if(item.getVisibleRadius() != null){
+    	  createAndSetRadius(item.getVisibleRadius(), GeomUtil.createGWTPoint(item.getPoint()), map, QuestItemTypes.getColor(item
+              .getTypeName()), 1);
+      }
       marker.setDraggable(!readonly);
       if (!readonly) {
     	  marker.addDragEndListenerOnce(new Marker.DragEndHandler() {
@@ -55,16 +60,19 @@ public class QuestItemMarker {
    }
 
 	private void createAndSetRadius(Double radius, LatLng point, GoogleMap map,
-			String color) {
-		if (polygon != null) {
-			polygon.setMap(null);
+			String color, int i) {
+		if (polygon[i] != null) {
+			polygon[i].setMap(null);
 		}
 		if (radius != null && radius > 0) {
-			polygon = Polygon.create();
-			polygon.setPath(polygonArrayToMvcArray(GeomUtil.createCircle(point,
+			polygon[i] = Polygon.create();
+			PolygonOptions polygonOptions = PolygonOptions.create();
+			polygonOptions.setFillColor(color);
+			polygon[i].setOptions(polygonOptions);
+			polygon[i].setPath(polygonArrayToMvcArray(GeomUtil.createCircle(point,
 					radius)));
 
-			polygon.addClickListener(new Polygon.ClickHandler() {
+			polygon[i].addClickListener(new Polygon.ClickHandler() {
 				@Override
 				public void handle(MouseEvent event) {
 					ClickPolygonEvent qi = new ClickPolygonEvent();
@@ -74,7 +82,7 @@ public class QuestItemMarker {
 					EventBus.get().fireEvent(qi);
 				}
 			});
-			polygon.setMap(map);
+			polygon[i].setMap(map);
 		}
 	}
 
@@ -100,7 +108,7 @@ public class QuestItemMarker {
 		return marker;
 	}
 	
-	public Polygon getPolygon() {
+	public Polygon[] getPolygon() {
 		return polygon;
 	}
 }

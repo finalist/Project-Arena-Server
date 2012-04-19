@@ -104,6 +104,7 @@ public class QuestionQuestItemDialog extends StoryQuestItemDialog {
 		result.add(createStoryPanel("Vraag"));
 		result.addAll(createAnswerPanels());
 		result.add(createRadiusPanel());
+	      result.add(createVisibleRadiusPanel());
 		return result;
 	}
 

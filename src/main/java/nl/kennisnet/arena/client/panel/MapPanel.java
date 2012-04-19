@@ -56,10 +56,12 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
 
          itemDTO.setPoint(new SimplePoint(point));
          itemDTO.setRadius(250.0);
+         itemDTO.setVisibleRadius(100.0);
 
          QuestItemMarker questItemMarker = new QuestItemMarker(getMapWidget(), itemDTO, false);
          markerObjects.add(questItemMarker.getMarker());
-         polygonObjects.add(questItemMarker.getPolygon());
+         polygonObjects.add(questItemMarker.getPolygon()[0]);
+         polygonObjects.add(questItemMarker.getPolygon()[1]);
          
          QuestState.getInstance().getState().addItem(itemDTO);
          CreateQuestItemEvent eventQI = new CreateQuestItemEvent();
@@ -87,7 +89,8 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
                if (QuestState.getInstance().isTypeVisible(itemDTO.getTypeName())) {
                   QuestItemMarker questItemMarker = new QuestItemMarker(getMapWidget(), itemDTO, false);
                   markerObjects.add(questItemMarker.getMarker());
-                  polygonObjects.add(questItemMarker.getPolygon());
+                  polygonObjects.add(questItemMarker.getPolygon()[0]);
+                  polygonObjects.add(questItemMarker.getPolygon()[1]);
                }
             }
          }
