@@ -79,12 +79,16 @@ img {
 	-moz-background-clip: border;
 	-moz-background-inline-policy: continuous;
 	-moz-background-origin: padding;
-	background: #0099ee url(gfx/menu3.gif) 0 100% repeat-x;
+	background: #0099ee 0 100% repeat-x;
 	margin-bottom: 12px;
 	padding-bottom: 10px;
 	padding-top: 10px;
 	margin: auto;
 	width:505px;
+	border-bottom-left-radius:5px;
+	-moz-border-bottom-left-radius:5px; /* Firefox 3.6 and earlier */
+	border-bottom-right-radius:5px;
+	-moz-border-bottom-right-radius:5px; /* Firefox 3.6 and earlier */
 }
 
 #menu:hover{
@@ -181,7 +185,7 @@ img {
 }
 
 #kennisnetLogo {
-	background: transparent url(SNKNlogoVSmallW.png) no-repeat scroll 100%
+	background: transparent url(DigischoolLogo2010.jpg) no-repeat scroll 100%
 		50%;
 	background-position: top right;
 	float: left;
