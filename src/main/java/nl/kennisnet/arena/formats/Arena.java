@@ -9,6 +9,7 @@ import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.model.Question.TYPE;
+import nl.kennisnet.arena.model.Video;
 import nl.kennisnet.arena.services.factories.GeomUtil;
 import nl.kennisnet.arena.utils.ArenaDataBean;
 
@@ -96,6 +97,8 @@ public class Arena {
 						+ ".item");
 			} else if (positionable instanceof Image) {
 				result.setWebpage(((Image) positionable).getUrl());
+			} else if (positionable instanceof Video) {
+				result.setWebpage(((Video) positionable).getVideoUrl());
 			}
 		}else{
 			result.setHasDetailPage(false);
@@ -111,6 +114,8 @@ public class Arena {
 			result.setObjectType("information");
 		} else if (positionable instanceof Question) {
 			result.setObjectType("question");
+		} else if (positionable instanceof Video) {
+			result.setObjectType("video");
 		}
 		return result;
 	}
@@ -133,6 +138,8 @@ public class Arena {
 			result.setObjectUrl(buildInformationImage(baseUrl));
 		} else if (positionable instanceof Image) {
 			result.setObjectUrl(buildPhotoImage(positionable, baseUrl, data));
+		} else if (positionable instanceof Video) {
+			result.setObjectUrl(((Video)positionable).getThumbnailUrl());
 		}
 		return result;
 	}

@@ -18,6 +18,7 @@ public class QuestItemTypeButtonPanel extends SidePanel{
       tools.addOption(QuestItemTypes.QUEST_TYPE_STORY, "Verhaal");
       tools.addOption(QuestItemTypes.QUEST_TYPE_QUESTION, "Vraag");
       tools.addOption(QuestItemTypes.QUEST_TYPE_PHOTO, "Foto");
+      tools.addOption(QuestItemTypes.QUEST_TYPE_VIDEO, "Video");
 
       tools.addValueChangeHandler(new ValueChangeHandler<Object>() {
          

@@ -13,6 +13,7 @@ import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
+import nl.kennisnet.arena.model.Video;
 
 public class DomainObjectFactory {
 
@@ -50,6 +51,9 @@ public class DomainObjectFactory {
 		} else if (questItemDTO.getTypeName().equals("Foto")) {
 			result = new Image();
 			((Image) result).setUrl(questItemDTO.getObjectURL());
+		} else if (questItemDTO.getTypeName().equals("Video")) {
+			result = new Video();
+			((Video) result).setVideoUrl(questItemDTO.getObjectURL());
 		}
 		if (result != null) {
 			result.setName(questItemDTO.getName());

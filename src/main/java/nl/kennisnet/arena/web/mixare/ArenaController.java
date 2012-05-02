@@ -66,8 +66,8 @@ public class ArenaController {
 			final Arena arena = ArenaFactory.getInstance(data, configuration);
 
 			log.debug("response model: " + arena);
-		Gson gson = new Gson();
-		return gson.toJson(arena);		
+			Gson gson = new Gson();
+			return gson.toJson(arena);		
 		}catch(NullPointerException ne){ //if quest is unknown:
 			ne.printStackTrace();
 			return "error, quest not found";

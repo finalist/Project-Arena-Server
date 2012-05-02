@@ -13,6 +13,8 @@ public class DialogSelector {
          new QuestionQuestItemDialog(itemDTO, readOnly,create).center();
       } else if (questType.equals(QuestItemTypes.QUEST_TYPE_PHOTO)) {
          new ImageQuestItemDialog(itemDTO, readOnly,create).center();
+      } else if(questType.equals(QuestItemTypes.QUEST_TYPE_VIDEO)) {
+    	 new VideoQuestItemDialog(itemDTO, readOnly, create).center();    	  
       } else {
          new QuestItemDialog(itemDTO, readOnly,create).center();
       }

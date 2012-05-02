@@ -87,6 +87,10 @@ img {
 	width:505px;
 }
 
+#menu:hover{
+	cursor: pointer;
+}
+
 #header {
 	height: 84px;
 }
@@ -341,6 +345,11 @@ img {
 	color: white;
 }
 
+#typefilter li.active #Video {
+	background-color: #800080;
+	color: white;
+}
+
 #typeselect ul {
 	list-style-image: none;
 	list-style-position: outside;
@@ -400,6 +409,10 @@ img {
 	background-color: #0337d1;
 }
 
+#typeselect li.active #Video {
+	background-color: #800080;
+}
+
 #typeselect li #Verhaal {
 	background: transparent url(text-red.png) no-repeat scroll 100% 50%;
 }
@@ -410,6 +423,10 @@ img {
 
 #typeselect li #Foto {
 	background: transparent url(photo.png) no-repeat scroll 100% 50%;
+}
+
+#typeselect li #Video {
+	background: transparent url(video.png) no-repeat scroll 100% 50%;
 }
 
 .paneltitle {
@@ -458,6 +475,11 @@ img {
 	padding: 0;
 }
 
+.video_panel {
+	background-color: #800080;
+	padding: 0;
+}
+
 .questitempanel a:link {
 	color: white;
 	padding-right: 3px;
@@ -479,6 +501,10 @@ img {
 
 .foto_panel .questitempanel_name {
 	background: url(photo.png) no-repeat scroll left top
+}
+
+.video_panel .questitempanel_name {
+	background: url(video.png) no-repeat scroll left top
 }
 
 .questitempanel a:hover {

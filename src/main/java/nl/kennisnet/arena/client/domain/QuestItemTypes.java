@@ -15,6 +15,7 @@ public class QuestItemTypes {
    public static String QUEST_TYPE_STORY = "Verhaal";
    public static String QUEST_TYPE_QUESTION = "Vraag";
    public static String QUEST_TYPE_PHOTO = "Foto";
+   public static String QUEST_TYPE_VIDEO = "Video";
    public static String QUEST_TYPE_OBJECT = "Ding";
    public static String QUEST_TYPE_GOAL = "Stortplaats";
 
@@ -22,6 +23,7 @@ public class QuestItemTypes {
       types.add(new QuestItemType(QUEST_TYPE_STORY, "text-red.png", "da0000"));
       types.add(new QuestItemType(QUEST_TYPE_PHOTO, "photo.png", "0337d1"));
       types.add(new QuestItemType(QUEST_TYPE_QUESTION, "question.png", "00a700"));
+      types.add(new QuestItemType(QUEST_TYPE_VIDEO, "video.png", "800080"));
    }
 
    private static MarkerImage createIcon(String imageURL) {

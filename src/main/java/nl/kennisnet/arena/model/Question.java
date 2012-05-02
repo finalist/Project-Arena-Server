@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.LazyCollection;
@@ -22,7 +21,7 @@ public class Question extends Positionable implements DomainObject {
 	private String answer2;
 	private String answer3;
 	private String answer4;
-	private Integer questionType = 0;
+	private Integer questionType = 0; //default: open_question
 	private Integer correctAnswer;
 	
 	@LazyCollection(LazyCollectionOption.FALSE)

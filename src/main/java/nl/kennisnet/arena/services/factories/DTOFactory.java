@@ -14,6 +14,7 @@ import nl.kennisnet.arena.model.ParticipationLog;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
+import nl.kennisnet.arena.model.Video;
 
 public class DTOFactory {
 
@@ -57,6 +58,10 @@ public class DTOFactory {
             Image image=(Image)positionable;
             result = new QuestItemDTO(image.getName(), "Foto");
             result.setObjectURL(image.getUrl());
+         } else if (positionable instanceof Video){
+        	 Video video = (Video)positionable;
+        	 result = new QuestItemDTO(video.getName(), "Video");
+        	 result.setObjectURL(video.getVideoUrl());
          }
          if (result!=null){
             result.setRadius(positionable.getLocation().getRadius());
