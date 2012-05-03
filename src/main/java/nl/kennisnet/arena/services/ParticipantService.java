@@ -112,20 +112,6 @@ public class ParticipantService extends HibernateAwareService {
 		return merge(participationLog);
 	}
 
-	public ParticipationLog addParticipationLogAnswer(
-			final long participationId, final Long time, final String action,
-			Point location, final Question question, final String answer) {
-		Participation participation = get(Participation.class, participationId);
-
-		if(location == null){
-			location = question.getLocation().getPoint();
-		}
-		
-		ParticipationLog participationLog = new ParticipationLog(participation,
-				new Date(time), action, location, question, answer);
-		return merge(participationLog);
-	}
-
 	public Progress getProgress(final long participationId) {
 		Participation p = get(Participation.class, participationId);
 		Quest quest = p.getQuest();
@@ -252,6 +238,9 @@ public class ParticipantService extends HibernateAwareService {
 		Participation participation = get(Participation.class, participationId);
 		participantAnswer.setParticipation(participation);
 		participantAnswer.setQuestion(question);
+		if(question.getCorrectAnswer() == null){
+			throw new IllegalArgumentException("No answer given");
+		}
 		if(answer == question.getCorrectAnswer()){
 			participantAnswer.setResult(Result.CORRECT.name());
 		}else{

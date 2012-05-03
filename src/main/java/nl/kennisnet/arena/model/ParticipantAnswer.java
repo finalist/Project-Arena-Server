@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -17,6 +18,9 @@ public class ParticipantAnswer implements DomainObject {
 	private Integer answer;
 	
 	private String textAnswer;
+	
+	@ManyToOne
+	private Round round;
 	
 	public enum Result{
 		CORRECT,
@@ -80,6 +84,14 @@ public class ParticipantAnswer implements DomainObject {
 	
 	public String getResult() {
 		return result;
+	}
+	
+	public void setRound(Round round) {
+		this.round = round;
+	}
+	
+	public Round getRound() {
+		return round;
 	}
 
 	@Override

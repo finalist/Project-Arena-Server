@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import nl.kennisnet.arena.services.factories.GeomUtil;
@@ -35,6 +36,12 @@ public class Quest implements DomainObject {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "quest")
 	private List<Positionable> positionables = new ArrayList<Positionable>();
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy="quest")
+	private List<Round> rounds = new ArrayList<Round>();
+	
+	@ManyToOne
+	private Round activeRound;
+	
 	@Type(type = "org.hibernatespatial.GeometryUserType")
 	private Polygon border;
 
@@ -127,6 +134,30 @@ public class Quest implements DomainObject {
 
 	public Polygon getBorder() {
 		return border;
+	}
+
+	public List<Round> getRounds() {
+		return rounds;
+	}
+
+	public void setRounds(List<Round> rounds) {
+		this.rounds = rounds;
+	}
+
+	public Round getActiveRound() {
+		return activeRound;
+	}
+
+	public void setActiveRound(Round activeRound) {
+		this.activeRound = activeRound;
+	}
+	
+	public void addRound(Round round){
+		rounds.add(round);
+	}
+	
+	public void deleteRound(Round round){
+		rounds.remove(round);
 	}
 
 	public void setBorder(Polygon border) {

@@ -13,6 +13,7 @@ import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
+import nl.kennisnet.arena.model.Round;
 import nl.kennisnet.arena.model.Video;
 
 public class DomainObjectFactory {
@@ -34,6 +35,7 @@ public class DomainObjectFactory {
 		}
 
 		result.setBorder(GeomUtil.createJTSPolygon(questDTO.getBorder()));
+		result.addRound(new Round("Ronde 1", result));
 		return result;
 	}
 

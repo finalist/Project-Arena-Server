@@ -1,6 +1,7 @@
 package nl.kennisnet.arena.services.factories;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import nl.kennisnet.arena.client.domain.ActionDTO;
 import nl.kennisnet.arena.client.domain.QuestDTO;
@@ -14,6 +15,7 @@ import nl.kennisnet.arena.model.ParticipationLog;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
+import nl.kennisnet.arena.model.Round;
 import nl.kennisnet.arena.model.Video;
 
 public class DTOFactory {
@@ -34,6 +36,7 @@ public class DTOFactory {
          result.setItems(items);
       }
       result.setBorder(GeomUtil.createSimplePolygon(quest.getBorder()));
+      result.setRounds(roundsListToStringList(quest.getRounds()));
       return result;
    }
 
@@ -107,5 +110,12 @@ public class DTOFactory {
       return team;
    }
 
+   private static List<String> roundsListToStringList(List<Round> rounds){
+	   List<String> result = new ArrayList<String>();
+	   for(Round round : rounds){
+		   result.add(round.getName());
+	   }
+	   return result;
+   }
 
 }

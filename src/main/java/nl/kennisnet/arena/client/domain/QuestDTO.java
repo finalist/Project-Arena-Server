@@ -6,67 +6,85 @@ import java.util.List;
 
 public class QuestDTO implements Serializable {
 
-   /**
+	/**
     * 
     */
-   private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-   private String name;
-   private List<QuestItemDTO> items;
-   private Long id;
-   private String emailOwner;
-   private SimplePolygon border;
-   
-   public String getName() {
-      return name;
-   }
+	private String name;
+	private List<QuestItemDTO> items;
+	private Long id;
+	private String emailOwner;
+	private SimplePolygon border;
 
-   public void setName(String name) {
-      this.name = name;
-   }
+	private List<String> rounds;
+	private String activeRound;
 
-   public List<QuestItemDTO> getItems() {
-      return items;
-   }
+	public String getName() {
+		return name;
+	}
 
-   public void setItems(List<QuestItemDTO> items) {
-      this.items = items;
-   }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-   public void addItem(QuestItemDTO item) {
-      if (items==null){
-         items=new ArrayList<QuestItemDTO>();
-      }
-      items.add(item);
-   }
+	public List<QuestItemDTO> getItems() {
+		return items;
+	}
 
-   public Long getId() {
-      return id;
-   }
+	public void setItems(List<QuestItemDTO> items) {
+		this.items = items;
+	}
 
-   public void setId(Long id) {
-      this.id = id;
-   }
+	public void addItem(QuestItemDTO item) {
+		if (items == null) {
+			items = new ArrayList<QuestItemDTO>();
+		}
+		items.add(item);
+	}
 
-   public String getEmailOwner() {
-      return emailOwner;
-   }
+	public Long getId() {
+		return id;
+	}
 
-   public void setEmailOwner(String emailOwner) {
-      this.emailOwner = emailOwner;
-   }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-   public SimplePolygon getBorder() {
-      return border;
-   }
+	public String getEmailOwner() {
+		return emailOwner;
+	}
 
-   public void setBorder(SimplePolygon border) {
-      this.border = border;
-   }
+	public void setEmailOwner(String emailOwner) {
+		this.emailOwner = emailOwner;
+	}
 
-   public void removeItem(QuestItemDTO itemDTO){
-      items.remove(itemDTO);
-   }
-   
-   
+	public SimplePolygon getBorder() {
+		return border;
+	}
+
+	public void setBorder(SimplePolygon border) {
+		this.border = border;
+	}
+
+	public void removeItem(QuestItemDTO itemDTO) {
+		items.remove(itemDTO);
+	}
+
+	public void setRounds(List<String> rounds) {
+		this.rounds = rounds;
+	}
+
+	public List<String> getRounds() {
+		return rounds;
+	}
+
+	public void setActiveRound(String activeRound) {
+		this.activeRound = activeRound;
+	}
+
+	public String getActiveRound() {
+		return activeRound;
+	}
+
 }

@@ -40,6 +40,8 @@ public class AnswerDTO implements Serializable {
 	
 	private long participationId;
 	
+	private String round; 
+	
 	public AnswerDTO() {
 
 	}
@@ -136,6 +138,14 @@ public class AnswerDTO implements Serializable {
 		return result;
 	}
 
+	public String getRound() {
+		return round;
+	}
+	
+	public void setRound(String round) {
+		this.round = round;
+	}
+	
 	private String answerIntToLetter(String answer) {
 		try {
 			int q = Integer.parseInt(answer.trim());

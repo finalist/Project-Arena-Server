@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import nl.kennisnet.arena.client.domain.ActionDTO;
+import nl.kennisnet.arena.client.domain.AnswerDTO;
 import nl.kennisnet.arena.client.domain.LogDTO;
 import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
@@ -77,6 +78,7 @@ public class ScoreGridPanel extends SimplePanel implements
 	}
 
 	private Grid createScoreGrid() {
+		List<AnswerDTO> answerDTOs = QuestState.getInstance().getAnswers();
 		LogDTO log = QuestState.getInstance().getLog();
 		QuestDTO quest = QuestState.getInstance().getState();
 		Grid result = null;
@@ -109,12 +111,12 @@ public class ScoreGridPanel extends SimplePanel implements
 			setHTML(result, itemIndex.size() + 1, 0, "Vragen juist beantwoord",
 					"FlexTable-row-label");
 
-			for (ActionDTO action : log.getTypeActions("Vraag")) {
-				int x = itemIndex.indexOf(action.getPositionableId()) + 1;
-				int y = teamIndex.indexOf(action.getTeamName()) + 1;
-				setHTML(result, x, y, answerIntToLetter(action.getAnswer()),
-						"FlexTable-value");
+			for(AnswerDTO answerDTO : answerDTOs){
+				int x = itemIndex.indexOf(answerDTO.getQuestionId()) + 1;
+				int y = teamIndex.indexOf(answerDTO.getPlayerName()) + 1;
+				setHTML(result, x, y, answerDTO.getAnswer(), "FlexTable-value");
 			}
+			
 		}
 		return result;
 	}
