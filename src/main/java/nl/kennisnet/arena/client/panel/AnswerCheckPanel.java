@@ -6,6 +6,8 @@ import java.util.List;
 import nl.kennisnet.arena.client.domain.AnswerDTO;
 import nl.kennisnet.arena.client.domain.AnswerDTO.Result;
 import nl.kennisnet.arena.client.domain.QuestState;
+import nl.kennisnet.arena.client.event.EventBus;
+import nl.kennisnet.arena.client.event.RefreshQuestEvent;
 import nl.kennisnet.arena.client.event.RefreshQuestLogEvent;
 import nl.kennisnet.arena.client.service.GWTQuestService;
 import nl.kennisnet.arena.client.service.GWTQuestServiceAsync;
@@ -28,7 +30,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  * 
  * @author A. Egal
  */
-public class AnswerCheckPanel extends SimplePanel implements
+public class AnswerCheckPanel extends SimplePanel implements 
 		RefreshQuestLogEvent.Handler, ResizablePanel {
 
 	private Panel panel = new FlowPanel();
@@ -148,6 +150,7 @@ public class AnswerCheckPanel extends SimplePanel implements
 			public void onClick(ClickEvent arg0) {
 				answerDTO.setResult(AnswerDTO.Result.CORRECT.name());
 				save(answerDTO);
+				EventBus.get().fireEvent(new RefreshQuestEvent());
 			}
 		});
 		Button incorrect = new Button("Incorrect");
@@ -157,6 +160,7 @@ public class AnswerCheckPanel extends SimplePanel implements
 			public void onClick(ClickEvent arg0) {
 				answerDTO.setResult(AnswerDTO.Result.INCORRECT.name());
 				save(answerDTO);
+				EventBus.get().fireEvent(new RefreshQuestEvent());
 			}
 		});
 		

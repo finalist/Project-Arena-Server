@@ -40,7 +40,7 @@ public class AnswerDTO implements Serializable {
 	
 	private long participationId;
 	
-	private String round; 
+	private RoundDTO round; 
 	
 	public AnswerDTO() {
 
@@ -138,11 +138,11 @@ public class AnswerDTO implements Serializable {
 		return result;
 	}
 
-	public String getRound() {
+	public RoundDTO getRound() {
 		return round;
 	}
 	
-	public void setRound(String round) {
+	public void setRound(RoundDTO round) {
 		this.round = round;
 	}
 	

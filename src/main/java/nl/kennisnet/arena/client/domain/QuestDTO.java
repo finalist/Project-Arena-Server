@@ -17,8 +17,8 @@ public class QuestDTO implements Serializable {
 	private String emailOwner;
 	private SimplePolygon border;
 
-	private List<String> rounds;
-	private String activeRound;
+	private List<RoundDTO> rounds = new ArrayList<RoundDTO>();
+	private RoundDTO activeRound;
 
 	public String getName() {
 		return name;
@@ -71,19 +71,19 @@ public class QuestDTO implements Serializable {
 		items.remove(itemDTO);
 	}
 
-	public void setRounds(List<String> rounds) {
+	public void setRounds(List<RoundDTO> rounds) {
 		this.rounds = rounds;
 	}
 
-	public List<String> getRounds() {
+	public List<RoundDTO> getRounds() {
 		return rounds;
 	}
 
-	public void setActiveRound(String activeRound) {
+	public void setActiveRound(RoundDTO activeRound) {
 		this.activeRound = activeRound;
 	}
 
-	public String getActiveRound() {
+	public RoundDTO getActiveRound() {
 		return activeRound;
 	}
 

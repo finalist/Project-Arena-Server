@@ -10,8 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames={"participant_id", "quest_id", "round_id"})})
 public class Participation implements DomainObject {
 
 	@Id
@@ -26,6 +29,8 @@ public class Participation implements DomainObject {
 	private Quest quest;
 	@ManyToOne
 	private Participant participant;
+	@ManyToOne
+	private Round round;
 	
 	public Participation() {
 		
@@ -35,6 +40,7 @@ public class Participation implements DomainObject {
 		super();
 		this.participant = participant;
 		this.quest = quest;
+		this.round = quest.getActiveRound();
 		this.score = score;
 	}
 
@@ -60,6 +66,15 @@ public class Participation implements DomainObject {
 
 	public void setQuest(Quest quest) {
 		this.quest = quest;
+		this.round = quest.getActiveRound();
+	}
+	
+	public Round getRound() {
+		return round;
+	}
+	
+	public void setRound(Round round) {
+		this.round = round;
 	}
 
 	public void setParticipant(Participant participant) {

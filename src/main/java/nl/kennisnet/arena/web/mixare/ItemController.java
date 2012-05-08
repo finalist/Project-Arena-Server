@@ -2,6 +2,9 @@ package nl.kennisnet.arena.web.mixare;
 
 import java.util.HashMap;
 
+import nl.kennisnet.arena.client.event.EventBus;
+import nl.kennisnet.arena.client.event.RefreshQuestEvent;
+import nl.kennisnet.arena.client.event.RefreshQuestLogEvent;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
@@ -136,6 +139,8 @@ public class ItemController {
 			mv = processOpenQuestion(participationId, question, answer);
 		}
 			
+		EventBus.get().fireEvent(new RefreshQuestEvent());
+        EventBus.get().fireEvent(new RefreshQuestLogEvent());
 		return mv;
 		
 	}

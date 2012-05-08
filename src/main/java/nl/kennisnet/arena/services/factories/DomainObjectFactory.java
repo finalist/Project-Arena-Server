@@ -6,6 +6,7 @@ import java.util.List;
 
 import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Location;
@@ -35,7 +36,11 @@ public class DomainObjectFactory {
 		}
 
 		result.setBorder(GeomUtil.createJTSPolygon(questDTO.getBorder()));
-		result.addRound(new Round("Ronde 1", result));
+		result.getRounds().clear();
+		for(RoundDTO round: questDTO.getRounds()){
+			result.addRound(new Round(round.getId(), round.getName(), result));
+		}
+		result.setActiveRound(result.getRounds().get(0));
 		return result;
 	}
 
@@ -96,6 +101,13 @@ public class DomainObjectFactory {
 			result.setPositionables(items);
 		}
 		result.setBorder(GeomUtil.createJTSPolygon(questDTO.getBorder()));
+		RoundDTO activeRoundDTO = questDTO.getActiveRound();
+		result.setActiveRound(new Round(activeRoundDTO.getId(), activeRoundDTO.getName(), result));
+		result.getRounds().clear();
+		for(RoundDTO round: questDTO.getRounds()){
+			Round r = new Round(round.getId(), round.getName(), result);
+			result.addRound(r);
+		}
 		return result;
 	}
 	

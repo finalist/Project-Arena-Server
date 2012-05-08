@@ -13,6 +13,7 @@ import nl.kennisnet.arena.client.domain.AnswerDTO;
 import nl.kennisnet.arena.client.domain.AnswerDTO.AnswerType;
 import nl.kennisnet.arena.client.domain.LogDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.TeamDTO;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
@@ -238,6 +239,7 @@ public class ParticipantService extends HibernateAwareService {
 		Participation participation = get(Participation.class, participationId);
 		participantAnswer.setParticipation(participation);
 		participantAnswer.setQuestion(question);
+		participantAnswer.setRound(question.getQuest().getActiveRound());
 		if(question.getCorrectAnswer() == null){
 			throw new IllegalArgumentException("No answer given");
 		}
@@ -256,6 +258,7 @@ public class ParticipantService extends HibernateAwareService {
 		Participation participation = get(Participation.class, participationId);
 		participantAnswer.setParticipation(participation);
 		participantAnswer.setQuestion(question);
+		participantAnswer.setRound(question.getQuest().getActiveRound());
 		participantAnswer.setResult(Result.ANSWERED.name());
 		merge(participantAnswer);
 	}
@@ -334,6 +337,7 @@ public class ParticipantService extends HibernateAwareService {
 					answerDTO.setQuestId(questId);
 					answerDTO.setQuestionId(participantAnswer.getQuestion().getId());
 					answerDTO.setParticipationId(participantAnswer.getParticipation().getId());
+					answerDTO.setRound(new RoundDTO(participantAnswer.getRound().getId(), participantAnswer.getRound().getName()));
 					answerDTOs.add(answerDTO);
 				}
 			}

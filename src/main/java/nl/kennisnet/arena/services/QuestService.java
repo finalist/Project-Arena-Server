@@ -86,6 +86,7 @@ public class QuestService extends HibernateAwareService {
 		Criteria criteria = getSession().createCriteria(Participation.class);
 		criteria.add(Restrictions.eq("participant", participant));
 		criteria.add(Restrictions.eq("quest", quest));
+		criteria.add(Restrictions.eq("round", quest.getActiveRound()));
 		criteria.setMaxResults(1);
 
 		List<Participation> participations = criteria.list();
@@ -123,7 +124,7 @@ public class QuestService extends HibernateAwareService {
 				quest.setId(null);
 			}
 		}
-
+		
 		quest = merge(quest);
 		if(sendNotification){
 			sendNotification(quest);

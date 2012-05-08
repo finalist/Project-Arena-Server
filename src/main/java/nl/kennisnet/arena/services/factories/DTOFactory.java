@@ -6,6 +6,7 @@ import java.util.List;
 import nl.kennisnet.arena.client.domain.ActionDTO;
 import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.TeamDTO;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
@@ -36,7 +37,8 @@ public class DTOFactory {
          result.setItems(items);
       }
       result.setBorder(GeomUtil.createSimplePolygon(quest.getBorder()));
-      result.setRounds(roundsListToStringList(quest.getRounds()));
+      result.setActiveRound(new RoundDTO(quest.getActiveRound().getId(), quest.getActiveRound().getName()));
+      result.setRounds(roundsToRoundDto(quest.getRounds()));
       return result;
    }
 
@@ -110,10 +112,11 @@ public class DTOFactory {
       return team;
    }
 
-   private static List<String> roundsListToStringList(List<Round> rounds){
-	   List<String> result = new ArrayList<String>();
+   private static List<RoundDTO> roundsToRoundDto(List<Round> rounds){
+	   List<RoundDTO> result = new ArrayList<RoundDTO>();
 	   for(Round round : rounds){
-		   result.add(round.getName());
+		   RoundDTO roundDTO = new RoundDTO(round.getId(), round.getName());
+		   result.add(roundDTO);
 	   }
 	   return result;
    }

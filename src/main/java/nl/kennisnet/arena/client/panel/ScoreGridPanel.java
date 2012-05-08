@@ -8,14 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import nl.kennisnet.arena.client.domain.ActionDTO;
 import nl.kennisnet.arena.client.domain.AnswerDTO;
 import nl.kennisnet.arena.client.domain.LogDTO;
 import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
+import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.TeamDTO;
 import nl.kennisnet.arena.client.event.EventBus;
+import nl.kennisnet.arena.client.event.RefreshQuestEvent;
 import nl.kennisnet.arena.client.event.RefreshQuestLogEvent;
 import nl.kennisnet.arena.client.util.PrintUtil;
 
@@ -35,12 +36,13 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * @author A. Egal A refractored LogTablePanel, used a grid instead of a
- *         flextable and used a AnswerDTO instead of a LogDTO, added open
- *         questions support
+ * @author A. Egal 
+ * A refractored LogTablePanel, used a grid instead of a
+ * flextable and used a AnswerDTO instead of a LogDTO, added open
+ * questions support
  */
-public class ScoreGridPanel extends SimplePanel implements
-		RefreshQuestLogEvent.Handler, ResizablePanel {
+public class ScoreGridPanel extends SimplePanel implements RefreshQuestEvent.Handler,
+	RefreshQuestLogEvent.Handler, ResizablePanel {
 
 	private String orderTeams = ORDER_NAME;
 	private String orderItems = ORDER_NAME;
@@ -68,19 +70,26 @@ public class ScoreGridPanel extends SimplePanel implements
 		title.setStyleName("scoreheader");
 		logPanel.add(title);
 		logPanel.add(createSortLinks());
-		Grid grid = createScoreGrid();
-		if (grid != null) {
-			setStyle(grid);
-			logPanel.add(grid);
+		for(RoundDTO roundDTO: quest.getRounds()){
+			Label round = new Label(roundDTO.getName());
+			round.setStyleName("roundheader");
+			if(roundDTO.equals(quest.getActiveRound())){
+				round.addStyleName("activeRound");
+			}
+			logPanel.add(round);
+			Grid grid = createScoreGrid(roundDTO, quest);
+			if (grid != null) {
+				setStyle(grid);
+				logPanel.add(grid);
+			}
+			logPanel.add(buildPrintButton(grid));
 		}
-		logPanel.add(buildPrintButton(grid));
 		container.add(logPanel);
 	}
 
-	private Grid createScoreGrid() {
+	private Grid createScoreGrid(RoundDTO roundDTO, QuestDTO quest) {
 		List<AnswerDTO> answerDTOs = QuestState.getInstance().getAnswers();
 		LogDTO log = QuestState.getInstance().getLog();
-		QuestDTO quest = QuestState.getInstance().getState();
 		Grid result = null;
 		if (log != null) {
 			result = new Grid();
@@ -99,22 +108,29 @@ public class ScoreGridPanel extends SimplePanel implements
 				}
 			}
 
-			for (TeamDTO team : getTeams(log, orderTeams)) {
-				teamIndex.add(team.getName());
-				int column = teamIndex.size();
-				setHTML(result, 0, column, team.getName(),
-						"FlexTable-column-label");
-				setHTML(result, itemIndex.size() + 1, column, team.getScore()
-						.toString(), "FlexTable-value");
+			for(AnswerDTO answerDTO : answerDTOs){
+				if(answerDTO.getRound().equals(roundDTO)){
+					if(!teamIndex.contains(answerDTO.getPlayerName())){
+						teamIndex.add(answerDTO.getPlayerName());
+						int column = teamIndex.size();
+						setHTML(result, 0, column, answerDTO.getPlayerName(),
+								"FlexTable-column-label");
+						setHTML(result, itemIndex.size() + 1, column, 
+								getScoreFromAnswerDto(answerDTOs, answerDTO.getPlayerName(), roundDTO), 
+								"FlexTable-value");
+					}
+				}
 			}
 
 			setHTML(result, itemIndex.size() + 1, 0, "Vragen juist beantwoord",
 					"FlexTable-row-label");
 
 			for(AnswerDTO answerDTO : answerDTOs){
-				int x = itemIndex.indexOf(answerDTO.getQuestionId()) + 1;
-				int y = teamIndex.indexOf(answerDTO.getPlayerName()) + 1;
-				setHTML(result, x, y, answerDTO.getAnswer(), "FlexTable-value");
+				if(answerDTO.getRound().equals(roundDTO)){
+					int x = itemIndex.indexOf(answerDTO.getQuestionId()) + 1;
+					int y = teamIndex.indexOf(answerDTO.getPlayerName()) + 1;
+					setHTML(result, x, y, answerDTO.getAnswer(), "FlexTable-value");
+				}
 			}
 			
 		}
@@ -329,21 +345,21 @@ public class ScoreGridPanel extends SimplePanel implements
 		return format.format(new Date());
 	}
 
-	private String answerIntToLetter(String answer) {
-		try {
-			int q = Integer.parseInt(answer.trim());
-			switch (q) {
-			case 1:	return "A";
-			case 2: return "B";
-			case 3: return "C";
-			case 4: return "D";
-			default: return "";
+	private String getScoreFromAnswerDto(List<AnswerDTO> answerDTOs, String playerName, RoundDTO round){
+		int score = 0;
+		for(AnswerDTO answerDTO: answerDTOs){
+			if(answerDTO.getRound().equals(round)){
+				if(answerDTO.getPlayerName().equals(playerName) && answerDTO.getResult().equals(AnswerDTO.Result.CORRECT.name())){
+					score ++;
+				}
 			}
-		} catch (NumberFormatException ne) {
-			return answer;
-		} catch (IndexOutOfBoundsException ie) {
-			return answer;
 		}
+		return score + "";
+	}
+	
+	@Override
+	public void onRefreshQuest(RefreshQuestEvent p) {
+		refresh();		
 	}
 
 }

@@ -2,9 +2,9 @@ package nl.kennisnet.arena.client;
 
 import nl.kennisnet.arena.client.panel.ClearLogPanel;
 import nl.kennisnet.arena.client.panel.MonitorMapPanel;
-import nl.kennisnet.arena.client.panel.QuestDetailsPanel;
 import nl.kennisnet.arena.client.panel.QuestItemsPanel;
 import nl.kennisnet.arena.client.panel.ResizablePanel;
+import nl.kennisnet.arena.client.panel.RoundPanel;
 import nl.kennisnet.arena.client.panel.TeamFilterPanel;
 import nl.kennisnet.arena.client.panel.ZoomToFitPanel;
 
@@ -17,7 +17,7 @@ public class ArenaMonitor extends HorizontalPanel implements ResizablePanel {
 
    private Panel contentPanel;
    private MonitorMapPanel monitorMapPanel;
-   private QuestDetailsPanel questDetailsPanel;
+   private RoundPanel roundPanel;
    private QuestItemsPanel questItemsPanel;
 
    public ArenaMonitor() {
@@ -50,9 +50,9 @@ public class ArenaMonitor extends HorizontalPanel implements ResizablePanel {
    private Panel createRightPanel() {
       VerticalPanel result = new VerticalPanel();
       result.getElement().setPropertyInt("cellSpacing", 3);
-      questDetailsPanel = new QuestDetailsPanel(true);
+      roundPanel = new RoundPanel();
       questItemsPanel = new QuestItemsPanel(true);
-      result.add(questDetailsPanel);
+      result.add(roundPanel);
       result.add(questItemsPanel);
       return result;
    }

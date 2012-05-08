@@ -100,7 +100,7 @@ public class QuestDetailsPanel extends SidePanel implements
 		QuestState.getInstance().getState()
 				.setEmailOwner(designerBox.getValue());
 	}
-
+	
 	private Button createSaveButton() {
 		return new Button("Bewaar en stuur een bevestigingsmail", saveButtonClick(true));
 	}

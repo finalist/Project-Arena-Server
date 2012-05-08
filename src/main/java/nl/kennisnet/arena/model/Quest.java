@@ -36,10 +36,10 @@ public class Quest implements DomainObject {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "quest")
 	private List<Positionable> positionables = new ArrayList<Positionable>();
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="quest")
+	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy="quest", orphanRemoval=true)
 	private List<Round> rounds = new ArrayList<Round>();
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Round activeRound;
 	
 	@Type(type = "org.hibernatespatial.GeometryUserType")

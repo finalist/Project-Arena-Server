@@ -6,6 +6,7 @@ import nl.kennisnet.arena.client.domain.AnswerDTO;
 import nl.kennisnet.arena.client.domain.LogDTO;
 import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
+import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.event.EventBus;
 import nl.kennisnet.arena.client.event.RefreshQuestEvent;
 import nl.kennisnet.arena.client.event.RefreshQuestLogEvent;
@@ -99,7 +100,10 @@ public class ArenaWA implements EntryPoint, ScreenSwitchEvent.Handler, RefreshQu
          QuestDTO quest = new QuestDTO();
          quest.setName("");
          quest.setEmailOwner("-");
-         QuestState.getInstance().setState(quest);
+         RoundDTO roundDTO = new RoundDTO("Ronde 1");
+     	 quest.setActiveRound(roundDTO);
+     	 quest.getRounds().add(roundDTO);
+    	 QuestState.getInstance().setState(quest);
       }
    }
 

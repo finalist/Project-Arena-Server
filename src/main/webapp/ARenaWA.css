@@ -484,6 +484,23 @@ img {
 	padding: 0;
 }
 
+.rounds_panel {
+	width: 255px;
+	cursor: pointer;
+}
+
+.rounds_panel li{
+	background-color: #ffffff;
+	padding: 0;
+	color: #000;
+}
+
+.rounds_panel li.active{
+	background-color: #0099ee;
+	padding: 0;
+	color: #fff;
+}
+
 .questitempanel a:link {
 	color: white;
 	padding-right: 3px;
@@ -620,6 +637,18 @@ img {
 .scoreheader {
 	font-size: 1.60em;
 	padding: 20px;
+	padding-top: 0px;
+}
+
+.roundheader{
+	font-size: 1.30em;
+	padding: 5px;
+	padding-top: 20px;
+}
+
+.activeRound{
+	font-weight: bold;
+	font-size: 1.40em;
 }
 
 .sortlink {
