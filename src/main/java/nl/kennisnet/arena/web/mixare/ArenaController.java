@@ -42,9 +42,7 @@ public class ArenaController {
 	/**
 	 * The browser does a GET to this url and the content-type is set to
 	 * application/mixare-json.
-	 * @param questName
-	 * @param name
-	 * @return
+	 * @return The browser will return json data according to the lat & lng
 	 */
 	@RequestMapping(value = "/{questId}", method = RequestMethod.GET, params = {"player", "lat", "lng"}) @ResponseBody
 	public String mixareCallback(@PathVariable Long questId, @RequestParam("player") final String player,
@@ -73,6 +71,37 @@ public class ArenaController {
 			return "error, quest not found";
 		}
 	}
+	
+	/**
+	 * The browser does a GET to this url and the content-type is set to
+	 * application/mixare-json. 
+	 * @return The browser returns offline data to the application
+	 */
+	@RequestMapping(value = "/{questId}", method = RequestMethod.GET, params = {"player"}) @ResponseBody
+	public String mixareCallback(@PathVariable Long questId, @RequestParam("player") final String player){
+			
+		final long participantId = participantService.getParticipantId(player);
+		final Quest quest = questService.getQuest(questId);
+		final long participationId = questService.participateInQuest(participantId, quest);
+
+		final ArenaDataBean data = new ArenaDataBean(questId, player, participantId, quest, null, participationId);
+		data.setParticipantService(participantService);
+
+		String pLog = "player: "+ player + " OFFLINE mode";
+
+		log.debug("default get: [quest=" + questId + ",player=" + player + " OFFLINE mode]");		
+		try{
+			final Arena arena = ArenaFactory.getOfflineInstance(data, configuration);
+
+			log.debug("response model: " + arena);
+			Gson gson = new Gson();
+			return gson.toJson(arena);		
+		}catch(NullPointerException ne){ //if quest is unknown:
+			ne.printStackTrace();
+			return "error, quest not found";
+		}
+	}
+	
 	
 	/**
 	 * This method will run if no parameters are send with the url. Mixare will first run this

@@ -29,6 +29,19 @@ public class ArenaFactory {
 		
 		return arena;
 	}
+	
+	public static Arena getOfflineInstance(final ArenaDataBean data, final CompositeConfiguration configuration) {
+		final ConvertorConfiguration config = new ConvertorConfiguration(data, configuration, data.getQuest());
+		String baseUrl = UtilityHelper.getBaseUrl(configuration);
+		
+		Arena arena = new Arena();
+		List<Positionable> positionables = data.getQuest().getPositionables();
+		
+		arena.addPositionResults(positionables, baseUrl, data);
+		arena.checkStats();
+		
+		return arena;
+	}
 
 	private static String formatProgress(final Progress progress) {
 		return String.format("Score: %d/%d", progress.getCurr(),

@@ -38,8 +38,17 @@ public class ArenaDataBean {
 		this.participationId = participationId;
 	}
 
-
-
+	public ArenaDataBean(Long questId, String player,
+			long participantId, Quest quest, Question question,
+			long participationId) {
+		super();
+		this.questId = questId;
+		this.player = player;
+		this.participantId = participantId;
+		this.quest = quest;
+		this.question = question;
+		this.participationId = participationId;
+	}
 
 	public Long getQuestId() {
 		return questId;

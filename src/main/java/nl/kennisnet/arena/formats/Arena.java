@@ -188,6 +188,9 @@ public class Arena {
 				) < positionable.getLocation().getVisibleRadius()) {
 			return true;
 		}
+		if (data.getLat() == 0.0 & data.getLon() == 0.0){ //offline mode activated
+			return true;
+		}
 		return false;
 	}
 }
