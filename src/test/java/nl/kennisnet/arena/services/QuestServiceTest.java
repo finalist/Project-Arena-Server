@@ -5,7 +5,9 @@ import java.util.List;
 
 import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.SimplePoint;
+import nl.kennisnet.arena.model.Round;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -32,6 +34,7 @@ public class QuestServiceTest {
     QuestDTO existingQuest;
     String existingName = "test-existing";
     String existingEmail = "kns.arena.tester@gmail.com";
+    RoundDTO existingRound = new RoundDTO("test-round");
     
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -51,6 +54,10 @@ public class QuestServiceTest {
         List<QuestItemDTO> items = new ArrayList<QuestItemDTO>();
         items.add(itemDTO);
         questDTO.setItems(items);
+        questDTO.setActiveRound(existingRound);
+        List<RoundDTO> rounds = new ArrayList<RoundDTO>();
+        rounds.add(existingRound);
+        questDTO.setRounds(rounds);
         existingQuest = questService.save(questDTO, true);
         existingId = existingQuest.getId();
     }
@@ -64,16 +71,22 @@ public class QuestServiceTest {
     public void testSaveExistingNoItems() {
         String name = "test-replaced";
         String email = "kns.arena.tester@gmail.com";
+        RoundDTO roundDto = new RoundDTO("round-replaced");
         QuestDTO questDTO = new QuestDTO();
         questDTO.setId(existingId);
         questDTO.setName(name);
         questDTO.setEmailOwner(email);
+        questDTO.setActiveRound(roundDto);
+        List<RoundDTO> rounds = new ArrayList<RoundDTO>();
+        rounds.add(existingRound);
+        questDTO.setRounds(rounds);
         QuestDTO saved = questService.save(questDTO, true);
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
         Assert.assertEquals(existingId, saved.getId());
         Assert.assertEquals(name, saved.getName());
         Assert.assertEquals(email, saved.getEmailOwner());
+        Assert.assertEquals(roundDto, saved.getActiveRound());
         Assert.assertEquals(0, saved.getItems().size());
     }
 
@@ -81,19 +94,23 @@ public class QuestServiceTest {
     public void testSaveExistingReplaceItem() {
         String name = "test-replaced";
         String email = "kns.arena.tester@gmail.com";
+        RoundDTO roundDto = new RoundDTO("round-replaced");
         QuestDTO questDTO = existingQuest;
         questDTO.setName(name);
         QuestItemDTO questItemDTO = questDTO.getItems().get(0);
         questItemDTO.setPoint(new SimplePoint(4.4D,2.2D));
+        questDTO.setActiveRound(roundDto);
+        List<RoundDTO> rounds = new ArrayList<RoundDTO>();
+        rounds.add(existingRound);
+        questDTO.setRounds(rounds);
         QuestDTO saved = questService.save(questDTO, true);
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
         Assert.assertEquals(existingId, saved.getId());
         Assert.assertEquals(name, saved.getName());
         Assert.assertEquals(email, saved.getEmailOwner());
+        Assert.assertEquals(roundDto, saved.getActiveRound());
         Assert.assertEquals(1, saved.getItems().size());
-        
-
         Assert.assertEquals(new Double(2.2D), saved.getItems().get(0).getPoint().getLongitude());
         Assert.assertEquals(new Double(4.4D), saved.getItems().get(0).getPoint().getLatitude());
     }

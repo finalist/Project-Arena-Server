@@ -104,7 +104,9 @@ public class DomainObjectFactory {
 		}
 		result.setBorder(GeomUtil.createJTSPolygon(questDTO.getBorder()));
 		RoundDTO activeRoundDTO = questDTO.getActiveRound();
-		result.setActiveRound(new Round(activeRoundDTO.getId(), activeRoundDTO.getName(), result));
+		if(activeRoundDTO != null){
+			result.setActiveRound(new Round(activeRoundDTO.getId(), activeRoundDTO.getName(), result));
+		}
 		result.getRounds().clear();
 		for(RoundDTO round: questDTO.getRounds()){
 			Round r = new Round(round.getId(), round.getName(), result);
