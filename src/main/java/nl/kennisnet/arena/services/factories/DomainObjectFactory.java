@@ -40,7 +40,9 @@ public class DomainObjectFactory {
 		for(RoundDTO round: questDTO.getRounds()){
 			result.addRound(new Round(round.getId(), round.getName(), result));
 		}
-		result.setActiveRound(result.getRounds().get(0));
+		if(result.getRounds().size() > 0){
+			result.setActiveRound(result.getRounds().get(0));
+		}
 		return result;
 	}
 
