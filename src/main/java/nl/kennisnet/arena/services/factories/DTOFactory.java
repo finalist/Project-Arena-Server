@@ -37,7 +37,9 @@ public class DTOFactory {
          result.setItems(items);
       }
       result.setBorder(GeomUtil.createSimplePolygon(quest.getBorder()));
-      result.setActiveRound(new RoundDTO(quest.getActiveRound().getId(), quest.getActiveRound().getName()));
+      if(quest.getActiveRound() != null){
+    	  result.setActiveRound(new RoundDTO(quest.getActiveRound().getId(), quest.getActiveRound().getName()));  
+      }
       result.setRounds(roundsToRoundDto(quest.getRounds()));
       return result;
    }
