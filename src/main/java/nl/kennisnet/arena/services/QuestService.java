@@ -20,7 +20,6 @@ import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.services.factories.DTOFactory;
 import nl.kennisnet.arena.services.factories.DomainObjectFactory;
 import nl.kennisnet.arena.services.support.HibernateAwareService;
-import nl.kennisnet.arena.utils.GamarayDataBean;
 import nl.kennisnet.arena.utils.UtilityHelper;
 
 import org.apache.commons.configuration.CompositeConfiguration;
@@ -34,8 +33,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 @Service
 @Transactional
@@ -242,23 +239,5 @@ public class QuestService extends HibernateAwareService {
 	private String currentTime(Locale locale) {
 		SimpleDateFormat format = new SimpleDateFormat("k:mm", locale);
 		return format.format(new Date());
-	}
-
-	public void handlePress(Quest quest, GamarayDataBean data) {
-		if (data.getEventSrc().startsWith("feature")) {
-			handleFeaturePress();
-		} else if (data.getEventSrc().startsWith("feature")) {
-			handleOverlayPress();
-		} else {
-			throw new NotImplementedException();
-		}
-	}
-
-	private void handleFeaturePress() {
-		throw new NotImplementedException();
-	}
-
-	private void handleOverlayPress() {
-		throw new NotImplementedException();
 	}
 }
