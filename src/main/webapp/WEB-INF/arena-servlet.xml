@@ -25,4 +25,8 @@
 		</property>
 	</bean>
 
+	<bean id="gamaray" class="nl.kennisnet.arena.view.MarshallingView">
+		<property name="marshaller" ref="marshaller" />
+	</bean>
+
 </beans>
