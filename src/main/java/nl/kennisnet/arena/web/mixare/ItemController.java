@@ -1,6 +1,7 @@
 package nl.kennisnet.arena.web.mixare;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import nl.kennisnet.arena.client.event.EventBus;
 import nl.kennisnet.arena.client.event.RefreshQuestEvent;
@@ -44,7 +45,9 @@ public class ItemController {
 	 * 
 	 * @param questId
 	 * @return
+	 * @deprecated Not being used anymore in the new version. sending the page directly through json
 	 */
+	@Deprecated
 	@RequestMapping(value = "/show/{questId}/{questionId}/{player}", method = RequestMethod.GET)
 	public ModelAndView showQuestions(@PathVariable Long questId,
 			@PathVariable Long questionId) {
@@ -57,7 +60,7 @@ public class ItemController {
 		if (question == null) {
 			return new ModelAndView(new InternalResourceView("/question.jsp"));
 		}
-		HashMap<String, String> model = new HashMap<String, String>();
+		Map<String, String> model = new HashMap<String, String>();
 		model.put("question", question.getText());
 		if (question.getQuestionTypeAsEnum() == TYPE.MULTIPLE_CHOICE) {
 			fillAnswerModel(model, "answer1", question.getAnswer1());
@@ -72,7 +75,7 @@ public class ItemController {
 				model);
 	}
 
-	private void fillAnswerModel(HashMap<String, String> model, String key,
+	private void fillAnswerModel(Map<String, String> model, String key,
 			String value) {
 		if (value != null) {
 			if (value.trim().length() > 0) {
@@ -82,12 +85,12 @@ public class ItemController {
 	}
 
 	/**
-	 * This method will run if no parameters are send with the url. Mixare will
-	 * first run this url to check if the page exists.
-	 * 
+	 * Shows the information item. as text 
 	 * @param questId
 	 * @return
+	 * @deprecated Not being used anymore in the new version. sending the page directly through json
 	 */
+	@Deprecated
 	@RequestMapping(value = "/show/{informationId}", method = RequestMethod.GET)
 	public ModelAndView showInformation(@PathVariable Long informationId) {
 		Information information = participantService
@@ -110,8 +113,7 @@ public class ItemController {
 	}
 
 	/**
-	 * This method will run if no parameters are send with the url. Mixare will
-	 * first run this url to check if the page exists.
+	 * Question submitter.
 	 * 
 	 * @param questId
 	 * @return

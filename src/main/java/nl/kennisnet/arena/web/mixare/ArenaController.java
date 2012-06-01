@@ -31,7 +31,12 @@ public class ArenaController {
 	private final CompositeConfiguration configuration;
 	
 	private Logger log = Logger.getLogger(ArenaController.class);
-
+	
+	private final String playerParam = "player";
+	private final String latitudeParam = "lat";
+	private final String longitudeParam = "lng";
+	
+	
 	@Autowired
 	public ArenaController(final QuestService questService, final ParticipantService participantService, final CompositeConfiguration configuration) {
 		this.questService = questService;
@@ -40,13 +45,13 @@ public class ArenaController {
 	}
 
 	/**
-	 * The browser does a GET to this url and the content-type is set to
-	 * application/mixare-json.
-	 * @return The browser will return json data according to the lat & lng
+	 * This method will be called by the mobile application mixare, and asks for the json data matching its
+	 * latitude and longitude.
+	 * @return The browser will return json data according to the lat & lng parameters
 	 */
-	@RequestMapping(value = "/{questId}", method = RequestMethod.GET, params = {"player", "lat", "lng"}) @ResponseBody
-	public String mixareCallback(@PathVariable Long questId, @RequestParam("player") final String player,
-								@RequestParam("lat") final float latitude, @RequestParam("lng") final float longitude){
+	@RequestMapping(value = "/{questId}", method = RequestMethod.GET, params = {playerParam, latitudeParam, longitudeParam}) @ResponseBody
+	public String mixareJsonRequest(@PathVariable Long questId, @RequestParam(playerParam) final String player,
+								@RequestParam(latitudeParam) final float latitude, @RequestParam(longitudeParam) final float longitude){
 			
 		final long participantId = participantService.getParticipantId(player);
 		final Quest quest = questService.getQuest(questId);
@@ -60,25 +65,23 @@ public class ArenaController {
 		, GeomUtil.createJTSPoint(latitude, longitude));		
 		
 		log.debug("default get: [quest=" + questId + ",player=" + player + "]");		
-		try{
+		if(quest != null){	
 			final Arena arena = ArenaFactory.getInstance(data, configuration);
 
 			log.debug("response model: " + arena);
 			Gson gson = new Gson();
 			return gson.toJson(arena);		
-		}catch(NullPointerException ne){ //if quest is unknown:
-			ne.printStackTrace();
+		}else{
 			return "error, quest not found";
 		}
 	}
 	
 	/**
-	 * The browser does a GET to this url and the content-type is set to
-	 * application/mixare-json. 
+	 * This method will be called by the mobile application mixare, and asks for all json data in that quest (arena)
 	 * @return The browser returns offline data to the application
 	 */
-	@RequestMapping(value = "/{questId}", method = RequestMethod.GET, params = {"player"}) @ResponseBody
-	public String mixareCallback(@PathVariable Long questId, @RequestParam("player") final String player){
+	@RequestMapping(value = "/{questId}", method = RequestMethod.GET, params = {playerParam}) @ResponseBody
+	public String mixareOfflineJsonRequest(@PathVariable Long questId, @RequestParam(playerParam) final String player){
 			
 		final long participantId = participantService.getParticipantId(player);
 		final Quest quest = questService.getQuest(questId);
@@ -87,17 +90,14 @@ public class ArenaController {
 		final ArenaDataBean data = new ArenaDataBean(questId, player, participantId, quest, null, participationId);
 		data.setParticipantService(participantService);
 
-		String pLog = "player: "+ player + " OFFLINE mode";
-
 		log.debug("default get: [quest=" + questId + ",player=" + player + " OFFLINE mode]");		
-		try{
+		if(quest != null){	
 			final Arena arena = ArenaFactory.getOfflineInstance(data, configuration);
 
 			log.debug("response model: " + arena);
 			Gson gson = new Gson();
 			return gson.toJson(arena);		
-		}catch(NullPointerException ne){ //if quest is unknown:
-			ne.printStackTrace();
+		}else{
 			return "error, quest not found";
 		}
 	}

@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 @Entity
 public class ParticipantAnswer implements DomainObject {
 
@@ -103,6 +105,11 @@ public class ParticipantAnswer implements DomainObject {
 			}
 		}
 		return super.equals(obj);
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(this.getParticipationtId()).append(this.getQuestion()).toHashCode();
 	}
 	
 	@Embeddable

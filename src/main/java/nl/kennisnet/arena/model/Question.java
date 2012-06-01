@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -143,6 +144,11 @@ public class Question extends Positionable implements DomainObject {
 			}
 		}
 		return super.equals(obj);
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(this.getId()).toHashCode();
 	}
 
 }

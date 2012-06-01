@@ -17,8 +17,6 @@ import com.vividsolutions.jts.geom.Polygon;
 public class ArenaFactory {
 
 	public static Arena getInstance(final ArenaDataBean data, final CompositeConfiguration configuration) {
-		
-		final ConvertorConfiguration config = new ConvertorConfiguration(data, configuration, data.getQuest());
 		String baseUrl = UtilityHelper.getBaseUrl(configuration);
 		
 		Arena arena = new Arena();
@@ -31,7 +29,6 @@ public class ArenaFactory {
 	}
 	
 	public static Arena getOfflineInstance(final ArenaDataBean data, final CompositeConfiguration configuration) {
-		final ConvertorConfiguration config = new ConvertorConfiguration(data, configuration, data.getQuest());
 		String baseUrl = UtilityHelper.getBaseUrl(configuration);
 		
 		Arena arena = new Arena();

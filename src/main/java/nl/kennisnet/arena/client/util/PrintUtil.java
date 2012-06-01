@@ -22,12 +22,12 @@ public class PrintUtil {
     /**
      * If true, use a Timer instead of DeferredCommand to print the internal fram
      */
-    public static boolean USE_TIMER     = false;
+    private static boolean useTimer     = false;
 
     /**
      * Time in seconds to wait before printing the internal frame when using Timer
      */
-    public static int TIMER_DELAY       = 2;
+    private static int timerDelay       = 2;
 
 
     public static native void it() /*-{
@@ -75,13 +75,13 @@ public class PrintUtil {
     public static void it(String html) {
         try {
             buildFrame(html);
-            if (USE_TIMER) {
+            if (PrintUtil.useTimer) {
                 Timer timer     = new Timer() {
                         public void run() {
                             printFrame();
                         }
                     };
-                timer.schedule(TIMER_DELAY * 1000);
+                timer.schedule(PrintUtil.timerDelay * 1000);
             } else {
                 DeferredCommand.addCommand(new Command() {
                         public void execute() {
@@ -90,7 +90,7 @@ public class PrintUtil {
                     });
             }
 
-        } catch (Throwable exc) {
+        } catch (Exception exc) {
             Window.alert(exc.getMessage());
         }
     }
@@ -140,12 +140,8 @@ public class PrintUtil {
     }
 
     public static void updateDOM(InputElement item) {
-        try {
-            item.setDefaultValue(               item.getValue());
-        } finally {}
-        try {
-            item.setDefaultChecked(             item.isDefaultChecked());
-        } finally {}
+        item.setDefaultValue(item.getValue());
+        item.setDefaultChecked(item.isDefaultChecked());
     }
 
     public static void updateDOM(TextAreaElement item) {

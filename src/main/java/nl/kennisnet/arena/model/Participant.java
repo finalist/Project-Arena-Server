@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 @Entity
 public class Participant implements DomainObject {
 
@@ -83,6 +85,11 @@ public class Participant implements DomainObject {
 			}
 		}
 		return super.equals(obj);
+	}
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(this.getId()).toHashCode();
 	}
 	
 	
