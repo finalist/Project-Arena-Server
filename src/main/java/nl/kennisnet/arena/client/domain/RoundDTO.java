@@ -53,7 +53,7 @@ public class RoundDTO implements Serializable{
 	
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(this.getName()).toHashCode();
+		return this.getName().hashCode();
 	}
 	
 }
