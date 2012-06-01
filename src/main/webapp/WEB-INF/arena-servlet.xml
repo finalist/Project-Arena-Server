@@ -25,11 +25,4 @@
 		</property>
 	</bean>
 
-	<bean id="gamaray" class="nl.kennisnet.arena.view.MarshallingView">
-		<property name="marshaller" ref="marshaller" />
-	</bean>
-
-	<oxm:jaxb2-marshaller id="marshaller">
-		<oxm:class-to-be-bound name="nl.kennisnet.arena.formats.Dimension" />
-	</oxm:jaxb2-marshaller>
 </beans>
