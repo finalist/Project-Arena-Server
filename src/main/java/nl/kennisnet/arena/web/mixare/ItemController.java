@@ -15,7 +15,9 @@ import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.model.Question.TYPE;
 import nl.kennisnet.arena.services.ParticipantService;
 import nl.kennisnet.arena.services.QuestService;
+import nl.kennisnet.arena.utils.UtilityHelper;
 
+import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,20 +37,22 @@ public class ItemController {
 
 	private final QuestService questService;
 	private final ParticipantService participantService;
+	private final CompositeConfiguration configuration;
 
 	private Logger log = Logger.getLogger(ItemController.class);
 
 	@Autowired
 	public ItemController(final QuestService questService,
-			final ParticipantService participantService) {
+			final ParticipantService participantService, final CompositeConfiguration configuration) {
 		this.questService = questService;
 		this.participantService = participantService;
+		this.configuration = configuration;
 	}
 
 	/**
 	 */
 	@RequestMapping(value = "offline/show/{questId}/{itemId}/{player}", method = RequestMethod.GET) @ResponseBody
-	public String showOfflineItem(@PathVariable Long questId, @PathVariable Long itemId) {
+	public String showOfflineItem(@PathVariable Long questId, @PathVariable Long itemId, @PathVariable String player) {
 		Quest quest = questService.getQuest(questId);
 		Positionable positionable = getPositionableById(quest, itemId);
 		if(positionable == null){
@@ -58,7 +62,10 @@ public class ItemController {
 		log.debug("questId = " + questId + ", questionId = " + itemId
 				+ ", quest = " + quest + ", positionable = " + positionable);
 		
-		final Item item = ItemFactory.getInstance(positionable);
+		final String baseUrl = UtilityHelper.getBaseUrl(configuration);
+		final String submitUrl = baseUrl + "show/"+questId+"/"+itemId+"/"+player;
+		
+		final Item item = ItemFactory.getInstance(positionable, submitUrl);
 		Gson gson = new Gson();
 		return gson.toJson(item);		
 	}

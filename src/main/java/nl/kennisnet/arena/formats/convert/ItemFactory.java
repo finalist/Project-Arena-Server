@@ -5,7 +5,7 @@ import nl.kennisnet.arena.model.Positionable;
 
 public class ItemFactory {
 
-	public static Item getInstance(Positionable positionable){
-		return new Item(positionable);
+	public static Item getInstance(final Positionable positionable, final String submitUrl){		
+		return new Item(positionable, submitUrl);
 	}
 }

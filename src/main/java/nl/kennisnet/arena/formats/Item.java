@@ -14,6 +14,7 @@ public class Item {
 	private String type = "";
 	private String title;
 	private String description;
+	private String submitUrl;
 	
 	//question type attributes
 	private String[] answers;
@@ -21,8 +22,9 @@ public class Item {
 	//image or video type attribute:
 	private String url;
 	
-	public Item(Positionable positionable){
+	public Item(Positionable positionable, String submitUrl){
 		setType(positionable);
+		this.submitUrl = submitUrl;
 	}
 	
 	public void setType(Positionable positionable){
@@ -120,4 +122,12 @@ public class Item {
 		return title;
 	}
 
+	public String getSubmitUrl() {
+		return submitUrl;
+	}
+	
+	public void setSubmitUrl(String submitUrl) {
+		this.submitUrl = submitUrl;
+	}
+	
 }
