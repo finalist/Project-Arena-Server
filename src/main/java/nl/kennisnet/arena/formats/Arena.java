@@ -72,6 +72,7 @@ public class Arena {
 			result = buildWebPage(result, positionable, baseUrl, data);
 			result = buildPositionableType(result, positionable);
 			result = buildObjectImage(result, positionable, baseUrl, data);
+			result = buildDistance(result, positionable, data);
 			results.add(result);
 			numResults++;
 		}
@@ -89,7 +90,10 @@ public class Arena {
 			String baseUrl, ArenaDataBean data) {
 		if(webPageNeeded(data, positionable)){
 			result.setHasDetailPage(true);
-			if (positionable instanceof Question) {
+			if(data.isOffline()){
+				result.setWebpage(baseUrl + "item/offline/show/" + data.getQuestId() + "/"
+						+ positionable.getId() + "/" + data.getPlayer() + ".item");
+			} else if (positionable instanceof Question) {
 				result.setWebpage(baseUrl + "item/show/" + data.getQuestId() + "/"
 						+ positionable.getId() + "/" + data.getPlayer() + ".item");
 			} else if (positionable instanceof Information) {
@@ -182,13 +186,20 @@ public class Arena {
 		return url;
 	}
 	
+	private Result buildDistance(Result result, Positionable positionable, ArenaDataBean data){
+		if(data.isOffline()){
+			result.setRadius(positionable.getLocation().getRadius());
+		}
+		return result;
+	}
+	
 	private boolean webPageNeeded(ArenaDataBean data, Positionable positionable){
 		if ( positionable.getLocation().getVisibleRadius() == null || GeomUtil.calculateDistanceInMeters(
 				data.getLocation(),	positionable.getLocation().getPoint()
 				) < positionable.getLocation().getVisibleRadius()) {
 			return true;
 		}
-		if (data.getLat() == 0.0 & data.getLon() == 0.0){ //offline mode activated
+		if (data.isOffline()){ //offline mode activated
 			return true;
 		}
 		return false;

@@ -6,7 +6,10 @@ import java.util.Map;
 import nl.kennisnet.arena.client.event.EventBus;
 import nl.kennisnet.arena.client.event.RefreshQuestEvent;
 import nl.kennisnet.arena.client.event.RefreshQuestLogEvent;
+import nl.kennisnet.arena.formats.Item;
+import nl.kennisnet.arena.formats.convert.ItemFactory;
 import nl.kennisnet.arena.model.Information;
+import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.model.Question.TYPE;
@@ -20,8 +23,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.InternalResourceView;
+
+import com.google.gson.Gson;
 
 @Controller
 @RequestMapping("/item")
@@ -40,14 +46,30 @@ public class ItemController {
 	}
 
 	/**
+	 */
+	@RequestMapping(value = "offline/show/{questId}/{itemId}/{player}", method = RequestMethod.GET) @ResponseBody
+	public String showOfflineItem(@PathVariable Long questId, @PathVariable Long itemId) {
+		Quest quest = questService.getQuest(questId);
+		Positionable positionable = getPositionableById(quest, itemId);
+		if(positionable == null){
+			return "Object niet gevonden";
+		}
+		
+		log.debug("questId = " + questId + ", questionId = " + itemId
+				+ ", quest = " + quest + ", positionable = " + positionable);
+		
+		final Item item = ItemFactory.getInstance(positionable);
+		Gson gson = new Gson();
+		return gson.toJson(item);		
+	}
+	
+	/**
 	 * This method will run if no parameters are send with the url. Mixare will
 	 * first run this url to check if the page exists.
 	 * 
 	 * @param questId
 	 * @return
-	 * @deprecated Not being used anymore in the new version. sending the page directly through json
 	 */
-	@Deprecated
 	@RequestMapping(value = "/show/{questId}/{questionId}/{player}", method = RequestMethod.GET)
 	public ModelAndView showQuestions(@PathVariable Long questId,
 			@PathVariable Long questionId) {
@@ -60,7 +82,7 @@ public class ItemController {
 		if (question == null) {
 			return new ModelAndView(new InternalResourceView("/question.jsp"));
 		}
-		Map<String, String> model = new HashMap<String, String>();
+		HashMap<String, String> model = new HashMap<String, String>();
 		model.put("question", question.getText());
 		if (question.getQuestionTypeAsEnum() == TYPE.MULTIPLE_CHOICE) {
 			fillAnswerModel(model, "answer1", question.getAnswer1());
@@ -73,24 +95,15 @@ public class ItemController {
 		}
 		return new ModelAndView(new InternalResourceView("/question.jsp"),
 				model);
-	}
-
-	private void fillAnswerModel(Map<String, String> model, String key,
-			String value) {
-		if (value != null) {
-			if (value.trim().length() > 0) {
-				model.put(key, value);
-			}
-		}
-	}
-
+	}	
+	
 	/**
-	 * Shows the information item. as text 
+	 * This method will run if no parameters are send with the url. Mixare will
+	 * first run this url to check if the page exists.
+	 * 
 	 * @param questId
 	 * @return
-	 * @deprecated Not being used anymore in the new version. sending the page directly through json
 	 */
-	@Deprecated
 	@RequestMapping(value = "/show/{informationId}", method = RequestMethod.GET)
 	public ModelAndView showInformation(@PathVariable Long informationId) {
 		Information information = participantService
@@ -110,6 +123,25 @@ public class ItemController {
 
 		return new ModelAndView(new InternalResourceView("/information.jsp"),
 				model);
+	}
+
+	
+	private Positionable getPositionableById(Quest quest, long itemId){
+		for( Positionable positionable: quest.getPositionables()){
+			if(positionable.getId() == itemId){
+				return positionable;
+			}
+		}
+		return null;
+	}
+
+	private void fillAnswerModel(Map<String, String> model, String key,
+			String value) {
+		if (value != null) {
+			if (value.trim().length() > 0) {
+				model.put(key, value);
+			}
+		}
 	}
 
 	/**

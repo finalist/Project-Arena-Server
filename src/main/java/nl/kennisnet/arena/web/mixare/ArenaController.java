@@ -57,7 +57,7 @@ public class ArenaController {
 		final Quest quest = questService.getQuest(questId);
 		final long participationId = questService.participateInQuest(participantId, quest);
 
-		final ArenaDataBean data = new ArenaDataBean(questId, player, latitude, longitude, participantId, quest, null, participationId);
+		final ArenaDataBean data = new ArenaDataBean(questId, player, latitude, longitude, participantId, quest, participationId);
 		data.setParticipantService(participantService);
 
 		String pLog = "player: "+ player + " on lat: "+ latitude+ " and lng "+ longitude;
@@ -87,7 +87,7 @@ public class ArenaController {
 		final Quest quest = questService.getQuest(questId);
 		final long participationId = questService.participateInQuest(participantId, quest);
 
-		final ArenaDataBean data = new ArenaDataBean(questId, player, participantId, quest, null, participationId);
+		final ArenaDataBean data = new ArenaDataBean(questId, player, participantId, quest, participationId, true);
 		data.setParticipantService(participantService);
 
 		log.debug("default get: [quest=" + questId + ",player=" + player + " OFFLINE mode]");		

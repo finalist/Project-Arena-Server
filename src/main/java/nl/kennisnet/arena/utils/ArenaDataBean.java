@@ -17,15 +17,15 @@ public class ArenaDataBean {
 	private double lon;
 	private long participantId;
 	private Quest quest;
-	private Question question;
 	private long participationId;
 	private ParticipantService participantService;
+	private boolean isOffline = false;
 	
 	public ArenaDataBean() {
 	}
 	
 	public ArenaDataBean(Long questId, String player, double lat, double lon,
-			long participantId, Quest quest, Question question,
+			long participantId, Quest quest,
 			long participationId) {
 		super();
 		this.questId = questId;
@@ -34,20 +34,19 @@ public class ArenaDataBean {
 		this.lon = lon;
 		this.participantId = participantId;
 		this.quest = quest;
-		this.question = question;
 		this.participationId = participationId;
 	}
 
 	public ArenaDataBean(Long questId, String player,
-			long participantId, Quest quest, Question question,
-			long participationId) {
+			long participantId, Quest quest,
+			long participationId, boolean isOffline) {
 		super();
 		this.questId = questId;
 		this.player = player;
 		this.participantId = participantId;
 		this.quest = quest;
-		this.question = question;
 		this.participationId = participationId;
+		this.isOffline = isOffline;
 	}
 
 	public Long getQuestId() {
@@ -97,15 +96,7 @@ public class ArenaDataBean {
 	public void setQuest(Quest quest) {
 		this.quest = quest;
 	}
-
-	public Question getQuestion() {
-		return question;
-	}
-
-	public void setQuestion(Question question) {
-		this.question = question;
-	}
-
+	
 	public long getParticipationId() {
 		return participationId;
 	}
@@ -120,6 +111,14 @@ public class ArenaDataBean {
 	
 	public ParticipantService getParticipantService() {
 		return participantService;
+	}
+	
+	public boolean isOffline() {
+		return isOffline;
+	}
+	
+	public void setOffline(boolean isOffline) {
+		this.isOffline = isOffline;
 	}
 
 	public Point getLocation() {

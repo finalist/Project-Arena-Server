@@ -14,7 +14,7 @@ public class Result {
 
 	private String title;
 
-	private float distance;
+	private double radius;
 	
 	@SerializedName("has_detail_page")
 	private int hasDetailPage;
@@ -67,12 +67,12 @@ public class Result {
 		this.title = title;
 	}
 	
-	public float getDistance() {
-		return distance;
+	public void setRadius(double radius) {
+		this.radius = radius;
 	}
 	
-	public void setDistance(float distance) {
-		this.distance = distance;
+	public double getRadius() {
+		return radius;
 	}
 	
 	public int isHasDetailPage() {
