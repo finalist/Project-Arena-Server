@@ -63,7 +63,7 @@ public class ItemController {
 				+ ", quest = " + quest + ", positionable = " + positionable);
 		
 		final String baseUrl = UtilityHelper.getBaseUrl(configuration);
-		final String submitUrl = baseUrl + "item/show/"+questId+"/"+itemId+"/"+player+".item";
+		final String submitUrl = "("+baseUrl + "item/show/"+questId+"/"+itemId+"/"+player+".item)";
 		
 		final Item item = ItemFactory.getInstance(positionable, submitUrl);
 		Gson gson = new Gson();
