@@ -17,6 +17,11 @@ import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Participation;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
+import nl.kennisnet.arena.repository.LocationRepository;
+import nl.kennisnet.arena.repository.ParticipantRepository;
+import nl.kennisnet.arena.repository.ParticipationRepository;
+import nl.kennisnet.arena.repository.PositionableRepository;
+import nl.kennisnet.arena.repository.QuestRepository;
 import nl.kennisnet.arena.services.factories.DTOFactory;
 import nl.kennisnet.arena.services.factories.DomainObjectFactory;
 import nl.kennisnet.arena.services.support.HibernateAwareService;
@@ -36,10 +41,25 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class QuestService extends HibernateAwareService {
+public class QuestService {
 
 	private static final int INITIAL_SCORE = 0;
 	private static final String newLine = System.getProperty("line.separator");
+
+	@Autowired
+	private LocationRepository locationRepository;
+	
+	@Autowired
+	private PositionableRepository positionableRepository;
+	
+	@Autowired
+	private ParticipationRepository participationRepository;
+
+	@Autowired
+	private QuestRepository questRepository;
+
+	@Autowired
+	private ParticipantRepository participantRepository;
 
 	@Autowired
 	private JavaMailSender mailSender;
@@ -52,7 +72,7 @@ public class QuestService extends HibernateAwareService {
 	private Logger log = Logger.getLogger(QuestService.class);
 
 	public Quest getQuest(final Long questId) {
-		return get(Quest.class, questId);
+		return questRepository.get(questId);
 	}
 
 	public void getQuest(final Long questId,
@@ -61,7 +81,7 @@ public class QuestService extends HibernateAwareService {
 	}
 
 	public QuestDTO getQuestDTO(Long id) {
-		Quest quest = get(Quest.class, id);
+		Quest quest = getQuest(id);
 		if (quest != null) {
 			return DTOFactory.create(quest);
 		}
@@ -78,28 +98,31 @@ public class QuestService extends HibernateAwareService {
 
 	public long participateInQuest(long participantId, Quest quest) {
 
-		Participant participant = get(Participant.class, participantId);
+		Participant participant = participantRepository.get(participantId);
 
-		Criteria criteria = getSession().createCriteria(Participation.class);
+		Participation participation = participationRepository
+				.findParticipation(participant, quest, quest.getActiveRound());
+		/*Criteria criteria = participantRepository.getAll();
 		criteria.add(Restrictions.eq("participant", participant));
 		criteria.add(Restrictions.eq("quest", quest));
 		criteria.add(Restrictions.eq("round", quest.getActiveRound()));
 		criteria.setMaxResults(1);
 
-		List<Participation> participations = criteria.list();
-		if (participations.size() > 0) {
-			return participations.get(0).getId();
+		List<Participation> participations = criteria.list();*/
+		
+		if(participation != null) {
+			return participation.getId();
 		} else {
-			Participation participation = new Participation(participant, quest,
+			Participation part = new Participation(participant, quest,
 					INITIAL_SCORE);
-			return merge(participation).getId();
+			return participationRepository.merge(part).getId();
 		}
 	}
 
 	public QuestDTO save(QuestDTO questDTO, boolean sendNotification) {
 		Quest originalQuest = null;
 		if (questDTO.getId() != null) {
-			originalQuest = get(Quest.class, questDTO.getId());
+			originalQuest = questRepository.get(questDTO.getId());
 		}
 		Quest quest = null;
 		List<Positionable> deletingPos = new ArrayList<Positionable>();
@@ -109,11 +132,11 @@ public class QuestService extends HibernateAwareService {
 			quest = DomainObjectFactory.update(questDTO, originalQuest);
 			deletingPos = DomainObjectFactory.delete(quest, originalQuest);
 			List<Location> deletingLocations = new ArrayList<Location>();
-			for(Positionable positionable: originalQuest.getPositionables() ){
+			for (Positionable positionable : originalQuest.getPositionables()) {
 				deletingLocations.add(positionable.getLocation());
 			}
-			delete(deletingPos);
-			delete(deletingLocations);
+			positionableRepository.delete(deletingPos);
+			locationRepository.delete(deletingLocations);
 		}
 
 		if (quest.getId() != null) {
@@ -121,9 +144,9 @@ public class QuestService extends HibernateAwareService {
 				quest.setId(null);
 			}
 		}
-		
-		quest = merge(quest);
-		if(sendNotification){
+
+		quest = questRepository.merge(quest);
+		if (sendNotification) {
 			sendNotification(quest);
 		}
 		return DTOFactory.create(quest);
