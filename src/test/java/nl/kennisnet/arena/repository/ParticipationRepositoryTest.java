@@ -138,6 +138,7 @@ public class ParticipationRepositoryTest {
 		participation1.setParticipant(participant1);
 		participation1.setQuest(quest1);
 		participation1.setRound(round1);
+		//participation1.setScore(1);
 		participation1 = repository.merge(participation1);
 		
 		Participation participation2 = new Participation();
@@ -152,6 +153,7 @@ public class ParticipationRepositoryTest {
 		participation2.setParticipant(participant2);
 		participation2.setQuest(quest2);
 		participation2.setRound(round2);
+		//participation1.setScore(1);
 		participation2 = repository.merge(participation2);
 		
 		Participation participation3 = new Participation();
@@ -166,6 +168,7 @@ public class ParticipationRepositoryTest {
 		participation3.setParticipant(participant3);
 		participation3.setQuest(quest3);
 		participation3.setRound(round3);
+		//participation1.setScore(1);
 		participation3 = repository.merge(participation3);
 		
 		Participation foundParticipation = repository.findParticipation(participant2, quest2, round2);
