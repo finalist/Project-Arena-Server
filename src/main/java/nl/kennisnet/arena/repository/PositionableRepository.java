@@ -1,6 +1,5 @@
 package nl.kennisnet.arena.repository;
 
-import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Positionable;
 
 import org.springframework.stereotype.Service;

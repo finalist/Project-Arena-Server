@@ -24,13 +24,10 @@ import nl.kennisnet.arena.repository.PositionableRepository;
 import nl.kennisnet.arena.repository.QuestRepository;
 import nl.kennisnet.arena.services.factories.DTOFactory;
 import nl.kennisnet.arena.services.factories.DomainObjectFactory;
-import nl.kennisnet.arena.services.support.HibernateAwareService;
 import nl.kennisnet.arena.utils.UtilityHelper;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamSource;

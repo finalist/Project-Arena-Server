@@ -27,13 +27,16 @@ import nl.kennisnet.arena.model.PositionableCollectionHelper;
 import nl.kennisnet.arena.model.Progress;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
+import nl.kennisnet.arena.repository.ParticipantRepository;
+import nl.kennisnet.arena.repository.ParticipationRepository;
+import nl.kennisnet.arena.repository.QuestRepository;
 import nl.kennisnet.arena.services.factories.DTOFactory;
-import nl.kennisnet.arena.services.support.HibernateAwareService;
 
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,25 +44,38 @@ import com.vividsolutions.jts.geom.Point;
 
 @Service("participantService")
 @Transactional
-public class ParticipantService extends HibernateAwareService {
+public class ParticipantService {
+	
+	@Autowired
+	ParticipantRepository participantRepository;
+	
+	@Autowired
+	ParticipationRepository participationRepository;
+	
+	@Autowired
+	QuestRepository questRepository;
+	
 	private final Logger log = Logger.getLogger(ParticipantService.class);
 
 	public void getParticipant(final String name,
 			final TransactionalCallback<Participant> callback) {
-		callback.onResult(get(Participant.class, getParticipantId(name)));
+		callback.onResult(participantRepository.get(getParticipantId(name)));
 	}
 
 	public void createParticipantIfNotPresent(final String name,
 			final String color) {
-		Criteria criteria = getSession().createCriteria(Participant.class);
+		
+		/*Criteria criteria = getSession().createCriteria(Participant.class);
 		criteria.add(Restrictions.eq("name", name));
 		criteria.setMaxResults(1);
 
-		List<Participant> participants = criteria.list();
-		if (participants.size() == 0) {
-			Participant participant = new Participant(name);
-			participant.setHexColor(color);
-			merge(participant);
+		List<Participant> participants = criteria.list();*/
+		Participant participant = participantRepository.findParticipant(name);
+		
+		if (participant == null) {
+			Participant newParticipant = new Participant(name);
+			newParticipant.setHexColor(color);
+			participantRepository.merge(newParticipant);
 			log.info("==> team created: " + name);
 		} else {
 			log.info("==> team was present: " + name);
@@ -68,37 +84,29 @@ public class ParticipantService extends HibernateAwareService {
 
 	@SuppressWarnings("unchecked")
 	public long getParticipantId(final String name) {
-		Criteria criteria = getSession().createCriteria(Participant.class);
-		criteria.add(Restrictions.eq("name", name));
-		criteria.setMaxResults(1);
-
-		List<Participant> participants = criteria.list();
-		if (participants.size() > 0) {
-			return participants.get(0).getId();
+		Participant participant = participantRepository.findParticipant(name);
+		if (participant != null) {
+			return participant.getId();
 		} else {
-			Participant participant = new Participant(name);
-			return merge(participant).getId();
+			Participant newParticipant = new Participant(name);
+			return participantRepository.merge(newParticipant).getId();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	public Participant getParticipant(final String name) {
-		Criteria criteria = getSession().createCriteria(Participant.class);
-		criteria.add(Restrictions.eq("name", name));
-		criteria.setMaxResults(1);
-
-		List<Participant> participants = criteria.list();
-		if (participants.size() > 0) {
-			return participants.get(0);
+		Participant participant = participantRepository.findParticipant(name);
+		if (participant != null) {
+			return participant;
 		} else {
-			Participant participant = new Participant(name);
-			return merge(participant);
+			Participant newParticipant = new Participant(name);
+			return participantRepository.merge(newParticipant);
 		}
 	}
 
 	public ParticipationLog addParticipationLog(final long participationId,
 			final long time, final String action, final Point location) {
-		Participation participation = get(Participation.class, participationId);
+		Participation participation = participationRepository.get(participationId);
 		ParticipationLog participationLog = new ParticipationLog(participation,
 				new Date(time), action, location);
 		return merge(participationLog);
@@ -107,14 +115,14 @@ public class ParticipantService extends HibernateAwareService {
 	public ParticipationLog addParticipationLogPress(
 			final long participationId, final Long time, final String action,
 			final Point location, final Positionable positionable) {
-		Participation participation = get(Participation.class, participationId);
+		Participation participation = participationRepository.get(participationId);
 		ParticipationLog participationLog = new ParticipationLog(participation,
 				new Date(time), action, location, positionable);
 		return merge(participationLog);
 	}
 
 	public Progress getProgress(final long participationId) {
-		Participation p = get(Participation.class, participationId);
+		Participation p = participationRepository.get(participationId);
 		Quest quest = p.getQuest();
 
 		List<ParticipationLog> participationLogs = p.getParticipationLogs();
@@ -164,7 +172,7 @@ public class ParticipantService extends HibernateAwareService {
 	public Map<Long, Integer> getPositionableScores(Long questId) {
 		Map<MultiKey, Integer> answers = getAnswers(questId);
 		Map<Long, Integer> result = new HashMap<Long, Integer>();
-		Quest quest = get(Quest.class, questId);
+		Quest quest = questRepository.get(questId);
 
 		Set<Positionable> positionables = new HashSet<Positionable>(quest.getPositionables());
 		for(Positionable positionable : positionables){
@@ -188,7 +196,7 @@ public class ParticipantService extends HibernateAwareService {
 	public Map<Long, Integer> getTeamScores(Long questId) {
 		Map<MultiKey, Integer> answers = getAnswers(questId);
 		Map<Long, Integer> result = new HashMap<Long, Integer>();
-		Quest quest = get(Quest.class, questId);
+		Quest quest = questRepository.get(questId);
 
 		Set<Positionable> positionables = new HashSet<Positionable>(quest.getPositionables());
 		for(Positionable positionable : positionables){
@@ -236,7 +244,7 @@ public class ParticipantService extends HibernateAwareService {
 			Question question, int answer) {
 		ParticipantAnswer participantAnswer = new ParticipantAnswer();
 		participantAnswer.setAnswer(answer);
-		Participation participation = get(Participation.class, participationId);
+		Participation participation = participationRepository.get(participationId);
 		participantAnswer.setParticipation(participation);
 		participantAnswer.setQuestion(question);
 		participantAnswer.setRound(question.getQuest().getActiveRound());
@@ -255,7 +263,7 @@ public class ParticipantService extends HibernateAwareService {
 			Question question, String textAnswer){
 		ParticipantAnswer participantAnswer = new ParticipantAnswer();
 		participantAnswer.setTextAnswer(textAnswer);
-		Participation participation = get(Participation.class, participationId);
+		Participation participation = participationRepository.get(participationId);
 		participantAnswer.setParticipation(participation);
 		participantAnswer.setQuestion(question);
 		participantAnswer.setRound(question.getQuest().getActiveRound());
