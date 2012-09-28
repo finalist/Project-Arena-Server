@@ -25,11 +25,11 @@ public class Positionable {
 	private String name;
 	private Boolean consumable;
 	
-	@ManyToOne()
+	@ManyToOne(optional = false)
 	@Cascade(CascadeType.ALL)
 	private Location location;
 	
-	@ManyToOne()
+	@ManyToOne(optional = false)
 	private Quest quest;
 	
 	@OneToMany(mappedBy = "positionable", cascade = javax.persistence.CascadeType.REMOVE)

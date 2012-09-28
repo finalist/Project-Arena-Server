@@ -12,7 +12,9 @@ import geodb.GeoDB;
 
 import javax.sql.DataSource;
 
+import nl.kennisnet.arena.model.Location;
 import nl.kennisnet.arena.model.Positionable;
+import nl.kennisnet.arena.model.Quest;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 		"classpath:/integration.xml", "classpath:/integration-test.xml",
 		"classpath:/services.xml", "classpath:arena-servlet-test.xml" })
 @Transactional
-public class PositionableTest {
+public class PositionableRepositoryTest {
 
 	@Autowired
 	DataSource dataSource;
@@ -35,29 +37,47 @@ public class PositionableTest {
 	@Autowired
 	PositionableRepository repository;
 	
+	@Autowired
+	QuestRepository qRepository;
+	
+	@Autowired
+	LocationRepository lRepository;
+	
 	@Before
 	public void setUp() throws Exception {
 		GeoDB.InitGeoDB(dataSource.getConnection());
 	}
 
-	private Positionable createObject() {
+	private Positionable createObject(String email) {
 		Positionable positionable = new Positionable();
-		positionable.setName("Henk");
+		Quest quest = new Quest();
+		quest.setEmailOwner(email);
+		quest = qRepository.merge(quest);
+		Location location = new Location();
+		location = lRepository.merge(location);
+		positionable.setLocation(location);
+		positionable.setQuest(quest);
 		positionable = repository.merge(positionable);
 		return positionable;
 	}
 	
 	@Test
 	public void testCreate() {
-		Positionable aPositionable = createObject();
+		Positionable aPositionable = createObject("henk@henk.nl");
 		assertThat(aPositionable, is(not(nullValue())));
 	}
 	
 	@Test
 	public void testGet() {
-		Positionable aPositionable = createObject();
-		Positionable receivedPositionable = repository.get(aPositionable.getId());		
+		String email = "henk@henk.nl";
+		Positionable aPositionable = createObject(email);
+		Positionable receivedPositionable = repository.get(aPositionable.getId());
+		Quest receivedQuest = receivedPositionable.getQuest();
+		Location receivedLocation = receivedPositionable.getLocation();
 		assertThat(receivedPositionable, is(not(nullValue())));
+		assertThat(receivedLocation, is(not(nullValue())));
+		assertThat(receivedQuest, is(not(nullValue())));
+		assertThat(receivedQuest.getEmailOwner(), is(email));
 	}
 	
 	@Test
@@ -65,7 +85,7 @@ public class PositionableTest {
 		int count;
 		int amount = 10;
 		for (count=0; count<amount; count++) {
-			createObject();
+			createObject("henk" + count + "@henk.nl");
 		}
 		assertThat(repository.getAll().size(), is(amount));
 	}
@@ -73,9 +93,9 @@ public class PositionableTest {
 	@Test
 	public void testDelete() {
 		List<Positionable> listToDelete = new ArrayList<Positionable>();
-		Positionable positionable1 = createObject();
-		Positionable positionable2 = createObject();
-		Positionable positionable3 = createObject();
+		Positionable positionable1 = createObject("henk1@henk.nl");
+		Positionable positionable2 = createObject("henk2@henk.nl");
+		Positionable positionable3 = createObject("henk3@henk.nl");
 		long id1 = positionable1.getId();
 		long id2 = positionable2.getId();
 		long id3 = positionable3.getId();

@@ -54,23 +54,44 @@ public class ParticipationRepositoryTest {
 	}
 
 
-	private Participation createObject() {
+	private Participation createObject(String name, String email) {
 		Participation participation = new Participation();
+		Quest quest = new Quest();
+		quest.setEmailOwner(email);
+		quest = qRepository.merge(quest);
+		Participant participant = new Participant(name);
+		participant = pRepository.merge(participant);
+		Round round = new Round();
+		round.setQuest(quest);
+		round = rRepository.merge(round);
+		participation.setParticipant(participant);
+		participation.setQuest(quest);
+		participation.setRound(round);
 		participation = repository.merge(participation);
 		return participation;
 	}
 	
 	@Test
 	public void testCreate() {
-		Participation aParticipation = createObject();
+		Participation aParticipation = createObject("Hans", "hansje@hanz.nl");
 		assertThat(aParticipation, is(not(nullValue())));
 	}
 	
 	@Test
 	public void testGet() {
-		Participation aParticipation = createObject();
-		Participation receivedParticipation = repository.get(aParticipation.getId());		
+		String name = "Hans";
+		String email = "hansje@hanz.nl";
+		Participation aParticipation = createObject(name, email);
+		Participation receivedParticipation = repository.get(aParticipation.getId());
+		Quest receivedQuest = receivedParticipation.getQuest();
+		Participant receivedParticipant = receivedParticipation.getParticipant();
+		Round receivedRound = receivedParticipation.getRound();
 		assertThat(receivedParticipation, is(not(nullValue())));
+		assertThat(receivedQuest, is(not(nullValue())));
+		assertThat(receivedQuest.getEmailOwner(), is(email));
+		assertThat(receivedParticipant, is(not(nullValue())));
+		assertThat(receivedParticipant.getName(), is(name));
+		assertThat(receivedRound, is(not(nullValue())));
 	}
 	
 	@Test
@@ -79,7 +100,7 @@ public class ParticipationRepositoryTest {
 		int count;
 		int amount = 10;
 		for (count=0; count<amount; count++) {
-			Participation participation = createObject();
+			Participation participation = createObject("Hans" + count, "hansje@hanz.nl");
 			listOfCreatedParticipations.add(participation);
 		}
 		assertThat(repository.getAll(), is(listOfCreatedParticipations));
@@ -88,9 +109,9 @@ public class ParticipationRepositoryTest {
 	@Test
 	public void testDelete() {
 		List<Participation> listToDelete = new ArrayList<Participation>();
-		Participation participation1 = createObject();
-		Participation participation2 = createObject();
-		Participation participation3 = createObject();
+		Participation participation1 = createObject("Hansje", "hansje@hanz.nl");
+		Participation participation2 = createObject("Ali", "ali@hanz.nl");
+		Participation participation3 = createObject("Kees", "keez@hanz.nl");
 		long id1 = participation1.getId();
 		long id2 = participation2.getId();
 		long id3 = participation3.getId();
@@ -103,72 +124,51 @@ public class ParticipationRepositoryTest {
 	}
 	
 	@Test
-	public void testRelatedObjects() {
-		Participation participation = new Participation();
-		Participant participant = new Participant();
-		participant.setName("henk");
-		participant = pRepository.merge(participant);
-		Quest quest = new Quest();
-		quest.setName("Ook henk");
-		quest.setEmailOwner("henkie@henk.nl");
-		quest = qRepository.merge(quest);
-		participation.setParticipant(participant);
-		participation.setQuest(quest);
-		participation = repository.merge(participation);
-		assertThat(participation.getParticipant(), is(participant));
-		assertThat(participation.getQuest(), is(quest));
-	}
-	
-	@Test
 	public void testFindParticipation() {
+		
 		Participation participation1 = new Participation();
-		Participant participant1 = new Participant();
-		participant1.setName("henk");
-		participant1 = pRepository.merge(participant1);
-		
 		Quest quest1 = new Quest();
-		quest1.setName("Ook henk");
-		quest1.setEmailOwner("henkie@henk.nl");
+		quest1.setEmailOwner("eenEmail@email.nl");
 		quest1 = qRepository.merge(quest1);
-		
+		Participant participant1 = new Participant("Henko");
+		participant1 = pRepository.merge(participant1);
 		Round round1 = new Round();
 		round1.setQuest(quest1);
-		round1.setName("ronde1");
 		round1 = rRepository.merge(round1);
-		
-		quest1.addRound(round1);
-		quest1.setActiveRound(round1);
-		quest1 = qRepository.merge(quest1);
-		
 		participation1.setParticipant(participant1);
 		participation1.setQuest(quest1);
+		participation1.setRound(round1);
 		participation1 = repository.merge(participation1);
 		
-		
 		Participation participation2 = new Participation();
-		Participant participant2 = new Participant();
-		participant2.setName("henkie");
-		participant2 = pRepository.merge(participant2);
-		
 		Quest quest2 = new Quest();
-		quest2.setName("Ook henkz");
-		quest2.setEmailOwner("henkie@henkz.nl");
+		quest2.setEmailOwner("hallo@email.nl");
 		quest2 = qRepository.merge(quest2);
-		
+		Participant participant2 = new Participant("Henkzzz");
+		participant2 = pRepository.merge(participant2);
 		Round round2 = new Round();
-		round2.setName("ronde2");
 		round2.setQuest(quest2);
 		round2 = rRepository.merge(round2);
-		
-		quest2.addRound(round2);
-		quest2.setActiveRound(round2);
-		quest2 = qRepository.merge(quest2);
-		
 		participation2.setParticipant(participant2);
 		participation2.setQuest(quest2);
+		participation2.setRound(round2);
 		participation2 = repository.merge(participation2);
 		
-		Participation foundParticipation = repository.findParticipation(participant2, quest2, quest2.getActiveRound());
+		Participation participation3 = new Participation();
+		Quest quest3 = new Quest();
+		quest3.setEmailOwner("eenEmail@email.nl");
+		quest3 = qRepository.merge(quest3);
+		Participant participant3 = new Participant("Henko");
+		participant3 = pRepository.merge(participant3);
+		Round round3 = new Round();
+		round3.setQuest(quest3);
+		round3 = rRepository.merge(round3);
+		participation3.setParticipant(participant3);
+		participation3.setQuest(quest3);
+		participation3.setRound(round3);
+		participation3 = repository.merge(participation3);
+		
+		Participation foundParticipation = repository.findParticipation(participant2, quest2, round2);
 		assertThat(foundParticipation, is(participation2));
 	}
 }
