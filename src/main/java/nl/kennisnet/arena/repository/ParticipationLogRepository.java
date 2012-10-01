@@ -8,6 +8,7 @@ import nl.kennisnet.arena.model.Quest;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,15 +26,9 @@ public class ParticipationLogRepository extends
 	}
 
 	public List<ParticipationLog> getParticipationLogsByQuest(long questId) {
-		ParticipationLog example = new ParticipationLog();
-		Participation exampleParticipation = new Participation();
-		example.setParticipation(exampleParticipation);
-		Quest exampleQuest = new Quest();
-		exampleQuest.setId(questId);
-		exampleParticipation.setQuest(exampleQuest);
 		Criteria criteria = getSession().createCriteria(ParticipationLog.class)
-				.add(Example.create(example)).createCriteria("participation")
-				.createCriteria("quest").add(Example.create(exampleQuest.getId()));
+				.createCriteria("participation").createCriteria("quest")
+				.add(Restrictions.eq("id", questId));
 
 		List<ParticipationLog> list = criteria.list();
 

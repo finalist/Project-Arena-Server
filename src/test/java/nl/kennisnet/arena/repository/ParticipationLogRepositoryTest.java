@@ -122,13 +122,7 @@ public class ParticipationLogRepositoryTest {
 		participation1 = participationRepository.merge(participation1);
 		participationLog1.setParticipation(participation1);
 		participationLog1 = repository.merge(participationLog1);
-		
-		boolean test = true;
-		if (repository.getParticipationLogsByQuest(quest1.getId()).size() < 1) {
-			test = false;
-		}
-		
-		assertThat(test, is(true));
+		assertThat(repository.getParticipationLogsByQuest(quest1.getId()).size(), is(not(0)));
 	}
 	
 }
