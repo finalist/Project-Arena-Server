@@ -27,10 +27,14 @@ import nl.kennisnet.arena.model.PositionableCollectionHelper;
 import nl.kennisnet.arena.model.Progress;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
+import nl.kennisnet.arena.repository.ImageRepository;
+import nl.kennisnet.arena.repository.InformationRepository;
 import nl.kennisnet.arena.repository.ParticipantRepository;
+import nl.kennisnet.arena.repository.ParticipationLogRepository;
 import nl.kennisnet.arena.repository.ParticipationRepository;
 import nl.kennisnet.arena.repository.QuestRepository;
 import nl.kennisnet.arena.services.factories.DTOFactory;
+import nl.kennisnet.arena.services.support.HibernateAwareService;
 
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.log4j.Logger;
@@ -54,6 +58,15 @@ public class ParticipantService {
 	
 	@Autowired
 	QuestRepository questRepository;
+	
+	@Autowired
+	ParticipationLogRepository participationLogRepository;
+	
+	@Autowired
+	ImageRepository imageRepository;
+	
+	@Autowired
+	InformationRepository informationRepository;
 	
 	private final Logger log = Logger.getLogger(ParticipantService.class);
 
@@ -109,7 +122,7 @@ public class ParticipantService {
 		Participation participation = participationRepository.get(participationId);
 		ParticipationLog participationLog = new ParticipationLog(participation,
 				new Date(time), action, location);
-		return merge(participationLog);
+		return participationLogRepository.merge(participationLog);
 	}
 
 	public ParticipationLog addParticipationLogPress(
@@ -118,7 +131,7 @@ public class ParticipantService {
 		Participation participation = participationRepository.get(participationId);
 		ParticipationLog participationLog = new ParticipationLog(participation,
 				new Date(time), action, location, positionable);
-		return merge(participationLog);
+		return participationLogRepository.merge(participationLog);
 	}
 
 	public Progress getProgress(final long participationId) {
@@ -144,11 +157,11 @@ public class ParticipantService {
 
 	private List<ParticipationLog> getParticipationLogs(Long questId) {
 		// TODO : add ordering by time.
-		Criteria criteria = getSession().createCriteria(ParticipationLog.class)
+		/*Criteria criteria = getSession().createCriteria(ParticipationLog.class)
 				.createCriteria("participation").createCriteria("quest")
 				.add(Restrictions.eq("id", questId));
-		List<ParticipationLog> log = criteria.list();
-		return log;
+		List<ParticipationLog> log = criteria.list();*/
+		return participationLogRepository.getParticipationLogsByQuest(questId);
 	}
 
 	public Map<MultiKey, Integer> getAnswers(Long questId) {
@@ -230,8 +243,7 @@ public class ParticipantService {
 	}
 
 	public Set<TeamDTO> getAllParticipants() {
-		Criteria criteria = getSession().createCriteria(Participant.class);
-		List<Participant> participants = criteria.list();
+		List<Participant> participants = participantRepository.getAll();
 		Set<TeamDTO> result = new HashSet<TeamDTO>();
 		for (Participant participant : participants) {
 			result.add(DTOFactory.create(participant));
@@ -286,7 +298,7 @@ public class ParticipantService {
 	public LogDTO getParticipationLog(final Long questId) {
 		List<ParticipationLog> log = getParticipationLogs(questId);
 
-		Quest quest = (Quest) getSession().get(Quest.class, questId);
+		Quest quest = (Quest) questRepository.get(questId);
 
 		List<ActionDTO> actions = new ArrayList<ActionDTO>(log.size());
 		Set<TeamDTO> teams = new HashSet<TeamDTO>();
@@ -322,7 +334,7 @@ public class ParticipantService {
 	
 	public List<AnswerDTO> getAnswerDTO(final long questId){
 		List<AnswerDTO> answerDTOs = new ArrayList<AnswerDTO>();
-		Quest quest = (Quest) getSession().get(Quest.class, questId);
+		Quest quest = (Quest) questRepository.get(questId);
 		for(Positionable positionable : quest.getPositionables()){
 			if(positionable instanceof Question){
 				Question question = (Question)positionable;
@@ -355,17 +367,17 @@ public class ParticipantService {
 	public void clearQuestLog(final Long questId) {
 		List<ParticipationLog> log = getParticipationLogs(questId);
 		for (ParticipationLog participationLog : log) {
-			getSession().delete(participationLog);
+			participationLogRepository.delete(participationLog);
 		}
 	}
 	
 	public String getImageUrl(long imageId){
-		Image image = get(Image.class, imageId);		
+		Image image = imageRepository.get(imageId);		
 		return image.getUrl();
 	}
 	
 	public Information getInformation(long informationId){
-		Information information = get(Information.class, informationId);
+		Information information = informationRepository.get(informationId);
 		return information;
 	}
 

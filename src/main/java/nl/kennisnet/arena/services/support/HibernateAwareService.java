@@ -7,7 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-private class HibernateAwareService {
+public class HibernateAwareService {
     @Autowired
     private SessionFactory sessionFactory;
 

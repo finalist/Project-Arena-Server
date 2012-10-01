@@ -73,7 +73,7 @@ public class QuestServiceTest {
     @Test
     @Rollback(true)
     public void testSaveExistingNoItems() {
-        /*String name = "test-replaced";
+        String name = "test-replaced";
         String email = "kns.arena.tester@gmail.com";
         RoundDTO roundDto = new RoundDTO("round-replaced");
         QuestDTO questDTO = new QuestDTO();
@@ -91,7 +91,7 @@ public class QuestServiceTest {
         Assert.assertEquals(name, saved.getName());
         Assert.assertEquals(email, saved.getEmailOwner());
         Assert.assertEquals(roundDto, saved.getActiveRound());
-        Assert.assertEquals(0, saved.getItems().size());*/
+        Assert.assertEquals(0, saved.getItems().size());
     }
 
     @Test

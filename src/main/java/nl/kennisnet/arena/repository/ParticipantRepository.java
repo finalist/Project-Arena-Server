@@ -2,8 +2,6 @@ package nl.kennisnet.arena.repository;
 
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Participation;
-import nl.kennisnet.arena.model.Quest;
-import nl.kennisnet.arena.model.Round;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Example;

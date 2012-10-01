@@ -3,8 +3,6 @@ package nl.kennisnet.arena.repository;
 import java.io.Serializable;
 import java.util.List;
 
-import nl.kennisnet.arena.model.Participation;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

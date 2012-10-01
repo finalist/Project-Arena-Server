@@ -99,13 +99,6 @@ public class QuestService {
 
 		Participation participation = participationRepository
 				.findParticipation(participant, quest, quest.getActiveRound());
-		/*Criteria criteria = participantRepository.getAll();
-		criteria.add(Restrictions.eq("participant", participant));
-		criteria.add(Restrictions.eq("quest", quest));
-		criteria.add(Restrictions.eq("round", quest.getActiveRound()));
-		criteria.setMaxResults(1);
-
-		List<Participation> participations = criteria.list();*/
 		
 		if(participation != null) {
 			return participation.getId();
