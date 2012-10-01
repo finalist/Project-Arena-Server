@@ -19,7 +19,7 @@ public class ParticipantRepository extends HibernateRepository<Participant>{
 	public Participant findParticipant(String name){
 		Participant example = new Participant();
 		example.setName(name);
-		Criteria criteria = getSession().createCriteria(Participation.class).add(Example.create(example));
+		Criteria criteria = getSession().createCriteria(Participant.class).add(Example.create(example));
 		Participant p = (Participant)criteria.uniqueResult();
 		return p;
 	}

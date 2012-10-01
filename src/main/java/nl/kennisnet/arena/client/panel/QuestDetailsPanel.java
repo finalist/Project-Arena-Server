@@ -100,40 +100,45 @@ public class QuestDetailsPanel extends SidePanel implements
 		QuestState.getInstance().getState()
 				.setEmailOwner(designerBox.getValue());
 	}
-	
+
 	private Button createSaveButton() {
-		return new Button("Bewaar en stuur een bevestigingsmail", saveButtonClick(true));
+		return new Button("Bewaar en stuur een bevestigingsmail",
+				saveButtonClick(true));
 	}
 
 	private Widget createUpdateButtom() {
-		return new Button("Aanpassen", saveButtonClick(false));		  
+		return new Button("Aanpassen", saveButtonClick(true));
 	}
 
-	private ClickHandler saveButtonClick(final boolean sendNotification){
-	   return new ClickHandler(){ @
-			   Override
-		         public void onClick(ClickEvent arg0) {
-           showProgressIndicator();
-           fillItemFromForm();
-           GWTQuestServiceAsync questService = (GWTQuestServiceAsync) GWT.create(GWTQuestService.class);
-           questService.save(QuestState.getInstance().getState(), sendNotification, new AsyncCallback<QuestDTO>() {
-              @Override
-              public void onSuccess(QuestDTO arg0) {
-//                 com.google.gwt.user.client.Window.alert("Saving of Areana succeded!");
-                 QuestState.getInstance().setState(arg0);
-                 EventBus.get().fireEvent(new RefreshQuestEvent());
-                 showPanel();
-              }
+	private ClickHandler saveButtonClick(final boolean sendNotification) {
+		return new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent arg0) {
+				showProgressIndicator();
+				fillItemFromForm();
+				GWTQuestServiceAsync questService = (GWTQuestServiceAsync) GWT
+						.create(GWTQuestService.class);
+				questService.save(QuestState.getInstance().getState(),
+						sendNotification, new AsyncCallback<QuestDTO>() {
+							@Override
+							public void onSuccess(QuestDTO arg0) {
+								// com.google.gwt.user.client.Window.alert("Saving of Areana succeded!");
+								QuestState.getInstance().setState(arg0);
+								EventBus.get().fireEvent(
+										new RefreshQuestEvent());
+								showPanel();
+							}
 
-              @Override
-              public void onFailure(Throwable arg0) {
-                 Window.alert("Er heeft zich een fout voorgedaan bij het opslaan van de Arena :"+arg0.getMessage());
-                 showPanel();
-              }
-           });
-        }
+							@Override
+							public void onFailure(Throwable arg0) {
+								Window.alert("Er heeft zich een fout voorgedaan bij het opslaan van de Arena :"
+										+ arg0.getMessage());
+								showPanel();
+							}
+						});
+			}
 
-     };
-   }
+		};
+	}
 
 }

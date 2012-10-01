@@ -1,5 +1,8 @@
 package nl.kennisnet.arena.services;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 import geodb.GeoDB;
 
 import java.util.ArrayList;
@@ -13,8 +16,8 @@ import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.SimplePoint;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.repository.ParticipantRepository;
+import nl.kennisnet.arena.repository.QuestRepository;
 
-import org.hamcrest.core.Is;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,10 +29,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/configuration.xml",
 		"classpath:/integration.xml", "classpath:/integration-test.xml",
@@ -39,6 +38,9 @@ public class QuestServiceTest {
 
 	@Autowired
 	private QuestService questService;
+
+	@Autowired
+	private QuestRepository questRepository;
 
 	@Autowired
 	private ParticipantRepository participantRepository;
@@ -58,7 +60,7 @@ public class QuestServiceTest {
 
 		Participant participant = new Participant("henk");
 		participant = participantRepository.merge(participant);
-		
+
 		QuestDTO questDTO = new QuestDTO();
 		questDTO.setName(existingName);
 		questDTO.setEmailOwner(existingEmail);
@@ -77,6 +79,33 @@ public class QuestServiceTest {
 
 	@After
 	public void tearDown() throws Exception {
+	}
+
+	@Test
+	public void testSaveDiffEmail() {
+		QuestDTO quest = new QuestDTO();
+		quest.setName("Henk");
+		quest.setEmailOwner("Henk@Henk.henk");
+
+		quest = questService.save(quest, true);
+
+		quest.setEmailOwner("Test@Test.Test");
+		QuestDTO quest2 = questService.save(quest, true);
+
+		assertThat(quest2.getId(), is(not(quest.getId())));
+	}
+
+	@Test
+	public void testSaveSameEmail() {
+		QuestDTO quest = new QuestDTO();
+		quest.setName("Henk");
+		quest.setEmailOwner("Henk@Henk.henk");
+
+		quest = questService.save(quest, true);
+
+		QuestDTO quest2 = questService.save(quest, true);
+
+		assertThat(quest2.getId(), is(quest.getId()));
 	}
 
 	@Test
