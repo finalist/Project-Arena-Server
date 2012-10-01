@@ -29,17 +29,15 @@ import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.repository.ImageRepository;
 import nl.kennisnet.arena.repository.InformationRepository;
+import nl.kennisnet.arena.repository.ParticipantAnswerRepository;
 import nl.kennisnet.arena.repository.ParticipantRepository;
 import nl.kennisnet.arena.repository.ParticipationLogRepository;
 import nl.kennisnet.arena.repository.ParticipationRepository;
 import nl.kennisnet.arena.repository.QuestRepository;
 import nl.kennisnet.arena.services.factories.DTOFactory;
-import nl.kennisnet.arena.services.support.HibernateAwareService;
 
 import org.apache.commons.collections.keyvalue.MultiKey;
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,6 +65,9 @@ public class ParticipantService {
 	
 	@Autowired
 	InformationRepository informationRepository;
+	
+	@Autowired
+	ParticipantAnswerRepository participantAnswerRepository;
 	
 	private final Logger log = Logger.getLogger(ParticipantService.class);
 
@@ -268,7 +269,7 @@ public class ParticipantService {
 		}else{
 			participantAnswer.setResult(Result.INCORRECT.name());
 		}
-		merge(participantAnswer);
+		participantAnswerRepository.merge(participantAnswer);
 	}
 	
 	public void storeParticipationTextAnswer(long participationId,
@@ -280,7 +281,7 @@ public class ParticipantService {
 		participantAnswer.setQuestion(question);
 		participantAnswer.setRound(question.getQuest().getActiveRound());
 		participantAnswer.setResult(Result.ANSWERED.name());
-		merge(participantAnswer);
+		participantAnswerRepository.merge(participantAnswer);
 	}
 
 	public ParticipantAnswer getParticipationAnswer(long participationId,
@@ -288,7 +289,7 @@ public class ParticipantService {
 		List<ParticipantAnswer> participants = question.getParticipantAnswers();
 		for (ParticipantAnswer p : participants){
 			if(p.getParticipationtId() == (participationId) && p.getQuestion().equals(question)){
-				getSession().evict(participants.get(0));
+				participantAnswerRepository.evict(participants.get(0));
 				return p;
 			}			
 		}		
@@ -385,7 +386,7 @@ public class ParticipantService {
 		ParticipantAnswer participantAnswer = getParticipationAnswer(answerDto.getParticipationId(), 
 				getQuestion(answerDto.getQuestionId(), quest));
 		participantAnswer.setResult(answerDto.getResult());
-		merge(participantAnswer);
+		participantAnswerRepository.merge(participantAnswer);
 		return answerDto;
 	}
 }

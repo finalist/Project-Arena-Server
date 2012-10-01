@@ -12,5 +12,9 @@ public class ParticipantAnswerRepository extends HibernateRepository<Participant
 	public ParticipantAnswerRepository() {
 		super(ParticipantAnswer.class);
 	}
+	
+	public void evict(ParticipantAnswer answer) {
+		getSession().evict(answer);
+	}
 
 }
