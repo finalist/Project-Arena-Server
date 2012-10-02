@@ -87,12 +87,28 @@ public class QuestServiceTest {
 		quest.setName("Henk");
 		quest.setEmailOwner("Henk@Henk.henk");
 
+		QuestItemDTO itemDTO = new QuestItemDTO("testitem", "Verhaal");
+		itemDTO.setPoint(new SimplePoint(2.2D, 1.1D));
+		List<QuestItemDTO> items = new ArrayList<QuestItemDTO>();
+		items.add(itemDTO);
+
+		RoundDTO existingRound = new RoundDTO("test-round");
+		List<RoundDTO> rounds = new ArrayList<RoundDTO>();
+		rounds.add(existingRound);
+
+		quest.setRounds(rounds);
+		quest.setItems(items);
 		quest = questService.save(quest, true);
 
 		quest.setEmailOwner("Test@Test.Test");
-		QuestDTO quest2 = questService.save(quest, true);
+		
+		QuestDTO quest3 = questService.getQuestDTO(quest.getId());
+		quest3.setEmailOwner("Bla@bla.nl");
+		quest3 = questService.save(quest3, false);
 
-		assertThat(quest2.getId(), is(not(quest.getId())));
+		assertThat(quest3.getId(), is(not(quest.getId())));
+		Assert.assertEquals(quest.getItems().size(), quest3.getItems().size());
+
 	}
 
 	@Test

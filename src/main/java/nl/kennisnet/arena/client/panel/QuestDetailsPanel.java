@@ -1,6 +1,7 @@
 package nl.kennisnet.arena.client.panel;
 
 import nl.kennisnet.arena.client.domain.QuestDTO;
+import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
 import nl.kennisnet.arena.client.event.EventBus;
 import nl.kennisnet.arena.client.event.RefreshQuestEvent;
@@ -118,11 +119,16 @@ public class QuestDetailsPanel extends SidePanel implements
 				fillItemFromForm();
 				GWTQuestServiceAsync questService = (GWTQuestServiceAsync) GWT
 						.create(GWTQuestService.class);
+				
 				questService.save(QuestState.getInstance().getState(),
 						sendNotification, new AsyncCallback<QuestDTO>() {
+					
+					
 							@Override
 							public void onSuccess(QuestDTO arg0) {
 								// com.google.gwt.user.client.Window.alert("Saving of Areana succeded!");
+							System.out.println(arg0.getEmailOwner());
+							System.out.println(arg0.getItems().size());
 								QuestState.getInstance().setState(arg0);
 								EventBus.get().fireEvent(
 										new RefreshQuestEvent());

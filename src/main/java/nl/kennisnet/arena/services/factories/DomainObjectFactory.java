@@ -122,7 +122,6 @@ public class DomainObjectFactory {
 				result.add(orriginalPos);
 			}
 		}
-		System.out.println(result);
 		return result;
 	}
 
