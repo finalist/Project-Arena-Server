@@ -125,8 +125,10 @@ public class QuestService {
 			for (Positionable positionable : originalQuest.getPositionables()) {
 				deletingLocations.add(positionable.getLocation());
 			}
+
 			positionableRepository.delete(deletingPos);
 			locationRepository.delete(deletingLocations);
+
 		}
 
 		if (quest.getId() != null) {
