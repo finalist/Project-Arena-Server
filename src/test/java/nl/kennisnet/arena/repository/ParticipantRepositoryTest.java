@@ -89,4 +89,17 @@ public class ParticipantRepositoryTest {
 		assertThat(repository.get(id3), is(nullValue()));
 	}
 	
+	@Test
+	public void testFindParticipant() {
+		Participant participant1 = createObject("Hans");
+		Participant participant2 = createObject("Fatima");
+		Participant participant3 = createObject("Hanoi");
+		
+		assertThat(repository.findParticipant("Hans"), is(participant1));
+		assertThat(repository.findParticipant("Hansz"), is(nullValue()));
+		assertThat(repository.findParticipant("Fatima"), is(participant2));
+		assertThat(repository.findParticipant("Fatima"), is(not(participant1)));
+		assertThat(repository.findParticipant("Hanoi"), is(participant3));
+	}
+	
 }
