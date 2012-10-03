@@ -32,8 +32,8 @@ public class Positionable {
 	@ManyToOne(optional = false)
 	private Quest quest;
 	
-	@OneToMany(mappedBy = "positionable", cascade = javax.persistence.CascadeType.REMOVE)
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@OneToMany(mappedBy = "positionable", cascade = javax.persistence.CascadeType.REMOVE, orphanRemoval=true)
+	//@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private List<ParticipationLog> participationlogs = new ArrayList<ParticipationLog>();
 	
 	public Location getLocation() {

@@ -45,10 +45,10 @@ public class QuestService {
 
 	@Autowired
 	private LocationRepository locationRepository;
-	
+
 	@Autowired
 	private PositionableRepository positionableRepository;
-	
+
 	@Autowired
 	private ParticipationRepository participationRepository;
 
@@ -99,8 +99,8 @@ public class QuestService {
 
 		Participation participation = participationRepository
 				.findParticipation(participant, quest, quest.getActiveRound());
-		
-		if(participation != null) {
+
+		if (participation != null) {
 			return participation.getId();
 		} else {
 			Participation part = new Participation(participant, quest,
@@ -120,21 +120,23 @@ public class QuestService {
 			quest = DomainObjectFactory.create(questDTO);
 		} else {
 			quest = DomainObjectFactory.update(questDTO, originalQuest);
-			deletingPos = DomainObjectFactory.delete(quest, originalQuest);
-			List<Location> deletingLocations = new ArrayList<Location>();
-			for (Positionable positionable : originalQuest.getPositionables()) {
-				deletingLocations.add(positionable.getLocation());
-			}
 
-			positionableRepository.delete(deletingPos);
-			locationRepository.delete(deletingLocations);
-
-		}
-
-		if (quest.getId() != null) {
 			if (!savedByOwner(quest, originalQuest)) {
-				quest.setId(null);
+				if (quest.getId() != null) {
+					quest.setId(null);
+				}
+			} else {
+				deletingPos = DomainObjectFactory.delete(quest, originalQuest);
+				List<Location> deletingLocations = new ArrayList<Location>();
+				for (Positionable positionable : originalQuest
+						.getPositionables()) {
+					deletingLocations.add(positionable.getLocation());
+				}
+
+				positionableRepository.delete(deletingPos);
+				// locationRepository.delete(deletingLocations);
 			}
+
 		}
 
 		quest = questRepository.merge(quest);

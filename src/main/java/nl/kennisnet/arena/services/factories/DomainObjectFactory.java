@@ -86,9 +86,9 @@ public class DomainObjectFactory {
 			for (QuestItemDTO questItemDTO : questDTO.getItems()) {
 				Positionable positionable = create(questItemDTO, result);
 				if (positionable != null ) {
-					for(Positionable orriginalPos : originalQuest.getPositionables()){
+					/*for(Positionable orriginalPos : originalQuest.getPositionables()){
 						if(orriginalPos.equals(positionable)){
-							positionable.setId(orriginalPos.getId());
+							//positionable.setId(orriginalPos.getId());
 						}
 						if(orriginalPos instanceof Question && positionable instanceof Question){
 							List<ParticipantAnswer> originalAnswers = ((Question)orriginalPos).getParticipantAnswers();
@@ -96,7 +96,8 @@ public class DomainObjectFactory {
 							Collections.copy(originalAnswers, participantAnswer);
 							((Question)positionable).setParticipantAnswers(participantAnswer);
 						}						
-					}
+					}*/
+					positionable.setQuest(result);
 					items.add(positionable);
 				}
 			}
