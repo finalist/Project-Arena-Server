@@ -1,5 +1,7 @@
 package nl.kennisnet.arena.utils;
 
+import java.util.Arrays;
+
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.log4j.Logger;
@@ -16,8 +18,10 @@ import org.springframework.beans.factory.InitializingBean;
  * Internally a CompositeConfiguration object is used for merging multiple
  * Configuration objects.
  */
-public class ConfigurationFactoryBean implements InitializingBean, FactoryBean<CompositeConfiguration> {
-	private static final Logger log = Logger.getLogger(ConfigurationFactoryBean.class);
+public class ConfigurationFactoryBean implements InitializingBean,
+		FactoryBean<CompositeConfiguration> {
+	private static final Logger log = Logger
+			.getLogger(ConfigurationFactoryBean.class);
 	private CompositeConfiguration configuration;
 
 	private Configuration[] configurations;
@@ -55,8 +59,13 @@ public class ConfigurationFactoryBean implements InitializingBean, FactoryBean<C
 	 * @param configurations
 	 *            the configurations to set.
 	 */
-	public void setConfigurations(Configuration[] configurations) {
-		this.configurations = configurations;
+	public void setConfigurations(Configuration[] newConfigurations) {
+		if (newConfigurations == null) {
+			this.configurations = new Configuration[0];
+		} else {
+			this.configurations = Arrays.copyOf(newConfigurations,
+					newConfigurations.length);
+		}
 	}
 
 	/**

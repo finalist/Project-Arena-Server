@@ -1,6 +1,7 @@
 package nl.kennisnet.arena.utils;
 
 import java.net.URL;
+import java.util.Arrays;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
@@ -17,7 +18,8 @@ import org.springframework.util.Assert;
  * like a normal java.util.Properties object which can be passed on to
  * setProperties() method allowing PropertyOverrideConfigurer and
  * PropertyPlaceholderConfigurer to take advantage of Commons Configuration.
- * <p/> Internally a CompositeConfiguration object is used for merging multiple
+ * <p/>
+ * Internally a CompositeConfiguration object is used for merging multiple
  * Configuration objects.
  * 
  * @see java.util.Properties
@@ -25,7 +27,8 @@ import org.springframework.util.Assert;
  * 
  * @author Costin Leau
  */
-public class CommonsConfigurationFactoryBean implements InitializingBean, FactoryBean {
+public class CommonsConfigurationFactoryBean implements InitializingBean,
+		FactoryBean {
 
 	private CompositeConfiguration configuration;
 
@@ -47,7 +50,8 @@ public class CommonsConfigurationFactoryBean implements InitializingBean, Factor
 	 * @see org.springframework.beans.factory.FactoryBean#getObject()
 	 */
 	public Object getObject() throws Exception {
-		return (configuration != null) ? ConfigurationConverter.getProperties(configuration) : null;
+		return (configuration != null) ? ConfigurationConverter
+				.getProperties(configuration) : null;
 	}
 
 	/**
@@ -68,9 +72,11 @@ public class CommonsConfigurationFactoryBean implements InitializingBean, Factor
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
 	public void afterPropertiesSet() throws Exception {
-		if (configuration == null && (configurations == null || configurations.length == 0)
+		if (configuration == null
+				&& (configurations == null || configurations.length == 0)
 				&& (locations == null || locations.length == 0))
-			throw new IllegalArgumentException("no configuration object or location specified");
+			throw new IllegalArgumentException(
+					"no configuration object or location specified");
 
 		if (configuration == null)
 			configuration = new CompositeConfiguration();
@@ -82,7 +88,7 @@ public class CommonsConfigurationFactoryBean implements InitializingBean, Factor
 				configuration.addConfiguration(configurations[i]);
 			}
 		}
-		
+
 		if (locations != null) {
 			for (int i = 0; i < locations.length; i++) {
 				URL url = locations[i].getURL();
@@ -104,8 +110,13 @@ public class CommonsConfigurationFactoryBean implements InitializingBean, Factor
 	 * 
 	 * @param configurations
 	 */
-	public void setConfigurations(Configuration[] configurations) {
-		this.configurations = configurations;
+	public void setConfigurations(Configuration[] newConfigurations) {
+		if (newConfigurations == null) {
+			this.configurations = new Configuration[0];
+		} else {
+			this.configurations = Arrays.copyOf(newConfigurations,
+					newConfigurations.length);
+		}
 	}
 
 	public Resource[] getLocations() {
@@ -119,8 +130,12 @@ public class CommonsConfigurationFactoryBean implements InitializingBean, Factor
 	 * 
 	 * @param locations
 	 */
-	public void setLocations(Resource[] locations) {
-		this.locations = locations;
+	public void setLocations(Resource[] newLocations) {
+		if (newLocations == null) {
+			this.locations = new Resource[0];
+		} else {
+			this.locations = Arrays.copyOf(newLocations, newLocations.length);
+		}
 	}
 
 	public boolean isThrowExceptionOnMissing() {
@@ -130,6 +145,7 @@ public class CommonsConfigurationFactoryBean implements InitializingBean, Factor
 	/**
 	 * Set the underlying Commons CompositeConfiguration throwExceptionOnMissing
 	 * flag.
+	 * 
 	 * @param throwExceptionOnMissing
 	 */
 	public void setThrowExceptionOnMissing(boolean throwExceptionOnMissing) {
