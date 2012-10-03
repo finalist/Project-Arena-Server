@@ -4,5 +4,5 @@ target
 .project
 .metadata
 .settings/
-
+src/main/webapp/WEB-INF/classes/
 
