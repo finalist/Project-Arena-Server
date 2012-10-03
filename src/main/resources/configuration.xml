@@ -20,7 +20,7 @@
 					<property name="location" value="file:/srv/tomcat/.arena/arena-settings.properties" />
 					<property name="reload" value="true" />
 				</bean>
-				<!-- Defauts from classpath -->
+				<!-- Defaults from classpath -->
 				<bean class="nl.kennisnet.arena.utils.PropertyConfigurationFactoryBean">
 					<property name="location" value="classpath:/arena-settings.properties" />
 				</bean>

@@ -15,6 +15,7 @@ import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.SimplePoint;
 import nl.kennisnet.arena.model.Participant;
+import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.repository.ParticipantRepository;
 import nl.kennisnet.arena.repository.QuestRepository;
 
@@ -82,33 +83,20 @@ public class QuestServiceTest {
 	}
 
 	@Test
-	public void testSaveDiffEmail() {
-		QuestDTO quest = new QuestDTO();
-		quest.setName("Henk");
-		quest.setEmailOwner("Henk@Henk.henk");
+	public void when_saving_with_a_different_email_address_the_quest_items_should_be_cloned() {
+		QuestDTO questDTO = questService.getQuestDTO(existingId);
+		questDTO.setEmailOwner("jacques@finalist.com");
+		QuestDTO newQuestDTO = questService.save(questDTO, false);
+		assertThat(questDTO.getItems().get(0).getId(), is(not(newQuestDTO.getItems().get(0).getId())));
+	}
 
-		QuestItemDTO itemDTO = new QuestItemDTO("testitem", "Verhaal");
-		itemDTO.setPoint(new SimplePoint(2.2D, 1.1D));
-		List<QuestItemDTO> items = new ArrayList<QuestItemDTO>();
-		items.add(itemDTO);
-
-		RoundDTO existingRound = new RoundDTO("test-round");
-		List<RoundDTO> rounds = new ArrayList<RoundDTO>();
-		rounds.add(existingRound);
-
-		quest.setRounds(rounds);
-		quest.setItems(items);
-		quest = questService.save(quest, true);
-
-		quest.setEmailOwner("Test@Test.Test");
-		
-		QuestDTO quest3 = questService.getQuestDTO(quest.getId());
-		quest3.setEmailOwner("Bla@bla.nl");
-		quest3 = questService.save(quest3, false);
-
-		assertThat(quest3.getId(), is(not(quest.getId())));
-		Assert.assertEquals(quest.getItems().size(), quest3.getItems().size());
-
+	@Test
+	public void when_saving_with_a_different_email_address_the_quest_items_should_not_be_removed_from_the_existing_quest() {
+		QuestDTO questDTO = questService.getQuestDTO(existingId);
+		questDTO.setEmailOwner("jacques@finalist.com");
+		questService.save(questDTO, false);
+		Quest oldQuest = questService.getQuest(questDTO.getId());
+		assertThat(oldQuest.getPositionables().get(0).getQuest().getId(), is(oldQuest.getId()));
 	}
 
 	@Test
