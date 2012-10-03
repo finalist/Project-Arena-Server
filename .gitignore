@@ -1,2 +1,8 @@
-/target/
-/.gwt/
+target
+.settings/
+.classpath
+.project
+.metadata
+.settings/
+
+
