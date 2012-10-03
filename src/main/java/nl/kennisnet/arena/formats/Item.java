@@ -1,7 +1,10 @@
 package nl.kennisnet.arena.formats;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.configuration.Configuration;
 
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
@@ -15,73 +18,73 @@ public class Item {
 	private String title;
 	private String description;
 	private String submitUrl;
-	
-	//question type attributes
+
+	// question type attributes
 	private String[] answers;
-	
-	//image or video type attribute:
+
+	// image or video type attribute:
 	private String url;
-	
-	public Item(Positionable positionable, String submitUrl){
+
+	public Item(Positionable positionable, String submitUrl) {
 		setType(positionable);
 		this.submitUrl = submitUrl;
 	}
-	
-	public void setType(Positionable positionable){
-		if(positionable instanceof Question){
-			fillWithQuestion((Question)positionable);
+
+	public void setType(Positionable positionable) {
+		if (positionable instanceof Question) {
+			fillWithQuestion((Question) positionable);
 		}
-		if(positionable instanceof Information){
-			fillWithInformation((Information)positionable);
+		if (positionable instanceof Information) {
+			fillWithInformation((Information) positionable);
 		}
-		if(positionable instanceof Image){
-			fillWithImage((Image)positionable);
+		if (positionable instanceof Image) {
+			fillWithImage((Image) positionable);
 		}
-		if(positionable instanceof Video){
-			fillWithVideo((Video)positionable);
-		}		
+		if (positionable instanceof Video) {
+			fillWithVideo((Video) positionable);
+		}
 	}
-	
-	private void fillWithQuestion(Question question){
+
+	private void fillWithQuestion(Question question) {
 		type = "Question";
 		title = question.getName();
 		description = question.getText();
-		List<String> ansList= new ArrayList<String>();
-		if(question.getAnswer1() != null){
+		List<String> ansList = new ArrayList<String>();
+		if (question.getAnswer1() != null) {
 			ansList.add(question.getAnswer1());
 		}
-		if(question.getAnswer2() != null){
+		if (question.getAnswer2() != null) {
 			ansList.add(question.getAnswer2());
 		}
-		if(question.getAnswer3() != null){
+		if (question.getAnswer3() != null) {
 			ansList.add(question.getAnswer3());
 		}
-		if(question.getAnswer4() != null){
+		if (question.getAnswer4() != null) {
 			ansList.add(question.getAnswer4());
 		}
-		answers = ansList.toArray(new String[]{});
+		answers = ansList.toArray(new String[] {});
 	}
-	
-	private void fillWithInformation(Information information){
+
+	private void fillWithInformation(Information information) {
 		type = "Information";
 		title = information.getName();
 		description = information.getText();
 	}
-	
-	private void fillWithImage(Image image){
-		type = "Image"; 
+
+	private void fillWithImage(Image image) {
+		type = "Image";
 		title = image.getName();
 		url = image.getUrl();
 	}
-	
-	private void fillWithVideo(Video video){
+
+	private void fillWithVideo(Video video) {
 		type = "Video";
 		title = video.getName();
 		url = video.getVideoUrl();
 	}
-	
+
 	// Getters and setters
-	
+
 	public String getType() {
 		return type;
 	}
@@ -102,8 +105,12 @@ public class Item {
 		return answers;
 	}
 
-	public void setAnswers(String[] answers) {
-		this.answers = answers;
+	public void setAnswers(String[] newAnswers) {
+		if (newAnswers == null) {
+			this.answers = new String[0];
+		} else {
+			this.answers = Arrays.copyOf(newAnswers, newAnswers.length);
+		}
 	}
 
 	public String getUrl() {
@@ -113,11 +120,11 @@ public class Item {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	public String getTitle() {
 		return title;
 	}
@@ -125,9 +132,9 @@ public class Item {
 	public String getSubmitUrl() {
 		return submitUrl;
 	}
-	
+
 	public void setSubmitUrl(String submitUrl) {
 		this.submitUrl = submitUrl;
 	}
-	
+
 }

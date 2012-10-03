@@ -78,12 +78,7 @@ public class ParticipantService {
 
 	public void createParticipantIfNotPresent(final String name,
 			final String color) {
-		
-		/*Criteria criteria = getSession().createCriteria(Participant.class);
-		criteria.add(Restrictions.eq("name", name));
-		criteria.setMaxResults(1);
 
-		List<Participant> participants = criteria.list();*/
 		Participant participant = participantRepository.findParticipant(name);
 		
 		if (participant == null) {
@@ -140,15 +135,14 @@ public class ParticipantService {
 		Quest quest = p.getQuest();
 
 		List<ParticipationLog> participationLogs = p.getParticipationLogs();
-		// int count = 0;
+
 		Set<Long> counted = new HashSet<Long>();
 		for (ParticipationLog log : participationLogs) {
 			Positionable positionable = log.getPositionable();
 			if (positionable instanceof Question) {
-				// if (!counted.contains(positionable.getId())) {
-				// count++;
+
 				counted.add(positionable.getId());
-				// }
+
 			}
 		}
 
@@ -158,10 +152,6 @@ public class ParticipantService {
 
 	private List<ParticipationLog> getParticipationLogs(Long questId) {
 		// TODO : add ordering by time.
-		/*Criteria criteria = getSession().createCriteria(ParticipationLog.class)
-				.createCriteria("participation").createCriteria("quest")
-				.add(Restrictions.eq("id", questId));
-		List<ParticipationLog> log = criteria.list();*/
 		return participationLogRepository.getParticipationLogsByQuest(questId);
 	}
 
