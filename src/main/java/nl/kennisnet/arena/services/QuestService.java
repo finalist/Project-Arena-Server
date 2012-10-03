@@ -115,28 +115,10 @@ public class QuestService {
 			originalQuest = questRepository.get(questDTO.getId());
 		}
 		Quest quest = null;
-		List<Positionable> deletingPos = new ArrayList<Positionable>();
-		if (originalQuest == null) {
+		if (originalQuest == null || !savedByOwner(quest, originalQuest)) {
 			quest = DomainObjectFactory.create(questDTO);
 		} else {
 			quest = DomainObjectFactory.update(questDTO, originalQuest);
-
-			if (!savedByOwner(quest, originalQuest)) {
-				if (quest.getId() != null) {
-					quest.setId(null);
-				}
-			} else {
-				deletingPos = DomainObjectFactory.delete(quest, originalQuest);
-				List<Location> deletingLocations = new ArrayList<Location>();
-				for (Positionable positionable : originalQuest
-						.getPositionables()) {
-					deletingLocations.add(positionable.getLocation());
-				}
-
-				positionableRepository.delete(deletingPos);
-				// locationRepository.delete(deletingLocations);
-			}
-
 		}
 
 		quest = questRepository.merge(quest);

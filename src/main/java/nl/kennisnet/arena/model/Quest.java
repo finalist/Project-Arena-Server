@@ -33,7 +33,7 @@ public class Quest implements DomainObject {
 	@Column(nullable = false)
 	private String emailOwner;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "quest")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "quest", orphanRemoval=true)
 	private List<Positionable> positionables = new ArrayList<Positionable>();
 
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy="quest", orphanRemoval=true)
