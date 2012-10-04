@@ -2,6 +2,7 @@ package nl.kennisnet.arena.services;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import geodb.GeoDB;
 
@@ -103,23 +104,40 @@ public class ParticipantServiceTest {
 		assertThat(participantRepository.getAll().size(), is(2));
 	}
 	
+	private Participation createParticipation(String name, String email) {
+		Participation participation1 = new Participation();
+		Quest quest1 = new Quest();
+		quest1.setEmailOwner(email);
+		quest1 = questRepository.merge(quest1);
+		Participant participant1 = new Participant();
+		participant1.setName(name);
+		participant1 = participantRepository.merge(participant1);
+		Round round1 = new Round();
+		round1 = roundRepository.merge(round1);
+		participation1.setQuest(quest1);
+		participation1.setParticipant(participant1);
+		participation1.setRound(round1);
+		return participationRepository.merge(participation1);
+	}
+	
 	@Test
 	public void testAddParticipationLog() {
-		//NOT WORKING YET
-		Quest quest = new Quest("quest");
-		quest.setEmailOwner("email@email.nl");
-		quest = questRepository.merge(quest);
-		Participant participant = new Participant("hans");
-		participant = participantRepository.merge(participant);
-		Round round = new Round();
-		round = roundRepository.merge(round);
-		Participation participation = new Participation();
-		participation.setParticipant(participant);
-		participation.setRound(round);
-		participation.setQuest(quest);
-		participation = participationRepository.merge(participation);
-		
-		participantService.addParticipationLog(participation.getId(), 0, null, null);
+		Participation p1 = createParticipation("hans", "hansje@email.nl");
+		participantService.addParticipationLog(p1.getId(), 0, null, null);
 		assertThat(participationLogRepository.getAll().size(), is(1));
 	}
+	
+	@Test
+	public void testAddParticipationLogPress() {
+		Participation p1 = createParticipation("hanZs", "hansje@email.nl");
+		participantService.addParticipationLogPress(p1.getId(), (long) 0, null, null, null);
+		assertThat(participationLogRepository.getAll().size(), is(1));
+	}
+	
+	@Test
+	public void testGetProgress() {
+		Participation p1 = createParticipation("hans", "hansje@email.nl");
+		assertThat(participantService.getProgress(p1.getId()), is(not(nullValue())));
+	}
+	
 }

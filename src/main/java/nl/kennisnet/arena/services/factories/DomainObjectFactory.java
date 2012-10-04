@@ -1,7 +1,6 @@
 package nl.kennisnet.arena.services.factories;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import nl.kennisnet.arena.client.domain.QuestDTO;
@@ -10,7 +9,6 @@ import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Location;
-import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
@@ -21,7 +19,7 @@ public class DomainObjectFactory {
 
 	public static Quest create(QuestDTO questDTO) {
 		Quest result = new Quest();
-		result.setId(questDTO.getId());
+		//result.setId(questDTO.getId());
 		result.setName(questDTO.getName());
 		result.setEmailOwner(questDTO.getEmailOwner());
 		if (questDTO.getItems() != null) {
@@ -77,22 +75,18 @@ public class DomainObjectFactory {
 		return result;
 	}
 
-	public static Quest update(QuestDTO questDTO, Quest quest) {
+	public static Quest update(QuestDTO questDTO) {
+		Quest quest = new Quest();
+		quest.setId(questDTO.getId());
 		quest.setName(questDTO.getName());
 		quest.setEmailOwner(questDTO.getEmailOwner());
-
 		if (questDTO.getItems() != null) {
 			List<Positionable> items = new ArrayList<Positionable>();
 			for (QuestItemDTO questItemDTO : questDTO.getItems()) {
-				if (questItemDTO.getId() != null) {
-					// TODO:Update
-					
-				} else {
-					Positionable positionable = create(questItemDTO, quest);
-					positionable.setQuest(quest);
+				Positionable positionable = create(questItemDTO, quest);
+				if (positionable != null) {
 					items.add(positionable);
 				}
-
 			}
 			quest.setPositionables(items);
 		}

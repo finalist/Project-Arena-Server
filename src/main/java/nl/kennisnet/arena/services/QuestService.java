@@ -3,19 +3,15 @@ package nl.kennisnet.arena.services;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import nl.kennisnet.arena.client.domain.QuestDTO;
-import nl.kennisnet.arena.model.Location;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Participation;
-import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.repository.LocationRepository;
 import nl.kennisnet.arena.repository.ParticipantRepository;
@@ -115,10 +111,10 @@ public class QuestService {
 			originalQuest = questRepository.get(questDTO.getId());
 		}
 		Quest quest = null;
-		if (originalQuest == null || !savedByOwner(quest, originalQuest)) {
+		if (originalQuest == null || !savedByOwner(questDTO, originalQuest)) {
 			quest = DomainObjectFactory.create(questDTO);
 		} else {
-			quest = DomainObjectFactory.update(questDTO, originalQuest);
+			quest = DomainObjectFactory.update(questDTO);
 		}
 
 		quest = questRepository.merge(quest);
@@ -128,9 +124,9 @@ public class QuestService {
 		return DTOFactory.create(quest);
 	}
 
-	private boolean savedByOwner(Quest quest, Quest originalQuest) {
+	private boolean savedByOwner(QuestDTO questDTO, Quest originalQuest) {
 		return originalQuest != null
-				&& originalQuest.getEmailOwner().equals(quest.getEmailOwner());
+				&& originalQuest.getEmailOwner().equals(questDTO.getEmailOwner());
 	}
 
 	private void sendNotification(Quest quest) {
