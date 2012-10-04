@@ -1,7 +1,6 @@
 package nl.kennisnet.arena.repository;
 
 import nl.kennisnet.arena.model.Participant;
-import nl.kennisnet.arena.model.Participation;
 
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Example;

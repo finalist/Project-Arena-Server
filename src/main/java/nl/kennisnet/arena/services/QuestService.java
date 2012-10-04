@@ -3,19 +3,15 @@ package nl.kennisnet.arena.services;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import nl.kennisnet.arena.client.domain.QuestDTO;
-import nl.kennisnet.arena.model.Location;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Participation;
-import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.repository.LocationRepository;
 import nl.kennisnet.arena.repository.ParticipantRepository;
@@ -45,10 +41,10 @@ public class QuestService {
 
 	@Autowired
 	private LocationRepository locationRepository;
-	
+
 	@Autowired
 	private PositionableRepository positionableRepository;
-	
+
 	@Autowired
 	private ParticipationRepository participationRepository;
 
@@ -99,8 +95,8 @@ public class QuestService {
 
 		Participation participation = participationRepository
 				.findParticipation(participant, quest, quest.getActiveRound());
-		
-		if(participation != null) {
+
+		if (participation != null) {
 			return participation.getId();
 		} else {
 			Participation part = new Participation(participant, quest,
@@ -115,24 +111,10 @@ public class QuestService {
 			originalQuest = questRepository.get(questDTO.getId());
 		}
 		Quest quest = null;
-		List<Positionable> deletingPos = new ArrayList<Positionable>();
-		if (originalQuest == null) {
+		if (originalQuest == null || !savedByOwner(questDTO, originalQuest)) {
 			quest = DomainObjectFactory.create(questDTO);
 		} else {
-			quest = DomainObjectFactory.update(questDTO, originalQuest);
-			deletingPos = DomainObjectFactory.delete(quest, originalQuest);
-			List<Location> deletingLocations = new ArrayList<Location>();
-			for (Positionable positionable : originalQuest.getPositionables()) {
-				deletingLocations.add(positionable.getLocation());
-			}
-			positionableRepository.delete(deletingPos);
-			locationRepository.delete(deletingLocations);
-		}
-
-		if (quest.getId() != null) {
-			if (!savedByOwner(quest, originalQuest)) {
-				quest.setId(null);
-			}
+			quest = DomainObjectFactory.update(questDTO);
 		}
 
 		quest = questRepository.merge(quest);
@@ -142,9 +124,9 @@ public class QuestService {
 		return DTOFactory.create(quest);
 	}
 
-	private boolean savedByOwner(Quest quest, Quest originalQuest) {
+	private boolean savedByOwner(QuestDTO questDTO, Quest originalQuest) {
 		return originalQuest != null
-				&& originalQuest.getEmailOwner().equals(quest.getEmailOwner());
+				&& originalQuest.getEmailOwner().equals(questDTO.getEmailOwner());
 	}
 
 	private void sendNotification(Quest quest) {

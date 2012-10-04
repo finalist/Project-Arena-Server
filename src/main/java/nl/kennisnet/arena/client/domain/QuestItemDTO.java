@@ -59,11 +59,11 @@ public class QuestItemDTO implements Serializable {
 	public void setRadius(Double radius) {
 		this.radius = radius;
 	}
-	
+
 	public Double getVisibleRadius() {
 		return visibleRadius;
 	}
-	
+
 	public void setVisibleRadius(Double visibleRadius) {
 		this.visibleRadius = visibleRadius;
 	}
@@ -173,13 +173,16 @@ public class QuestItemDTO implements Serializable {
 	}
 
 	public TYPE getQuestionTypeAsEnum() {
-		if(questionType == null){
+		if (questionType == null) {
 			return TYPE.MULTIPLE_CHOICE;
 		}
 		switch (questionType) {
-			case 0: return TYPE.MULTIPLE_CHOICE;
-			case 1: return TYPE.OPEN_QUESTION;
-			default: return TYPE.MULTIPLE_CHOICE;
+		case 0:
+			return TYPE.MULTIPLE_CHOICE;
+		case 1:
+			return TYPE.OPEN_QUESTION;
+		default:
+			return TYPE.MULTIPLE_CHOICE;
 		}
 	}
 
@@ -220,83 +223,114 @@ public class QuestItemDTO implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		QuestItemDTO other = (QuestItemDTO) obj;
 		if (alt == null) {
-			if (other.alt != null)
+			if (other.alt != null) {
 				return false;
-		} else if (!alt.equals(other.alt))
+			}
+		} else if (!alt.equals(other.alt)) {
 			return false;
+		}
 		if (correctOption == null) {
-			if (other.correctOption != null)
+			if (other.correctOption != null) {
 				return false;
-		} else if (!correctOption.equals(other.correctOption))
+			}
+		} else if (!correctOption.equals(other.correctOption)) {
 			return false;
+		}
 		if (description == null) {
-			if (other.description != null)
+			if (other.description != null) {
 				return false;
-		} else if (!description.equals(other.description))
+			}
+		} else if (!description.equals(other.description)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (name == null) {
-			if (other.name != null)
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!name.equals(other.name)) {
 			return false;
+		}
 		if (objectURL == null) {
-			if (other.objectURL != null)
+			if (other.objectURL != null) {
 				return false;
-		} else if (!objectURL.equals(other.objectURL))
+			}
+		} else if (!objectURL.equals(other.objectURL)) {
 			return false;
+		}
 		if (option1 == null) {
-			if (other.option1 != null)
+			if (other.option1 != null) {
 				return false;
-		} else if (!option1.equals(other.option1))
+			}
+		} else if (!option1.equals(other.option1)) {
 			return false;
+		}
 		if (option2 == null) {
-			if (other.option2 != null)
+			if (other.option2 != null) {
 				return false;
-		} else if (!option2.equals(other.option2))
+			}
+		} else if (!option2.equals(other.option2)) {
 			return false;
+		}
 		if (option3 == null) {
-			if (other.option3 != null)
+			if (other.option3 != null) {
 				return false;
-		} else if (!option3.equals(other.option3))
+			}
+		} else if (!option3.equals(other.option3)) {
 			return false;
+		}
 		if (option4 == null) {
-			if (other.option4 != null)
+			if (other.option4 != null) {
 				return false;
-		} else if (!option4.equals(other.option4))
+			}
+		} else if (!option4.equals(other.option4)) {
 			return false;
+		}
 		if (point == null) {
-			if (other.point != null)
+			if (other.point != null) {
 				return false;
-		} else if (!point.equals(other.point))
+			}
+		} else if (!point.equals(other.point)) {
 			return false;
+		}
 		if (radius == null) {
-			if (other.radius != null)
+			if (other.radius != null) {
 				return false;
-		} else if (!radius.equals(other.radius))
+			}
+		} else if (!radius.equals(other.radius)) {
 			return false;
+		}
 		if (score == null) {
-			if (other.score != null)
+			if (other.score != null) {
 				return false;
-		} else if (!score.equals(other.score))
+			}
+		} else if (!score.equals(other.score)) {
 			return false;
+		}
 		if (typeName == null) {
-			if (other.typeName != null)
+			if (other.typeName != null) {
 				return false;
-		} else if (!typeName.equals(other.typeName))
+			}
+		} else if (!typeName.equals(other.typeName)) {
 			return false;
+		}
 		return true;
 	}
 

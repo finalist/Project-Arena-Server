@@ -15,6 +15,7 @@ import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.SimplePoint;
 import nl.kennisnet.arena.model.Participant;
+import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.repository.ParticipantRepository;
 import nl.kennisnet.arena.repository.QuestRepository;
 
@@ -66,8 +67,11 @@ public class QuestServiceTest {
 		questDTO.setEmailOwner(existingEmail);
 		QuestItemDTO itemDTO = new QuestItemDTO("testitem", "Verhaal");
 		itemDTO.setPoint(new SimplePoint(2.2D, 1.1D));
+		QuestItemDTO itemDTO2 = new QuestItemDTO("test", "Verhaal");
+		itemDTO2.setPoint(new SimplePoint(2.5D, 1.8D));
 		List<QuestItemDTO> items = new ArrayList<QuestItemDTO>();
 		items.add(itemDTO);
+		items.add(itemDTO2);
 		questDTO.setItems(items);
 		questDTO.setActiveRound(existingRound);
 		List<RoundDTO> rounds = new ArrayList<RoundDTO>();
@@ -82,17 +86,53 @@ public class QuestServiceTest {
 	}
 
 	@Test
-	public void testSaveDiffEmail() {
-		QuestDTO quest = new QuestDTO();
-		quest.setName("Henk");
-		quest.setEmailOwner("Henk@Henk.henk");
+	public void when_saving_with_a_different_email_address_the_quest_items_should_be_cloned() {
+		QuestDTO questDTO = questService.getQuestDTO(existingId);
+		questDTO.setEmailOwner("jacques@finalist.com");
+		QuestDTO newQuestDTO = questService.save(questDTO, true);
+		assertThat(questDTO.getItems().get(0).getId(), is(not(newQuestDTO
+				.getItems().get(0).getId())));
+	}
 
-		quest = questService.save(quest, true);
+	@Test
+	public void when_saving_with_a_different_email_address_the_quest_items_should_not_be_removed_from_the_existing_quest() {
+		QuestDTO questDTO = questService.getQuestDTO(existingId);
+		questDTO.setEmailOwner("jacques@finalist.com");
+		questService.save(questDTO, true);
+		Quest oldQuest = questService.getQuest(questDTO.getId());
+		assertThat(oldQuest.getPositionables().get(0).getQuest().getId(),
+				is(oldQuest.getId()));
+	}
 
-		quest.setEmailOwner("Test@Test.Test");
-		QuestDTO quest2 = questService.save(quest, true);
+	@Test
+	@Rollback(true)
+	public void when_saving_with_different_email_and_different_items_the_original_items_should_stay() {
+		QuestDTO questDTO = questService.getQuestDTO(existingId);
 
-		assertThat(quest2.getId(), is(not(quest.getId())));
+		List<QuestItemDTO> items = questDTO.getItems();
+		questDTO.removeItem(items.get(1));
+		questDTO.setEmailOwner("Edwin.schriek@gmail.com");
+
+		QuestDTO newQuest = questService.save(questDTO, true);
+		assertThat(newQuest.getItems().size(), is(1));
+
+	}
+	
+	@Test
+	public void when_delete_item_and_saving_with_same_email_size_must_be_lower() {
+		QuestDTO questDTO = questService.getQuestDTO(existingId);	
+
+		List<QuestItemDTO> newItems = new ArrayList<QuestItemDTO>();
+		newItems.add(questDTO.getItems().get(0));
+		
+		questDTO.setItems(newItems);
+		
+		questService.save(questDTO, true);
+		
+		QuestDTO newQuest = questService.getQuestDTO(existingId);
+		
+		assertThat(newQuest.getItems().size(), is(1));
+		
 	}
 
 	@Test
@@ -152,7 +192,7 @@ public class QuestServiceTest {
 		Assert.assertEquals(name, saved.getName());
 		Assert.assertEquals(email, saved.getEmailOwner());
 		Assert.assertEquals(roundDto, saved.getActiveRound());
-		Assert.assertEquals(1, saved.getItems().size());
+		Assert.assertEquals(2, saved.getItems().size());
 		Assert.assertEquals(new Double(2.2D), saved.getItems().get(0)
 				.getPoint().getLongitude());
 		Assert.assertEquals(new Double(4.4D), saved.getItems().get(0)
@@ -167,10 +207,10 @@ public class QuestServiceTest {
 
 		questDTO.getItems().add(questItemDTO);
 		QuestDTO saved = questService.save(questDTO, true);
-		Assert.assertEquals(2, saved.getItems().size());
-		Assert.assertEquals(new Double(3.3D), saved.getItems().get(1)
+		Assert.assertEquals(3, saved.getItems().size());
+		Assert.assertEquals(new Double(3.3D), saved.getItems().get(2)
 				.getPoint().getLongitude());
-		Assert.assertEquals(new Double(6.6D), saved.getItems().get(1)
+		Assert.assertEquals(new Double(6.6D), saved.getItems().get(2)
 				.getPoint().getLatitude());
 	}
 
@@ -182,11 +222,11 @@ public class QuestServiceTest {
 
 		questItemDTO.setPoint(new SimplePoint(6.6D, 3.3D));
 		questDTO.getItems().add(questItemDTO);
-		QuestDTO saved = questService.save(questDTO, false);
-		Assert.assertEquals(1, saved.getItems().size());
-		Assert.assertEquals(new Double(3.3D), saved.getItems().get(0)
+		QuestDTO saved = questService.save(questDTO, true);
+		Assert.assertEquals(2, saved.getItems().size());
+		Assert.assertEquals(new Double(3.3D), saved.getItems().get(1)
 				.getPoint().getLongitude());
-		Assert.assertEquals(new Double(6.6D), saved.getItems().get(0)
+		Assert.assertEquals(new Double(6.6D), saved.getItems().get(1)
 				.getPoint().getLatitude());
 	}
 
@@ -211,7 +251,7 @@ public class QuestServiceTest {
 		Assert.assertEquals(existingId, dto.getId());
 		Assert.assertEquals(existingName, dto.getName());
 		Assert.assertEquals(existingEmail, dto.getEmailOwner());
-		Assert.assertEquals(1, dto.getItems().size());
+		Assert.assertEquals(2, dto.getItems().size());
 	}
 
 	@Test

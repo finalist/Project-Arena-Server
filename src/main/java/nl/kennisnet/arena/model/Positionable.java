@@ -3,6 +3,7 @@ package nl.kennisnet.arena.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,10 +12,9 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -25,15 +25,13 @@ public class Positionable {
 	private String name;
 	private Boolean consumable;
 	
-	@ManyToOne(optional = false)
-	@Cascade(CascadeType.ALL)
+	@OneToOne(optional = false,orphanRemoval=true,cascade=CascadeType.ALL)
 	private Location location;
 	
 	@ManyToOne(optional = false)
 	private Quest quest;
 	
-	@OneToMany(mappedBy = "positionable", cascade = javax.persistence.CascadeType.REMOVE)
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@OneToMany(mappedBy = "positionable", cascade = CascadeType.REMOVE, orphanRemoval=true)
 	private List<ParticipationLog> participationlogs = new ArrayList<ParticipationLog>();
 	
 	public Location getLocation() {
