@@ -233,9 +233,9 @@ public class ParticipantService {
 		return null;
 	}
 
-	public Set<TeamDTO> getAllParticipants() {
+	public List<TeamDTO> getAllParticipants() {
 		List<Participant> participants = participantRepository.getAll();
-		Set<TeamDTO> result = new HashSet<TeamDTO>();
+		List<TeamDTO> result = new ArrayList<TeamDTO>();
 		for (Participant participant : participants) {
 			result.add(DTOFactory.create(participant));
 		}
