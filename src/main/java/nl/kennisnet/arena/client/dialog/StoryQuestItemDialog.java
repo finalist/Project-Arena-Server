@@ -18,8 +18,6 @@ public class StoryQuestItemDialog extends QuestItemDialog {
       setText("Verhaal details");
    }
 
-
-
    @Override
    protected List<FormTablePanel.Element> createFormPanels(){
       List<FormTablePanel.Element> result=new ArrayList<FormTablePanel.Element>();

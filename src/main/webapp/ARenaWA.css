@@ -354,6 +354,11 @@ img {
 	color: white;
 }
 
+#typefilter li.active #Object3D {
+	background-color: #600060;
+	color: white;
+}
+
 #typeselect ul {
 	list-style-image: none;
 	list-style-position: outside;
@@ -417,6 +422,10 @@ img {
 	background-color: #800080;
 }
 
+#typeselect li.active #Object3D {
+	background-color: #600060;
+}
+
 #typeselect li #Verhaal {
 	background: transparent url(text-red.png) no-repeat scroll 100% 50%;
 }
@@ -431,6 +440,10 @@ img {
 
 #typeselect li #Video {
 	background: transparent url(video.png) no-repeat scroll 100% 50%;
+}
+
+#typeselect li #Object3D {
+	background: transparent url(trash.png) no-repeat scroll 100% 50%;
 }
 
 .paneltitle {
@@ -484,6 +497,11 @@ img {
 	padding: 0;
 }
 
+.object3d_panel {
+	background-color: #800080;
+	padding: 0;
+}
+
 .rounds_panel {
 	width: 255px;
 	cursor: pointer;
@@ -526,6 +544,10 @@ img {
 
 .video_panel .questitempanel_name {
 	background: url(video.png) no-repeat scroll left top
+}
+
+.object3d_panel .questitempanel_name {
+	background: url(trash.png) no-repeat scroll left top
 }
 
 .questitempanel a:hover {

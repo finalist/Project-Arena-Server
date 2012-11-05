@@ -15,6 +15,8 @@ public class DialogSelector {
          new ImageQuestItemDialog(itemDTO, readOnly,create).center();
       } else if(questType.equals(QuestItemTypes.QUEST_TYPE_VIDEO)) {
     	 new VideoQuestItemDialog(itemDTO, readOnly, create).center();    	  
+      } else if(questType.equals(QuestItemTypes.QUEST_TYPE_3D)){
+    	  new Object3DDialog(itemDTO, readOnly, create).center();
       } else {
          new QuestItemDialog(itemDTO, readOnly,create).center();
       }
