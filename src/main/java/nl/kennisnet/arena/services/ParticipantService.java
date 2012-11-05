@@ -278,7 +278,7 @@ public class ParticipantService {
 			Question question) {
 		List<ParticipantAnswer> participants = question.getParticipantAnswers();
 		for (ParticipantAnswer p : participants){
-			if(p.getParticipationtId() == (participationId) && p.getQuestion().equals(question)){
+			if(p.getParticipationId() == (participationId) && p.getQuestion().equals(question)){
 				participantAnswerRepository.evict(participants.get(0));
 				return p;
 			}			

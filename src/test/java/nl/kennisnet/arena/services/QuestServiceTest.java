@@ -259,5 +259,4 @@ public class QuestServiceTest {
 		QuestDTO dto = questService.getQuestDTO(-1L);
 		Assert.assertNull(dto);
 	}
-
 }

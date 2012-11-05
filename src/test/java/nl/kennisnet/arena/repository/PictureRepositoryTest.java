@@ -57,7 +57,7 @@ public class PictureRepositoryTest {
 	public void testGet() {
 		Picture aPicture = createObject("Henk.jpg");
 		Picture receivedPicture = repository.get(aPicture.getId());		
-		assertThat(receivedPicture, is(not(nullValue())));
+		assertThat(receivedPicture, is(aPicture));
 	}
 	
 	@Test
