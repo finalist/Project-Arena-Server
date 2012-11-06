@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import nl.kennisnet.arena.repository.Object3DRepository;
+import nl.kennisnet.arena.services.Object3DService;
 import nl.kennisnet.arena.services.PictureService;
 
 import org.apache.commons.configuration.CompositeConfiguration;
@@ -36,8 +38,6 @@ public class FileController {
        this.pictureService = questService;
        this.configuration = configuration;
    }
-
-   
    
    @RequestMapping(value = "/fileUpload", method = RequestMethod.POST)
    public void processPictureUpload1(@RequestParam("uploadFormElement") MultipartFile image, HttpServletResponse response)

@@ -1,6 +1,7 @@
 package nl.kennisnet.arena.client.domain;
 
 import java.io.Serializable;
+import java.util.Vector;
 
 public class QuestItemDTO implements Serializable {
 
@@ -29,6 +30,9 @@ public class QuestItemDTO implements Serializable {
 	private Integer correctOption;
 	private Integer score;
 	private Long id;
+	private Float schaal;
+	private Integer blended;
+	private Vector<Float> rotation;
 
 	public Long getId() {
 		return id;
@@ -186,6 +190,30 @@ public class QuestItemDTO implements Serializable {
 		}
 	}
 
+	public Float getSchaal() {
+		return schaal;
+	}
+
+	public void setSchaal(Float schaal) {
+		this.schaal = schaal;
+	}
+
+	public Integer getBlended() {
+		return blended;
+	}
+
+	public void setBlended(Integer blended) {
+		this.blended = blended;
+	}
+
+	public Vector<Float> getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(Vector<Float> rotation) {
+		this.rotation = rotation;
+	}
+
 	@Override
 	public String toString() {
 		return "QuestItemDTO [alt=" + alt + ", correctOption=" + correctOption
@@ -193,7 +221,8 @@ public class QuestItemDTO implements Serializable {
 				+ name + ", objectURL=" + objectURL + ", option1=" + option1
 				+ ", option2=" + option2 + ", option3=" + option3
 				+ ", option4=" + option4 + ", point=" + point + ", radius="
-				+ radius + ", typeName=" + typeName + "]";
+				+ radius + ", typeName=" + typeName + ", schaal=" + schaal
+				+ ", blended=" + blended + "]";
 	}
 
 	@Override
@@ -218,6 +247,8 @@ public class QuestItemDTO implements Serializable {
 		result = prime * result + ((score == null) ? 0 : score.hashCode());
 		result = prime * result
 				+ ((typeName == null) ? 0 : typeName.hashCode());
+		result = prime * result + ((schaal == null) ? 0 : schaal.hashCode());
+		result = prime * result + ((blended == null) ? 0 : blended.hashCode());
 		return result;
 	}
 
@@ -329,6 +360,20 @@ public class QuestItemDTO implements Serializable {
 				return false;
 			}
 		} else if (!typeName.equals(other.typeName)) {
+			return false;
+		}
+		if (schaal == null) {
+			if (other.schaal != null) {
+				return false;
+			}
+		} else if (!schaal.equals(other.schaal)) {
+			return false;
+		}
+		if (blended == null) {
+			if (other.blended != null) {
+				return false;
+			}
+		} else if (!blended.equals(other.blended)) {
 			return false;
 		}
 		return true;

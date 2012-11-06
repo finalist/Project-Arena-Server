@@ -10,6 +10,7 @@ import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.TeamDTO;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
+import nl.kennisnet.arena.model.Object3D;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Participation;
 import nl.kennisnet.arena.model.ParticipationLog;
@@ -69,6 +70,10 @@ public class DTOFactory {
         	 Video video = (Video)positionable;
         	 result = new QuestItemDTO(video.getName(), "Video");
         	 result.setObjectURL(video.getVideoUrl());
+         } else if (positionable instanceof Object3D){
+        	 Object3D object3d = (Object3D) positionable;
+        	 result = new QuestItemDTO(object3d.getName(), "object3d");
+        	 result.setObjectURL(object3d.getUrl());
          }
          if (result!=null){
             result.setRadius(positionable.getLocation().getRadius());

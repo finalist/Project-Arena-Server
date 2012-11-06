@@ -5,6 +5,7 @@ import java.util.List;
 
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
+import nl.kennisnet.arena.model.Object3D;
 import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Question;
@@ -88,14 +89,16 @@ public class Arena {
 
 	private Result buildWebPage(Result result, Positionable positionable,
 			String baseUrl, ArenaDataBean data) {
-		if(webPageNeeded(data, positionable)){
+		if (webPageNeeded(data, positionable)) {
 			result.setHasDetailPage(true);
-			if(data.isOffline()){
-				result.setWebpage(baseUrl + "item/offline/show/" + data.getQuestId() + "/"
-						+ positionable.getId() + "/" + data.getPlayer() + ".item");
+			if (data.isOffline()) {
+				result.setWebpage(baseUrl + "item/offline/show/"
+						+ data.getQuestId() + "/" + positionable.getId() + "/"
+						+ data.getPlayer() + ".item");
 			} else if (positionable instanceof Question) {
-				result.setWebpage(baseUrl + "item/show/" + data.getQuestId() + "/"
-						+ positionable.getId() + "/" + data.getPlayer() + ".item");
+				result.setWebpage(baseUrl + "item/show/" + data.getQuestId()
+						+ "/" + positionable.getId() + "/" + data.getPlayer()
+						+ ".item");
 			} else if (positionable instanceof Information) {
 				result.setWebpage(baseUrl + "item/show/" + positionable.getId()
 						+ ".item");
@@ -104,7 +107,10 @@ public class Arena {
 			} else if (positionable instanceof Video) {
 				result.setWebpage(((Video) positionable).getVideoUrl());
 			}
-		}else{
+//			} else if (positionable instanceof Object3D) {
+//				result.setWebpage(((Object3D) positionable).getUrl());
+//			}
+		} else {
 			result.setHasDetailPage(false);
 		}
 		return result;
@@ -120,13 +126,15 @@ public class Arena {
 			result.setObjectType("question");
 		} else if (positionable instanceof Video) {
 			result.setObjectType("video");
+		} else if (positionable instanceof Object3D) {
+			result.setObjectType("object3d");
 		}
 		return result;
 	}
 
 	private Result buildObjectImage(Result result, Positionable positionable,
 			String baseUrl, ArenaDataBean data) {
-		if(!webPageNeeded(data, positionable)){
+		if (!webPageNeeded(data, positionable)) {
 			result.setObjectUrl(baseUrl + "images/too-far.png");
 			result.setTitle("Onbekend (afstand te groot)");
 		} else if (positionable instanceof Question) {
@@ -143,7 +151,9 @@ public class Arena {
 		} else if (positionable instanceof Image) {
 			result.setObjectUrl(buildPhotoImage(positionable, baseUrl, data));
 		} else if (positionable instanceof Video) {
-			result.setObjectUrl(((Video)positionable).getThumbnailUrl());
+			result.setObjectUrl(((Video) positionable).getThumbnailUrl());
+		} else if (positionable instanceof Object3D) {
+			result.setObjectUrl(buildInformationImage(baseUrl));
 		}
 		return result;
 	}
@@ -185,21 +195,23 @@ public class Arena {
 				(positionable).getId());
 		return url;
 	}
-	
-	private Result buildDistance(Result result, Positionable positionable, ArenaDataBean data){
-		if(data.isOffline()){
+
+	private Result buildDistance(Result result, Positionable positionable,
+			ArenaDataBean data) {
+		if (data.isOffline()) {
 			result.setRadius(positionable.getLocation().getRadius());
 		}
 		return result;
 	}
-	
-	private boolean webPageNeeded(ArenaDataBean data, Positionable positionable){
-		if ( positionable.getLocation().getVisibleRadius() == null || GeomUtil.calculateDistanceInMeters(
-				data.getLocation(),	positionable.getLocation().getPoint()
-				) < positionable.getLocation().getVisibleRadius()) {
+
+	private boolean webPageNeeded(ArenaDataBean data, Positionable positionable) {
+		if (positionable.getLocation().getVisibleRadius() == null
+				|| GeomUtil.calculateDistanceInMeters(data.getLocation(),
+						positionable.getLocation().getPoint()) < positionable
+						.getLocation().getVisibleRadius()) {
 			return true;
 		}
-		if (data.isOffline()){ //offline mode activated
+		if (data.isOffline()) { // offline mode activated
 			return true;
 		}
 		return false;

@@ -72,25 +72,10 @@ public class ImageQuestItemDialog extends QuestItemDialog {
 
       panel.add(upload);
 
-      // Button submitButton = new Button("Submit", new ClickHandler() {
-      // public void onClick(ClickEvent event) {
-      // String filename = upload.getFilename();
-      // if (filename == null) {
-      // Window.alert("Kies eerst een bestand");
-      // } else if (!(filename.toLowerCase().endsWith(".jpg") ||
-      // filename.toLowerCase().endsWith(".png"))) {
-      // Window.alert("Bestandsformaat is niet toegestaan!");
-      // } else {
-      // result.submit();
-      // }
-      // }
-      // });
-
-      // panel.add(submitButton);
-
       formPanel.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
          public void onSubmitComplete(SubmitCompleteEvent event) {
             getQuestItemDTO().setObjectURL(event.getResults());
+            Window.alert("Submit succesvol! " + event.getResults());
             refresh();
          }
       });

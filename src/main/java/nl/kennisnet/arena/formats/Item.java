@@ -8,6 +8,7 @@ import org.apache.commons.configuration.Configuration;
 
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
+import nl.kennisnet.arena.model.Object3D;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.model.Video;
@@ -43,6 +44,15 @@ public class Item {
 		if (positionable instanceof Video) {
 			fillWithVideo((Video) positionable);
 		}
+		if (positionable instanceof Object3D) {
+			fillWithObject3D((Object3D) positionable);
+		}
+	}
+
+	private void fillWithObject3D(Object3D object) {
+		type = "object3d";
+		title = object.getName();
+		description = object.getUrl();
 	}
 
 	private void fillWithQuestion(Question question) {

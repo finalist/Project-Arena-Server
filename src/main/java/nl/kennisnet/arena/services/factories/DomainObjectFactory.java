@@ -9,6 +9,7 @@ import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Location;
+import nl.kennisnet.arena.model.Object3D;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
@@ -19,7 +20,7 @@ public class DomainObjectFactory {
 
 	public static Quest create(QuestDTO questDTO) {
 		Quest result = new Quest();
-		//result.setId(questDTO.getId());
+		// result.setId(questDTO.getId());
 		result.setName(questDTO.getName());
 		result.setEmailOwner(questDTO.getEmailOwner());
 		if (questDTO.getItems() != null) {
@@ -62,6 +63,9 @@ public class DomainObjectFactory {
 		} else if (questItemDTO.getTypeName().equals("Video")) {
 			result = new Video();
 			((Video) result).setVideoUrl(questItemDTO.getObjectURL());
+		} else if (questItemDTO.getTypeName().equalsIgnoreCase("object3d")) {
+			result = new Object3D();
+			((Object3D) result).setUrl(questItemDTO.getObjectURL());
 		}
 		if (result != null) {
 			result.setName(questItemDTO.getName());

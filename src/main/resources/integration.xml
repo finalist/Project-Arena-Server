@@ -41,6 +41,7 @@
 			<props>
 				<prop key="hibernate.dialect">org.hibernatespatial.postgis.PostgisDialect</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.show_sql">true</prop>
 			</props>
 		</property>
 	</bean>
