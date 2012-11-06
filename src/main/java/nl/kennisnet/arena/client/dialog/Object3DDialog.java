@@ -180,7 +180,7 @@ public class Object3DDialog extends QuestItemDialog {
 				result.setSchaal(Float.valueOf(settings[0].getText()));
 				result.setAlt(Double.valueOf(settings[2].getText()));
 
-				Vector<Float> rotatie = new Vector<Float>();
+				ArrayList<Float> rotatie = new ArrayList<Float>();
 				rotatie.add(Float.valueOf(rotation[0].getText()));
 				rotatie.add(Float.valueOf(rotation[1].getText()));
 				rotatie.add(Float.valueOf(rotation[2].getText()));

@@ -63,9 +63,15 @@ public class DomainObjectFactory {
 		} else if (questItemDTO.getTypeName().equals("Video")) {
 			result = new Video();
 			((Video) result).setVideoUrl(questItemDTO.getObjectURL());
-		} else if (questItemDTO.getTypeName().equalsIgnoreCase("object3d")) {
+		} else if (questItemDTO.getTypeName().equalsIgnoreCase("Object3D")) {
 			result = new Object3D();
 			((Object3D) result).setUrl(questItemDTO.getObjectURL());
+			((Object3D) result)
+					.setBlended((questItemDTO.getBlended() == 0) ? false : true);
+			;
+			((Object3D) result).setSchaal(questItemDTO.getSchaal());
+			((Object3D) result).setRotation(questItemDTO.getRotation());
+
 		}
 		if (result != null) {
 			result.setName(questItemDTO.getName());

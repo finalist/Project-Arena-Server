@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 import nl.kennisnet.arena.repository.Object3DRepository;
-import nl.kennisnet.arena.services.Object3DService;
 import nl.kennisnet.arena.services.PictureService;
 
 import org.apache.commons.configuration.CompositeConfiguration;

@@ -50,7 +50,7 @@ public class Item {
 	}
 
 	private void fillWithObject3D(Object3D object) {
-		type = "object3d";
+		type = "Object3D";
 		title = object.getName();
 		description = object.getUrl();
 	}
