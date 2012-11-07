@@ -82,6 +82,10 @@ public class Round {
 		participantAnswers.add(participantAnswer);
 	}
 	
+	public void removeParticipantAnswer(ParticipantAnswer participantAnswer) {
+		participantAnswers.remove(participantAnswer);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof Round){

@@ -174,7 +174,6 @@ public class ParticipantService {
 	}
 
 	public Map<Long, Integer> getPositionableScores(Long questId) {
-		Map<MultiKey, Integer> answers = getAnswers(questId);
 		Map<Long, Integer> result = new HashMap<Long, Integer>();
 		Quest quest = questRepository.get(questId);
 
@@ -198,7 +197,6 @@ public class ParticipantService {
 	}
 
 	public Map<Long, Integer> getTeamScores(Long questId) {
-		Map<MultiKey, Integer> answers = getAnswers(questId);
 		Map<Long, Integer> result = new HashMap<Long, Integer>();
 		Quest quest = questRepository.get(questId);
 
@@ -233,9 +231,9 @@ public class ParticipantService {
 		return null;
 	}
 
-	public Set<TeamDTO> getAllParticipants() {
+	public List<TeamDTO> getAllParticipants() {
 		List<Participant> participants = participantRepository.getAll();
-		Set<TeamDTO> result = new HashSet<TeamDTO>();
+		List<TeamDTO> result = new ArrayList<TeamDTO>();
 		for (Participant participant : participants) {
 			result.add(DTOFactory.create(participant));
 		}
@@ -278,7 +276,7 @@ public class ParticipantService {
 			Question question) {
 		List<ParticipantAnswer> participants = question.getParticipantAnswers();
 		for (ParticipantAnswer p : participants){
-			if(p.getParticipationtId() == (participationId) && p.getQuestion().equals(question)){
+			if(p.getParticipationId() == (participationId) && p.getQuestion().equals(question)){
 				participantAnswerRepository.evict(participants.get(0));
 				return p;
 			}			

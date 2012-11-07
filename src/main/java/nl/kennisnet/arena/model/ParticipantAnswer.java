@@ -21,7 +21,7 @@ public class ParticipantAnswer implements DomainObject {
 	
 	private String textAnswer;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Round round;
 	
 	public enum Result{
@@ -42,8 +42,8 @@ public class ParticipantAnswer implements DomainObject {
 		this.participationAnswerPrimaryKey = participationAnswerPrimaryKey;
 	}
 	
-	public long getParticipationtId() {
-		return participationAnswerPrimaryKey.getParticipationtId();
+	public long getParticipationId() {
+		return participationAnswerPrimaryKey.getParticipationId();
 	}
 	
 	public Participation getParticipation() {
@@ -99,7 +99,7 @@ public class ParticipantAnswer implements DomainObject {
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof ParticipantAnswer){
-			if( ((ParticipantAnswer)obj).getParticipationtId() == (this.getParticipationtId())
+			if( ((ParticipantAnswer)obj).getParticipationId() == (this.getParticipationId())
 					&& ((ParticipantAnswer)obj).getQuestion().equals(this.getQuestion()) ){
 				return true;
 			}
@@ -109,7 +109,7 @@ public class ParticipantAnswer implements DomainObject {
 	
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(this.getParticipationtId()).append(this.getQuestion()).toHashCode();
+		return new HashCodeBuilder().append(this.getParticipationId()).append(this.getQuestion()).toHashCode();
 	}
 	
 	@Embeddable
@@ -132,7 +132,7 @@ public class ParticipantAnswer implements DomainObject {
 			this.participation = participation;
 		}
 		
-		public long getParticipationtId() {
+		public long getParticipationId() {
 			return participation.getId();
 		}
 

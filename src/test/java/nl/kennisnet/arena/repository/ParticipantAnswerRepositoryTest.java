@@ -12,7 +12,13 @@ import geodb.GeoDB;
 
 import javax.sql.DataSource;
 
-import nl.kennisnet.arena.model.Picture;
+import nl.kennisnet.arena.model.Location;
+import nl.kennisnet.arena.model.ParticipantAnswer;
+import nl.kennisnet.arena.model.Participant;
+import nl.kennisnet.arena.model.Participation;
+import nl.kennisnet.arena.model.Quest;
+import nl.kennisnet.arena.model.Question;
+import nl.kennisnet.arena.model.Round;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,60 +39,101 @@ public class ParticipantAnswerRepositoryTest {
 	DataSource dataSource;
 
 	@Autowired
-	PictureRepository repository;
+	ParticipantAnswerRepository repository;
+	
+	@Autowired
+	RoundRepository roundRepository;
+	
+	@Autowired
+	ParticipationRepository participationRepository;
+	
+	@Autowired
+	QuestRepository questRepository;
+	
+	@Autowired
+	ParticipantRepository participantRepository;
+	
+	@Autowired
+	PositionableRepository positionableRepository;
+	
+	@Autowired
+	LocationRepository locationRepository;
 	
 	@Before
 	public void setUp() throws Exception {
 		GeoDB.InitGeoDB(dataSource.getConnection());
 	}
 
-	private Picture createObject(String name) {
-		Picture picture = new Picture();
-		picture.setName(name);
-		picture = repository.merge(picture);
-		return picture;
+	private ParticipantAnswer createObject() {
+		ParticipantAnswer participantAnswer = new ParticipantAnswer();
+		participantAnswer.setTextAnswer("LOL");
+		
+		Round round = new Round();
+		round = roundRepository.merge(round);
+		
+		Participation participation = new Participation();
+		Quest quest = new Quest();
+		quest.setEmailOwner("testmail@test.nl");
+		quest = questRepository.merge(quest);
+		Participant participant = new Participant("testname");
+		participant = participantRepository.merge(participant);
+		participation.setParticipant(participant);
+		participation.setQuest(quest);
+		participation.setRound(round);
+		participation = participationRepository.merge(participation);
+		
+		Question positionable = new Question();
+		Location location = new Location();
+		location = locationRepository.merge(location);
+		positionable.setLocation(location);
+		positionable.setQuest(quest);
+		positionable = (Question) positionableRepository.merge(positionable);
+		
+		participantAnswer.setRound(round);
+		participantAnswer.setQuestion(positionable);
+		participantAnswer.setParticipation(participation);
+		participantAnswer = repository.merge(participantAnswer);
+		return participantAnswer;
 	}
 	
 	@Test
 	public void testCreate() {
-		Picture aPicture = createObject("Schriek.jpg");
-		assertThat(aPicture, is(not(nullValue())));
+		ParticipantAnswer participantAnswer = createObject();
+		assertThat(participantAnswer, is(not(nullValue())));
 	}
 	
 	@Test
 	public void testGet() {
-		Picture aPicture = createObject("Henk.jpg");
-		Picture receivedPicture = repository.get(aPicture.getId());		
-		assertThat(receivedPicture, is(not(nullValue())));
+		ParticipantAnswer participantAnswer = createObject();
+		ParticipantAnswer receivedAnswer = repository.get(participantAnswer.getParticipationAnswerPrimaryKey());		
+		assertThat(receivedAnswer, is(not(nullValue())));
+		System.out.println(receivedAnswer.getTextAnswer());
 	}
 	
 	@Test
 	public void testGetAll() {
-		List<Picture> listOfCreatedPictures = new ArrayList<Picture>();
+		List<ParticipantAnswer> listOfCreatedParticipantAnswers = new ArrayList<ParticipantAnswer>();
 		int count;
 		int amount = 10;
 		for (count=0; count<amount; count++) {
-			Picture picture = createObject("Henk" + count + ".jpg");
-			listOfCreatedPictures.add(picture);
+			ParticipantAnswer participantAnswer = createObject();
+			listOfCreatedParticipantAnswers.add(participantAnswer);
 		}
-		assertThat(repository.getAll(), is(listOfCreatedPictures));
+		assertThat(repository.getAll(), is(listOfCreatedParticipantAnswers));
 	}
 	
 	@Test
 	public void testDelete() {
-		List<Picture> listToDelete = new ArrayList<Picture>();
-		Picture picture1 = createObject("Jaap.jpg");
-		Picture picture2 = createObject("Ali.jpg");
-		Picture picture3 = createObject("Joop.jpg");
-		long id1 = picture1.getId();
-		long id2 = picture2.getId();
-		long id3 = picture3.getId();
-		listToDelete.add(picture1);
-		listToDelete.add(picture3);
+		List<ParticipantAnswer> listToDelete = new ArrayList<ParticipantAnswer>();
+		ParticipantAnswer pa1 = createObject();
+		ParticipantAnswer pa2 = createObject();
+		ParticipantAnswer pa3 = createObject();
+		listToDelete.add(pa1);
+		listToDelete.add(pa3);
 		repository.delete(listToDelete);
-		assertThat(repository.get(id1), is(nullValue()));
-		assertThat(repository.get(id2), is(not(nullValue())));
-		assertThat(repository.get(id3), is(nullValue()));
+		assertThat(repository.get(pa1.getParticipationAnswerPrimaryKey()), is(nullValue()));
+		assertThat(repository.get(pa2.getParticipationAnswerPrimaryKey()), is(not(nullValue())));
+		assertThat(repository.get(pa3.getParticipationAnswerPrimaryKey()), is(nullValue()));
 	}
 	
 }

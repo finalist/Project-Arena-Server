@@ -43,7 +43,7 @@ public class QuestService {
 	private LocationRepository locationRepository;
 
 	@Autowired
-	private PositionableRepository positionableRepository;
+	PositionableRepository positionableRepository;
 
 	@Autowired
 	private ParticipationRepository participationRepository;
@@ -106,6 +106,7 @@ public class QuestService {
 	}
 
 	public QuestDTO save(QuestDTO questDTO, boolean sendNotification) {
+		boolean update = false;
 		Quest originalQuest = null;
 		if (questDTO.getId() != null) {
 			originalQuest = questRepository.get(questDTO.getId());
@@ -114,11 +115,11 @@ public class QuestService {
 		if (originalQuest == null || !savedByOwner(questDTO, originalQuest)) {
 			quest = DomainObjectFactory.create(questDTO);
 		} else {
-			quest = DomainObjectFactory.update(questDTO);
+			quest = DomainObjectFactory.update(questDTO, originalQuest);
+			update = true;
 		}
-
 		quest = questRepository.merge(quest);
-		if (sendNotification) {
+		if (sendNotification && !update) {
 			sendNotification(quest);
 		}
 		return DTOFactory.create(quest);
