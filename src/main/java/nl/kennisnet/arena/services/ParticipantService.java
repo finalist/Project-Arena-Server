@@ -174,7 +174,6 @@ public class ParticipantService {
 	}
 
 	public Map<Long, Integer> getPositionableScores(Long questId) {
-		Map<MultiKey, Integer> answers = getAnswers(questId);
 		Map<Long, Integer> result = new HashMap<Long, Integer>();
 		Quest quest = questRepository.get(questId);
 
@@ -198,7 +197,6 @@ public class ParticipantService {
 	}
 
 	public Map<Long, Integer> getTeamScores(Long questId) {
-		Map<MultiKey, Integer> answers = getAnswers(questId);
 		Map<Long, Integer> result = new HashMap<Long, Integer>();
 		Quest quest = questRepository.get(questId);
 

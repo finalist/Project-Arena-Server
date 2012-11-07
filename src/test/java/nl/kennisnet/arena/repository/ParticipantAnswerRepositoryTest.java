@@ -14,10 +14,8 @@ import javax.sql.DataSource;
 
 import nl.kennisnet.arena.model.Location;
 import nl.kennisnet.arena.model.ParticipantAnswer;
-import nl.kennisnet.arena.model.ParticipantAnswer.ParticipationAnswerPrimaryKey;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Participation;
-import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.model.Round;

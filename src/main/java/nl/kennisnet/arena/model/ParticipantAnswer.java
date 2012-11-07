@@ -21,7 +21,7 @@ public class ParticipantAnswer implements DomainObject {
 	
 	private String textAnswer;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Round round;
 	
 	public enum Result{

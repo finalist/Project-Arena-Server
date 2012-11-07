@@ -4,6 +4,10 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import geodb.GeoDB;
 
 import javax.sql.DataSource;
@@ -12,9 +16,11 @@ import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Participation;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Round;
+import nl.kennisnet.arena.repository.LocationRepository;
 import nl.kennisnet.arena.repository.ParticipantRepository;
 import nl.kennisnet.arena.repository.ParticipationLogRepository;
 import nl.kennisnet.arena.repository.ParticipationRepository;
+import nl.kennisnet.arena.repository.PositionableRepository;
 import nl.kennisnet.arena.repository.QuestRepository;
 import nl.kennisnet.arena.repository.RoundRepository;
 
@@ -41,6 +47,9 @@ public class ParticipantServiceTest {
 	ParticipantService participantService;
 	
 	@Autowired
+	QuestService questService;
+	
+	@Autowired
 	private ParticipantRepository participantRepository;
 	
 	@Autowired
@@ -54,6 +63,12 @@ public class ParticipantServiceTest {
 
 	@Autowired
 	private RoundRepository roundRepository;
+	
+	@Autowired
+	private PositionableRepository positionableRepository;
+	
+	@Autowired
+	private LocationRepository locationRepository;
 
 	@Before
 	public void setUp() throws Exception {
@@ -104,20 +119,30 @@ public class ParticipantServiceTest {
 		assertThat(participantRepository.getAll().size(), is(2));
 	}
 	
-	private Participation createParticipation(String name, String email) {
-		Participation participation1 = new Participation();
+	private Quest createQuest(String email) {
 		Quest quest1 = new Quest();
 		quest1.setEmailOwner(email);
 		quest1 = questRepository.merge(quest1);
-		Participant participant1 = new Participant();
-		participant1.setName(name);
-		participant1 = participantRepository.merge(participant1);
+		return quest1;
+	}
+	
+	private Participation createParticipation(String name, String email) {
+		Participation participation1 = new Participation();
+		Quest quest1 = createQuest(email);
 		Round round1 = new Round();
 		round1 = roundRepository.merge(round1);
 		participation1.setQuest(quest1);
-		participation1.setParticipant(participant1);
 		participation1.setRound(round1);
-		return participationRepository.merge(participation1);
+		Participant participant1 = new Participant();
+		participant1.setName(name);
+		participant1 = participantRepository.merge(participant1);
+		participation1.setParticipant(participant1);
+		participation1 = participationRepository.merge(participation1);
+		List<Participation> plist = new ArrayList<Participation>();
+		plist.add(participation1);
+		participant1.setParticipations(plist);
+		participant1 = participantRepository.merge(participant1);
+		return participation1;
 	}
 	
 	@Test
@@ -138,6 +163,5 @@ public class ParticipantServiceTest {
 	public void testGetProgress() {
 		Participation p1 = createParticipation("hans", "hansje@email.nl");
 		assertThat(participantService.getProgress(p1.getId()), is(not(nullValue())));
-	}
-	
+	}	
 }

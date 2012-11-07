@@ -16,7 +16,7 @@ import nl.kennisnet.arena.model.Round;
 import nl.kennisnet.arena.model.Video;
 
 public class DomainObjectFactory {
-
+	
 	public static Quest create(QuestDTO questDTO) {
 		Quest result = new Quest();
 		//result.setId(questDTO.getId());
@@ -74,22 +74,51 @@ public class DomainObjectFactory {
 		result.setQuest(quest);
 		return result;
 	}
-
-	public static Quest update(QuestDTO questDTO) {
-		Quest quest = new Quest();
-		quest.setId(questDTO.getId());
-		quest.setName(questDTO.getName());
-		quest.setEmailOwner(questDTO.getEmailOwner());
-		if (questDTO.getItems() != null) {
-			List<Positionable> items = new ArrayList<Positionable>();
-			for (QuestItemDTO questItemDTO : questDTO.getItems()) {
-				Positionable positionable = create(questItemDTO, quest);
-				if (positionable != null) {
-					items.add(positionable);
+	
+	private static List<Positionable> positionablesToDelete(List<Positionable> posList, List<QuestItemDTO> itemDTOList) {
+		List<Positionable> removeList = new ArrayList<Positionable>();
+		for (Positionable pos : posList) {
+			boolean exist = false;
+			for (QuestItemDTO item : itemDTOList) {
+				if (pos.getId().equals(item.getId())) {
+					exist = true;
 				}
 			}
-			quest.setPositionables(items);
+			if (!exist) {
+				System.out.println("DEZE 1 WORDT VERWIJDERD!");
+				removeList.add(pos);
+			}
 		}
+		return removeList;
+	}
+	
+	public static Quest update(QuestDTO questDTO, Quest originalQuest) {
+		Quest quest = originalQuest;
+		quest.setName(questDTO.getName());
+		
+		for (Positionable pos : positionablesToDelete(quest.getPositionables(), questDTO.getItems())) {
+			quest.getPositionables().remove(pos);
+		}
+		
+		if (questDTO.getItems() != null) {
+			for (QuestItemDTO questItemDTO : questDTO.getItems()) {
+				if (questItemDTO.getId() != null) {
+					System.out.println(">>>>>>>>>>>>>>>>>>> DTO ID: " + questItemDTO.getId());
+					for (Positionable found : quest.getPositionables()) {
+						System.out.println("FOUND ID: " + found.getId());
+						if (found.getId().equals(questItemDTO.getId())) {
+							System.out.println("GEVONDEN");
+							updatePositionable(found, questItemDTO);
+						}
+					}
+				} else {
+					Positionable positionable = create(questItemDTO, quest);
+					positionable.setQuest(quest);
+					quest.getPositionables().add(positionable);
+				}
+			}
+		}
+		
 		quest.setBorder(GeomUtil.createJTSPolygon(questDTO.getBorder()));
 		RoundDTO activeRoundDTO = questDTO.getActiveRound();
 		if (activeRoundDTO != null) {
@@ -101,14 +130,40 @@ public class DomainObjectFactory {
 			Round r = new Round(round.getId(), round.getName(), quest);
 			quest.addRound(r);
 		}
+		
 		return quest;
+	}
+	
+	private static void updatePositionable(Positionable positionable, QuestItemDTO questItemDTO) {
+		if (positionable instanceof Information) {
+			((Information) positionable).setName(questItemDTO.getName());
+			((Information) positionable).setText((questItemDTO.getDescription()));
+		} else if (positionable instanceof Question) {
+			((Question) positionable).setText(questItemDTO.getDescription());
+			((Question) positionable).setAnswer1(questItemDTO.getOption1());
+			((Question) positionable).setAnswer2(questItemDTO.getOption2());
+			((Question) positionable).setAnswer3(questItemDTO.getOption3());
+			((Question) positionable).setAnswer4(questItemDTO.getOption4());
+			((Question) positionable).setQuestionType((questItemDTO.getQuestionType()));
+			((Question) positionable).setCorrectAnswer(questItemDTO.getCorrectOption());
+		} else if (positionable instanceof Image) {
+			((Image) positionable).setUrl(questItemDTO.getObjectURL());
+		} else if (positionable instanceof Video) {
+			((Video) positionable).setVideoUrl(questItemDTO.getObjectURL());
+		}
+		positionable.setName(questItemDTO.getName());
+		Location location = new Location(
+				GeomUtil.createJTSPoint(questItemDTO.getPoint()),
+				questItemDTO.getAlt(), questItemDTO.getRadius(),
+				questItemDTO.getVisibleRadius());
+		positionable.setLocation(location);
 	}
 
 	public static List<Positionable> delete(Quest quest, Quest originalQuest) {
 		List<Positionable> result = new ArrayList<Positionable>();
-		for (Positionable orriginalPos : originalQuest.getPositionables()) {
-			if (!quest.getPositionables().contains(orriginalPos)) {
-				result.add(orriginalPos);
+		for (Positionable originalPos : originalQuest.getPositionables()) {
+			if (!quest.getPositionables().contains(originalPos)) {
+				result.add(originalPos);
 			}
 		}
 		return result;
