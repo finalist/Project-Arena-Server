@@ -2,6 +2,7 @@ package nl.kennisnet.arena.client.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class QuestItemDTO implements Serializable {
@@ -33,7 +34,7 @@ public class QuestItemDTO implements Serializable {
 	private Long id;
 	private Float schaal;
 	private Integer blended;
-	private ArrayList<Float> rotation;
+	private Float[] rotation;
 
 	public Long getId() {
 		return id;
@@ -207,11 +208,11 @@ public class QuestItemDTO implements Serializable {
 		this.blended = blended;
 	}
 
-	public ArrayList<Float> getRotation() {
+	public Float[] getRotation() {
 		return rotation;
 	}
 
-	public void setRotation(ArrayList<Float> rotation) {
+	public void setRotation(Float[] rotation) {
 		this.rotation = rotation;
 	}
 

@@ -86,6 +86,33 @@ public class QuestServiceTest {
 	}
 
 	@Test
+	public void testSave3DObject() {
+		Float[] rotation = new Float[3];
+		rotation[0] = 1f;
+		rotation[1] = 2f;
+		rotation[2] = 3f;
+		
+		QuestDTO questDTO = new QuestDTO();
+		questDTO.setEmailOwner("henk@henk.nl");
+		QuestItemDTO itemDTO = new QuestItemDTO("testObject", "Object3D");
+		itemDTO.setPoint(new SimplePoint(2.5D, 1.8D));
+		itemDTO.setBlended(1);
+		itemDTO.setAlt(5.0);
+		itemDTO.setRotation(rotation);
+		itemDTO.setSchaal(10f);
+		
+		questDTO.addItem(itemDTO);
+		
+		QuestDTO saved = questService.save(questDTO, true);
+
+		assertThat(saved.getItems().size(), is(1));
+		
+		QuestDTO loaded = questService.getQuestDTO(saved.getId());
+		
+		assertThat(loaded.getItems().size(), is(1));
+	}
+	
+	@Test
 	public void when_saving_with_a_different_email_address_the_quest_items_should_be_cloned() {
 		QuestDTO questDTO = questService.getQuestDTO(existingId);
 		questDTO.setEmailOwner("jacques@finalist.com");

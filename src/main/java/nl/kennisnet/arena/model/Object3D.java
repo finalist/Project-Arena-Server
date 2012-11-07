@@ -1,22 +1,14 @@
 package nl.kennisnet.arena.model;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import javax.persistence.Entity;
 
 @Entity
-public class Object3D extends Positionable implements DomainObject, Serializable {
+public class Object3D extends Positionable implements DomainObject {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	private String url;
 	private float schaal;
 	private boolean isBlended;
-	private ArrayList<Float> rotation;
+	private Float x, y, z;
 
 	public String getUrl() {
 		return url;
@@ -25,11 +17,11 @@ public class Object3D extends Positionable implements DomainObject, Serializable
 	public void setUrl(String url) {
 		this.url = url;
 	}
-	
+
 	public void setSchaal(float schaal) {
 		this.schaal = schaal;
 	}
-	
+
 	public float getSchaal() {
 		return schaal;
 	}
@@ -42,11 +34,18 @@ public class Object3D extends Positionable implements DomainObject, Serializable
 		this.isBlended = isBlended;
 	}
 
-	public ArrayList<Float> getRotation() {
-		return rotation;
+	public Float[] getRotation() {
+		Float[] f = new Float[3];
+		f[0] = x;
+		f[1] = y;
+		f[2] = z;
+
+		return f;
 	}
 
-	public void setRotation(ArrayList<Float> rotation) {
-		this.rotation = rotation;
+	public void setRotation(Float[] rotation) {
+		x = rotation[0];
+		y = rotation[1];
+		z = rotation[2];
 	}
 }

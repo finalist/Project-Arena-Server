@@ -76,7 +76,8 @@ public class DTOFactory {
 				result = new QuestItemDTO(object3d.getName(), "Object3D");
 				result.setObjectURL(object3d.getUrl());
 				result.setSchaal(object3d.getSchaal());
-				result.setBlended(object3d.isBlended() ? 0 : 1);
+				result.setBlended(object3d.isBlended() ? 1 : 0);
+				result.setAlt(object3d.getLocation().getAlt());
 				result.setRotation(object3d.getRotation());
 			}
 			if (result != null) {

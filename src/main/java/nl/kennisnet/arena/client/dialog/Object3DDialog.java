@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.widget.FormTablePanel;
+import nl.kennisnet.arena.client.widget.FormTablePanel.Element;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -53,14 +54,12 @@ public class Object3DDialog extends QuestItemDialog {
 
 		blended = new RadioButton("blended");
 
-		settings = new TextBox[3];
+		settings = new TextBox[2];
 		settings[0] = new TextBox();
 		settings[1] = new TextBox();
-		settings[2] = new TextBox();
 
 		settings[0].setName("Schaal");
-		settings[1].setName("Rotatie");
-		settings[2].setName("Altitude");
+		settings[1].setName("Altitude");
 
 		for (TextBox t : settings) {
 			items.add(new FormTablePanel.Element(t.getName(), t));
@@ -145,7 +144,6 @@ public class Object3DDialog extends QuestItemDialog {
 		super.fillFormFromItem(itemDTO);
 		if (itemDTO.getObjectURL() != null) {
 			System.out.println(itemDTO.getObjectURL());
-			settings[1].setText(itemDTO.getObjectURL());
 		}
 
 		if (itemDTO.getBlended() != null) {
@@ -155,13 +153,13 @@ public class Object3DDialog extends QuestItemDialog {
 		if (itemDTO.getSchaal() != null) {
 			settings[0].setText("" + itemDTO.getSchaal());
 		} else if (itemDTO.getAlt() != null) {
-			settings[2].setText("" + itemDTO.getAlt());
+			settings[1].setText("" + itemDTO.getAlt());
 		}
 
 		if (itemDTO.getRotation() != null) {
-			rotation[0].setText("" + itemDTO.getRotation().get(0));
-			rotation[1].setText("" + itemDTO.getRotation().get(1));
-			rotation[2].setText("" + itemDTO.getRotation().get(2));
+			rotation[0].setText("" + (itemDTO.getRotation())[0]);
+			rotation[1].setText("" + (itemDTO.getRotation())[1]);
+			rotation[2].setText("" + (itemDTO.getRotation())[2]);
 		}
 
 	}
@@ -180,10 +178,10 @@ public class Object3DDialog extends QuestItemDialog {
 				result.setSchaal(Float.valueOf(settings[0].getText()));
 				result.setAlt(Double.valueOf(settings[2].getText()));
 
-				ArrayList<Float> rotatie = new ArrayList<Float>();
-				rotatie.add(Float.valueOf(rotation[0].getText()));
-				rotatie.add(Float.valueOf(rotation[1].getText()));
-				rotatie.add(Float.valueOf(rotation[2].getText()));
+				Float[] rotatie = new Float[3];
+				rotatie[0] = Float.valueOf(rotation[0].getText());
+				rotatie[1] = Float.valueOf(rotation[1].getText());
+				rotatie[2] = Float.valueOf(rotation[2].getText());
 
 				result.setRotation(rotatie);
 			}
