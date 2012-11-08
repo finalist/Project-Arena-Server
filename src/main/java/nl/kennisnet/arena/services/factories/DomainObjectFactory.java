@@ -19,7 +19,6 @@ public class DomainObjectFactory {
 	
 	public static Quest create(QuestDTO questDTO) {
 		Quest result = new Quest();
-		//result.setId(questDTO.getId());
 		result.setName(questDTO.getName());
 		result.setEmailOwner(questDTO.getEmailOwner());
 		if (questDTO.getItems() != null) {
@@ -85,7 +84,6 @@ public class DomainObjectFactory {
 				}
 			}
 			if (!exist) {
-				System.out.println("DEZE 1 WORDT VERWIJDERD!");
 				removeList.add(pos);
 			}
 		}
@@ -103,11 +101,8 @@ public class DomainObjectFactory {
 		if (questDTO.getItems() != null) {
 			for (QuestItemDTO questItemDTO : questDTO.getItems()) {
 				if (questItemDTO.getId() != null) {
-					System.out.println(">>>>>>>>>>>>>>>>>>> DTO ID: " + questItemDTO.getId());
 					for (Positionable found : quest.getPositionables()) {
-						System.out.println("FOUND ID: " + found.getId());
 						if (found.getId().equals(questItemDTO.getId())) {
-							System.out.println("GEVONDEN");
 							updatePositionable(found, questItemDTO);
 						}
 					}
