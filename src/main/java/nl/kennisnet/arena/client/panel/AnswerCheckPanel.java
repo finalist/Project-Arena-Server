@@ -133,7 +133,7 @@ public class AnswerCheckPanel extends SimplePanel implements
 		
 		answerPanel.setStyleName("answer-view");
 		answer.setStyleName("answer");
-		
+		answerPanel.setWidth("200px");
 		answerPanel.add(answerLabel);
 		answerPanel.add(answer);
 		

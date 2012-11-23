@@ -196,11 +196,11 @@ public class ItemController {
 		
 		HashMap<String, String> model = new HashMap<String, String>();
 		if (question.getCorrectAnswer() == answer) {
-			model.put("correct", "correct");
+			model.put("correct", "Antwoord opgeslagen");
 			return new ModelAndView(new InternalResourceView(
 					"../../../../question-result.jsp"), model);
 		} else {
-			model.put("incorrect", "incorrect");
+			model.put("incorrect", "Antwoord opgeslagen");
 			return new ModelAndView(new InternalResourceView(
 					"../../../../question-result.jsp"), model);
 		}
@@ -210,10 +210,10 @@ public class ItemController {
 		HashMap<String, String> model = new HashMap<String, String>();
 		if(answer.length() > 0){
 			participantService.storeParticipationTextAnswer(participationId, question, answer);
-			model.put("question_submitted", "Question submitted");
+			model.put("question_submitted", "Antwoord opgeslagen");
 			
 		}else{
-			model.put("question_submitted", "Answer is too short");
+			model.put("question_submitted", "Antwoord is te kort");
 		}
 		return new ModelAndView(new InternalResourceView(
 				"../../../../question-result.jsp"), model);
