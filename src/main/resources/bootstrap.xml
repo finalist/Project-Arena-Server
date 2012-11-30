@@ -12,8 +12,6 @@
 				
 	<tx:annotation-driven />
 	<bean id="bootstrapService" class="nl.kennisnet.arena.setup.Bootstrap" init-method="bootstrap">
-		<constructor-arg index="0" ref="participantService"/>
-		
 		<property name="teams">
 			<map>
 				<entry key="zwart">
