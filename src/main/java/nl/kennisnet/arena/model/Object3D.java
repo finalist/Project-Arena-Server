@@ -10,6 +10,10 @@ public class Object3D extends Positionable implements DomainObject {
 	private boolean isBlended;
 	private Float x, y, z;
 
+	public Object3D() {
+		
+	}
+	
 	public String getUrl() {
 		return url;
 	}

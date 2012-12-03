@@ -359,6 +359,12 @@ img {
 	color: white;
 }
 
+#typefilter li.active #Combined {
+	background-color: #978000;
+	color: white;
+}
+
+
 #typeselect ul {
 	list-style-image: none;
 	list-style-position: outside;
@@ -426,6 +432,10 @@ img {
 	background-color: #600060;
 }
 
+#typeselect li.active #Combined {
+	background-color: #978000;
+}
+
 #typeselect li #Verhaal {
 	background: transparent url(text-red.png) no-repeat scroll 100% 50%;
 }
@@ -443,6 +453,10 @@ img {
 }
 
 #typeselect li #Object3D {
+	background: transparent url(trash.png) no-repeat scroll 100% 50%;
+}
+
+#typeselect li #Combined {
 	background: transparent url(trash.png) no-repeat scroll 100% 50%;
 }
 
@@ -498,7 +512,12 @@ img {
 }
 
 .object3d_panel {
-	background-color: #800080;
+	background-color: #600060;
+	padding: 0;
+}
+
+.combined_panel {
+	background-color: #978000;
 	padding: 0;
 }
 
@@ -547,6 +566,10 @@ img {
 }
 
 .object3d_panel .questitempanel_name {
+	background: url(trash.png) no-repeat scroll left top
+}
+
+.combined_panel .questitempanel_name {
 	background: url(trash.png) no-repeat scroll left top
 }
 

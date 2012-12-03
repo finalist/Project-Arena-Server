@@ -68,15 +68,36 @@ public class Arena {
 			String baseUrl, ArenaDataBean data) {
 
 		for (Positionable positionable : positionables) {
-			Result result = new Result();
-			result = buildResultData(result, positionable);
-			result = buildWebPage(result, positionable, baseUrl, data);
-			result = buildPositionableType(result, positionable);
-			result = buildObjectImage(result, positionable, baseUrl, data);
-			result = buildDistance(result, positionable, data);
-			results.add(result);
-			numResults++;
+			if (positionable instanceof Object3D) {
+				Result result = new Result();
+				result = buildResultData(result, positionable);
+				result = buildWebPage(result, positionable, baseUrl, data);
+				result = buildPositionableType(result, positionable);
+				result = buildObjectImage(result, positionable, baseUrl, data);
+				result = build3dData(result, positionable);
+				result = buildDistance(result, positionable, data);
+				results.add(result);
+				numResults++;
+			} else {
+				Result result = new Result();
+				result = buildResultData(result, positionable);
+				result = buildWebPage(result, positionable, baseUrl, data);
+				result = buildPositionableType(result, positionable);
+				result = buildObjectImage(result, positionable, baseUrl, data);
+				result = buildDistance(result, positionable, data);
+				results.add(result);
+				numResults++;
+			}
 		}
+	}
+
+	private Result build3dData(Result result, Positionable positionable) {
+		result.setSchaal(((Object3D) positionable).getSchaal());
+		result.setBlended(((Object3D) positionable).isBlended() ? 0 : 1);
+		result.setRotX(((Object3D) positionable).getRotation()[0]);
+		result.setRotY(((Object3D) positionable).getRotation()[1]);
+		result.setRotZ(((Object3D) positionable).getRotation()[2]);
+		return result;
 	}
 
 	private Result buildResultData(Result result, Positionable positionable) {
@@ -106,10 +127,9 @@ public class Arena {
 				result.setWebpage(((Image) positionable).getUrl());
 			} else if (positionable instanceof Video) {
 				result.setWebpage(((Video) positionable).getVideoUrl());
+			} else if (positionable instanceof Object3D) {
+				result.setWebpage(((Object3D) positionable).getUrl());
 			}
-//			} else if (positionable instanceof Object3D) {
-//				result.setWebpage(((Object3D) positionable).getUrl());
-//			}
 		} else {
 			result.setHasDetailPage(false);
 		}
@@ -153,7 +173,7 @@ public class Arena {
 		} else if (positionable instanceof Video) {
 			result.setObjectUrl(((Video) positionable).getThumbnailUrl());
 		} else if (positionable instanceof Object3D) {
-			result.setObjectUrl(buildInformationImage(baseUrl));
+			result.setObjectUrl(((Object3D) positionable).getUrl());
 		}
 		return result;
 	}

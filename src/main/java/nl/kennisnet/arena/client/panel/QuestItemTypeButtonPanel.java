@@ -20,6 +20,7 @@ public class QuestItemTypeButtonPanel extends SidePanel{
       tools.addOption(QuestItemTypes.QUEST_TYPE_PHOTO, "Foto");
       tools.addOption(QuestItemTypes.QUEST_TYPE_VIDEO, "Video");
       tools.addOption(QuestItemTypes.QUEST_TYPE_3D, "Object3D");
+      tools.addOption(QuestItemTypes.QUEST_TYPE_COMBI, "Combined");
 
       tools.addValueChangeHandler(new ValueChangeHandler<Object>() {
          

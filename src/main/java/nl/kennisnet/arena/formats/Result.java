@@ -27,6 +27,10 @@ public class Result {
 	@SerializedName("object_url")
 	private String objectUrl;
 	
+	private float schaal;
+	private float rotX, rotY, rotZ;
+	private int blended;
+	
 	public long getId() {
 		return id;
 	}
@@ -109,5 +113,45 @@ public class Result {
 	}
 	public String getObjectUrl() {
 		return objectUrl;
+	}
+
+	public float getSchaal() {
+		return schaal;
+	}
+
+	public void setSchaal(float schaal) {
+		this.schaal = schaal;
+	}
+
+	public float getRotX() {
+		return rotX;
+	}
+
+	public void setRotX(float rotX) {
+		this.rotX = rotX;
+	}
+
+	public float getRotY() {
+		return rotY;
+	}
+
+	public void setRotY(float rotY) {
+		this.rotY = rotY;
+	}
+
+	public float getRotZ() {
+		return rotZ;
+	}
+
+	public void setRotZ(float rotZ) {
+		this.rotZ = rotZ;
+	}
+
+	public int getBlended() {
+		return blended;
+	}
+
+	public void setBlended(int blended) {
+		this.blended = blended;
 	}
 }

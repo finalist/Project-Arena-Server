@@ -95,7 +95,6 @@ public class DomainObjectFactory {
 				}
 			}
 			if (!exist) {
-				System.out.println("DEZE 1 WORDT VERWIJDERD!");
 				removeList.add(pos);
 			}
 		}
@@ -160,7 +159,10 @@ public class DomainObjectFactory {
 			((Image) positionable).setUrl(questItemDTO.getObjectURL());
 		} else if (positionable instanceof Video) {
 			((Video) positionable).setVideoUrl(questItemDTO.getObjectURL());
+		} else if (positionable instanceof Object3D) {
+			((Object3D) positionable).setUrl(questItemDTO.getObjectURL());
 		}
+		
 		positionable.setName(questItemDTO.getName());
 		Location location = new Location(
 				GeomUtil.createJTSPoint(questItemDTO.getPoint()),

@@ -1,2 +1,0 @@
-serviceClass: nl.kennisnet.arena.client.service.GWTQuestService
-path: AC8BACC9B6EC62258796B51BB49C3A5E.gwt.rpc

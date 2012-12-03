@@ -174,9 +174,9 @@ public class Object3DDialog extends QuestItemDialog {
 
 		try {
 			if (!settings[0].getText().isEmpty()
-					|| !settings[2].getText().isEmpty()) {
+					|| !settings[1].getText().isEmpty()) {
 				result.setSchaal(Float.valueOf(settings[0].getText()));
-				result.setAlt(Double.valueOf(settings[2].getText()));
+				result.setAlt(Double.valueOf(settings[1].getText()));
 
 				Float[] rotatie = new Float[3];
 				rotatie[0] = Float.valueOf(rotation[0].getText());

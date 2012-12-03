@@ -52,7 +52,7 @@ public class Item {
 	private void fillWithObject3D(Object3D object) {
 		type = "Object3D";
 		title = object.getName();
-		description = object.getUrl();
+		url = object.getUrl();
 	}
 
 	private void fillWithQuestion(Question question) {

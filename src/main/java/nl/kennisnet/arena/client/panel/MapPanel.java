@@ -51,6 +51,7 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
       String selectedItemType = QuestState.getInstance().getSelectedQuestType();
       if (selectedItemType != null) {
 
+    	  System.out.println(selectedItemType);
          QuestItemDTO itemDTO = new QuestItemDTO(selectedItemType + " " + QuestState.getInstance().getNumber(selectedItemType),
                selectedItemType);
 

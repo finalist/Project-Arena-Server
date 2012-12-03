@@ -33,6 +33,7 @@ public class TypeFilterPanel extends SidePanel implements RefreshQuestEvent.Hand
       filter.addOption(QuestItemTypes.QUEST_TYPE_PHOTO, "Foto (0)");
       filter.addOption(QuestItemTypes.QUEST_TYPE_VIDEO, "Video (0)");
       filter.addOption(QuestItemTypes.QUEST_TYPE_3D, "3D Object (0)");
+      filter.addOption(QuestItemTypes.QUEST_TYPE_COMBI, "Gecombineerd (0)");
       
       EventBus.get().addHandler(RefreshQuestEvent.TYPE, this);
       EventBus.get().addHandler(CreateQuestItemEvent.TYPE, this);
