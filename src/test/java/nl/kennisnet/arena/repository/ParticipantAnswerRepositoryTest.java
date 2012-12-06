@@ -15,11 +15,14 @@ import javax.sql.DataSource;
 import nl.kennisnet.arena.model.Location;
 import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Participant;
+import nl.kennisnet.arena.model.ParticipantAnswer.Result;
 import nl.kennisnet.arena.model.Participation;
+import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.model.Round;
 
+import org.h2.engine.Session;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -136,4 +139,101 @@ public class ParticipantAnswerRepositoryTest {
 		assertThat(repository.get(pa3.getParticipationAnswerPrimaryKey()), is(nullValue()));
 	}
 	
+	@Test
+	public void testSaveAnswerApprove() {
+		//SETUP
+		Participant blauw = new Participant();
+		blauw.setName("Blauw");
+		blauw = participantRepository.merge(blauw);
+		
+		Quest quest = new Quest();
+		quest.setEmailOwner("email@email.nl");
+		quest = questRepository.merge(quest);
+		
+		Round round = new Round();
+		round.setName("Round");
+		round.setQuest(quest);
+		round = roundRepository.merge(round);
+		
+		quest.setActiveRound(round);
+		quest.getRounds().add(round);
+		quest = questRepository.merge(quest);
+		
+		Participation part1 = new Participation();
+		part1.setParticipant(blauw);
+		part1.setRound(round);
+		part1.setQuest(quest);
+		part1 = participationRepository.merge(part1);
+		
+		blauw.getParticipations().add(part1);
+		blauw = participantRepository.merge(blauw);
+		
+		//ADD QUESTION & ANSWER
+		Location location = new Location();
+		location = locationRepository.merge(location);
+		
+		Question question = new Question();
+		question.setName("The Question?");
+		question.setQuest(quest);
+		question.setQuestionType(1);
+		question.setLocation(location);
+		question = (Question)positionableRepository.merge(question);
+		
+		quest.getPositionables().add(question);
+		quest = questRepository.merge(quest);
+		
+		location.getPositionables().add(question);
+		location = locationRepository.merge(location);
+		
+		ParticipantAnswer answer1 = new ParticipantAnswer();
+		answer1.setTextAnswer("The Answer");
+		answer1.setQuestion(question);
+		answer1.setResult(Result.ANSWERED.name());
+		answer1.setParticipation(part1);
+		answer1.setRound(round);
+		answer1 = repository.merge(answer1);
+		
+		round.getParticipantAnswers().add(answer1);
+		round = roundRepository.merge(round);
+		
+		List<ParticipantAnswer> answer = new ArrayList<ParticipantAnswer>();
+		answer.add(answer1);
+		question.setParticipantAnswers(answer);
+		question = (Question)positionableRepository.merge(question);
+		positionableRepository.getAll();
+		repository.getSession().clear();
+		
+		//CHECK ANSWER 
+		ParticipantAnswer participantAnswer = getParticipationAnswer(answer1.getParticipationId(), 
+				getQuestion(answer1.getQuestion().getId(), quest));
+		participantAnswer.setResult(Result.INCORRECT.name());
+		participantAnswer = repository.merge(participantAnswer);
+		repository.getAll();
+	}
+	
+	public ParticipantAnswer getParticipationAnswer(long participationId,
+			Question question) {
+		List<ParticipantAnswer> participants = question.getParticipantAnswers();
+		for (ParticipantAnswer p : participants){
+			if(p.getParticipationId() == (participationId) && p.getQuestion().equals(question)){
+				repository.evict(participants.get(0));
+				return p;
+			}			
+		}		
+		return null;
+	}	
+	
+	
+	public Question getQuestion(Long id, Quest quest) {
+		if (quest != null && quest.getPositionables() != null) {
+			for (Positionable positionable : quest.getPositionables()) {
+				if (positionable.getId().equals(id)
+						&& positionable instanceof Question) {
+					return (Question) positionable;
+				}
+			}
+		}
+		return null;
+	}
+
 }
