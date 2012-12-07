@@ -1,14 +1,9 @@
 package nl.kennisnet.arena.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 public class Question extends Positionable implements DomainObject {
@@ -24,10 +19,6 @@ public class Question extends Positionable implements DomainObject {
 	private String answer4;
 	private Integer questionType = 0; //default: open_question
 	private Integer correctAnswer;
-	
-	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany(mappedBy="participationAnswerPrimaryKey.question",cascade=CascadeType.ALL)
-	private List<ParticipantAnswer> participantAnswers;
 
 	public Question() {
 
@@ -99,18 +90,6 @@ public class Question extends Positionable implements DomainObject {
 		return correctAnswer;
 	}
 	
-	public List<ParticipantAnswer> getParticipantAnswers() {
-		return participantAnswers;
-	}
-	
-	public void setParticipantAnswers(List<ParticipantAnswer> participantAnswers) {
-		this.participantAnswers = participantAnswers;
-	}
-	
-	public void clearParticipantAnswers() {
-		this.participantAnswers.clear();
-	}
-	
 	public int getQuestionType() {
 		if(questionType == null){
 			return 0;
@@ -136,12 +115,8 @@ public class Question extends Positionable implements DomainObject {
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Question) {
-			Question q = (Question) obj;
-			if (this.getId() != null && q.getId() != null) {
-				if (q.getId().equals(this.getId())) {
-					return true;
-				}
-			}
+			Question other = (Question) obj;
+			return new EqualsBuilder().append(this.getId(), other.getId()).isEquals();
 		}
 		return super.equals(obj);
 	}

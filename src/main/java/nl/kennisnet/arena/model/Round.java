@@ -1,17 +1,14 @@
 package nl.kennisnet.arena.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import org.apache.commons.lang.builder.EqualsBuilder;
 
 /**
  * A gameround model, is responsible for multiple rounds in a single quest
@@ -29,10 +26,8 @@ public class Round {
 	@ManyToOne()
 	private Quest quest;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy="round")
-	private List<ParticipantAnswer> participantAnswers = new ArrayList<ParticipantAnswer>();
-		
 	public Round(Integer id, String name, Quest quest) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.quest = quest;
@@ -66,33 +61,11 @@ public class Round {
 		this.quest = quest;
 	}
 	
-	public List<ParticipantAnswer> getParticipantAnswers() {
-		return participantAnswers;
-	}
-	
-	public void setParticipantAnswers(List<ParticipantAnswer> participantAnswers) {
-		this.participantAnswers = participantAnswers;
-	}
-	
-	public void clearRound() {
-		participantAnswers.clear();
-	}
-	
-	public void addParticipantAnswer(ParticipantAnswer participantAnswer){
-		participantAnswers.add(participantAnswer);
-	}
-	
-	public void removeParticipantAnswer(ParticipantAnswer participantAnswer) {
-		participantAnswers.remove(participantAnswer);
-	}
-	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof Round){
-			if(name.equals(((Round)obj).getName()) &&
-					quest.equals(((Round)obj).getQuest())){
-				return true;
-			}
+			Round other = (Round) obj;
+			return new EqualsBuilder().append(this.name, other.name).append(this.quest, other.quest).isEquals();
 		}
 		return super.equals(obj);
 	}

@@ -91,7 +91,6 @@ public class ParticipantService {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public long getParticipantId(final String name) {
 		Participant participant = participantRepository.findParticipant(name);
 		if (participant != null) {
@@ -102,7 +101,6 @@ public class ParticipantService {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public Participant getParticipant(final String name) {
 		Participant participant = participantRepository.findParticipant(name);
 		if (participant != null) {
@@ -181,7 +179,7 @@ public class ParticipantService {
 		for(Positionable positionable : positionables){
 			if(positionable instanceof Question){
 				Question question = (Question)positionable;
-				for(ParticipantAnswer participantAnswer : question.getParticipantAnswers()){
+				for(ParticipantAnswer participantAnswer : participantAnswerRepository.findParticipantAnswers(question)){
 					long positionableId = participantAnswer.getQuestion().getId();
 					if(result.get(positionableId) == null){
 						result.put(positionableId, 0);
@@ -204,7 +202,7 @@ public class ParticipantService {
 		for(Positionable positionable : positionables){
 			if(positionable instanceof Question){
 				Question question = (Question)positionable;
-				for(ParticipantAnswer participantAnswer : question.getParticipantAnswers()){
+				for(ParticipantAnswer participantAnswer : participantAnswerRepository.findParticipantAnswers(question)){
 					long teamId = participantAnswer.getParticipation().getParticipant().getId();
 					if(result.get(teamId) == null){
 						result.put(teamId, 0);
@@ -243,7 +241,10 @@ public class ParticipantService {
 
 	public void storeParticipationAnswer(long participationId,
 			Question question, int answer) {
-		ParticipantAnswer participantAnswer = new ParticipantAnswer();
+		ParticipantAnswer participantAnswer = getParticipationAnswer(participationId, question);
+		if (participantAnswer == null) {
+			participantAnswer = new ParticipantAnswer();
+		}
 		participantAnswer.setAnswer(answer);
 		Participation participation = participationRepository.get(participationId);
 		participantAnswer.setParticipation(participation);
@@ -262,7 +263,10 @@ public class ParticipantService {
 	
 	public void storeParticipationTextAnswer(long participationId,
 			Question question, String textAnswer){
-		ParticipantAnswer participantAnswer = new ParticipantAnswer();
+		ParticipantAnswer participantAnswer = getParticipationAnswer(participationId, question);
+		if (participantAnswer == null) {
+			participantAnswer = new ParticipantAnswer();
+		}
 		participantAnswer.setTextAnswer(textAnswer);
 		Participation participation = participationRepository.get(participationId);
 		participantAnswer.setParticipation(participation);
@@ -274,14 +278,8 @@ public class ParticipantService {
 
 	public ParticipantAnswer getParticipationAnswer(long participationId,
 			Question question) {
-		List<ParticipantAnswer> participants = question.getParticipantAnswers();
-		for (ParticipantAnswer p : participants){
-			if(p.getParticipationId() == (participationId) && p.getQuestion().equals(question)){
-				participantAnswerRepository.evict(participants.get(0));
-				return p;
-			}			
-		}		
-		return null;
+		Participation participation = participationRepository.get(participationId);
+		return participantAnswerRepository.findParticipantAnswer(participation, question);
 	}	
 
 	public LogDTO getParticipationLog(final Long questId) {
@@ -327,7 +325,7 @@ public class ParticipantService {
 		for(Positionable positionable : quest.getPositionables()){
 			if(positionable instanceof Question){
 				Question question = (Question)positionable;
-				for(ParticipantAnswer participantAnswer : question.getParticipantAnswers()){
+				for(ParticipantAnswer participantAnswer : participantAnswerRepository.findParticipantAnswers(question)){
 					AnswerDTO answerDTO = new AnswerDTO();
 					if(question.getQuestionTypeAsEnum() == Question.TYPE.OPEN_QUESTION){
 						answerDTO.setTextAnswer(participantAnswer.getTextAnswer());

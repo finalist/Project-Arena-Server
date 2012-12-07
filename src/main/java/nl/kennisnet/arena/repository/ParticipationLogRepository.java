@@ -1,13 +1,8 @@
 package nl.kennisnet.arena.repository;
 
 import java.util.List;
-
-import nl.kennisnet.arena.model.Participation;
 import nl.kennisnet.arena.model.ParticipationLog;
-import nl.kennisnet.arena.model.Quest;
-
 import org.hibernate.Criteria;
-import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +25,7 @@ public class ParticipationLogRepository extends
 				.createCriteria("participation").createCriteria("quest")
 				.add(Restrictions.eq("id", questId));
 
+		@SuppressWarnings("unchecked")
 		List<ParticipationLog> list = criteria.list();
 
 		return list;
