@@ -22,17 +22,17 @@ public class LogDTO implements Serializable {
    public LogDTO() {
    }
 
-   public LogDTO(List<ActionDTO> actions, Collection<TeamDTO> teams, Collection<QuestItemDTO> items) {
+   public LogDTO(List<ActionDTO> actions, Collection<TeamDTO> teams, Collection<PoiDTO> items) {
       this(actions, createTeamMap(teams), createItemMap(items));
    }
 
-   public LogDTO(List<ActionDTO> actions, Map<String, TeamDTO> teamMap, Map<Long, QuestItemDTO> itemMap) {
+   public LogDTO(List<ActionDTO> actions, Map<String, TeamDTO> teamMap, Map<Long, PoiDTO> itemMap) {
       List<Entry> result = new ArrayList<Entry>();
       for (int i = 0; i < actions.size(); i++) {
          ActionDTO actionDTO = actions.get(i);
          TeamDTO team = teamMap.get(actionDTO.getTeamName());
          if (actionDTO.getPositionableId()!=null){
-            QuestItemDTO item = itemMap.get(actionDTO.getPositionableId());
+            PoiDTO item = itemMap.get(actionDTO.getPositionableId());
             if (item != null) {
                result.add(new Entry(team, item, item.getTypeName(), actionDTO));
             }
@@ -52,10 +52,10 @@ public class LogDTO implements Serializable {
       return teamMap;
    }
 
-   private static Map<Long, QuestItemDTO> createItemMap(Collection<QuestItemDTO> items) {
-      Map<Long, QuestItemDTO> itemMap = new HashMap<Long, QuestItemDTO>();
-      for (QuestItemDTO questItemDTO : items) {
-         itemMap.put(questItemDTO.getId(), questItemDTO);
+   private static Map<Long, PoiDTO> createItemMap(Collection<PoiDTO> items) {
+      Map<Long, PoiDTO> itemMap = new HashMap<Long, PoiDTO>();
+      for (PoiDTO PoiDTO : items) {
+         itemMap.put(PoiDTO.getId(), PoiDTO);
       }
       return itemMap;
    }
@@ -92,12 +92,12 @@ public class LogDTO implements Serializable {
       return result;
    }
 
-   public List<QuestItemDTO> getQuestItems() {
+   public List<PoiDTO> getQuestItems() {
       return getQuestItems(null);
    }
 
-   public List<QuestItemDTO> getQuestItems(String questItemType) {
-      Set<QuestItemDTO> items = new HashSet<QuestItemDTO>();
+   public List<PoiDTO> getQuestItems(String questItemType) {
+      Set<PoiDTO> items = new HashSet<PoiDTO>();
       if (logEntries!=null){
          for (int i = 0; i < logEntries.length; i++) {
             Entry entry = logEntries[i];
@@ -106,11 +106,11 @@ public class LogDTO implements Serializable {
             }
          }
       }
-      List<QuestItemDTO> result = new ArrayList<QuestItemDTO>(items);
+      List<PoiDTO> result = new ArrayList<PoiDTO>(items);
       return result;
    }
 
-   public ActionDTO getQuestItem(String teamName, QuestItemDTO item) {
+   public ActionDTO getQuestItem(String teamName, PoiDTO item) {
       for (int i = 0; i < logEntries.length; i++) {
          Entry entry = logEntries[i];
          if (entry.getItemDTO().equals(item) && entry.getTeamDTO().getName().equals(teamName)) {
@@ -128,7 +128,7 @@ public class LogDTO implements Serializable {
       private static final long serialVersionUID = 1L;
 
       private TeamDTO teamDTO;
-      private QuestItemDTO itemDTO;
+      private PoiDTO itemDTO;
       private String typeName;
       private ActionDTO actionDTO;
 
@@ -136,7 +136,7 @@ public class LogDTO implements Serializable {
          super();
       }
 
-      public Entry(TeamDTO teamDTO, QuestItemDTO itemDTO, String typeName, ActionDTO actionDTO) {
+      public Entry(TeamDTO teamDTO, PoiDTO itemDTO, String typeName, ActionDTO actionDTO) {
          super();
          this.teamDTO = teamDTO;
          this.itemDTO = itemDTO;
@@ -148,7 +148,7 @@ public class LogDTO implements Serializable {
          return teamDTO;
       }
 
-      public QuestItemDTO getItemDTO() {
+      public PoiDTO getItemDTO() {
          return itemDTO;
       }
 
@@ -164,7 +164,7 @@ public class LogDTO implements Serializable {
          this.teamDTO = teamDTO;
       }
 
-      public void setItemDTO(QuestItemDTO itemDTO) {
+      public void setItemDTO(PoiDTO itemDTO) {
          this.itemDTO = itemDTO;
       }
 

@@ -6,11 +6,13 @@ import java.util.List;
 
 import org.apache.commons.configuration.Configuration;
 
+import nl.kennisnet.arena.client.elements.Element;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Object3D;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Question;
+import nl.kennisnet.arena.model.Type;
 import nl.kennisnet.arena.model.Video;
 
 public class Item {
@@ -26,38 +28,36 @@ public class Item {
 	// image or video type attribute:
 	private String url;
 
-	public Item(Positionable positionable, String submitUrl) {
+	public Item(Type positionable, String submitUrl) {
 		setType(positionable);
 		this.submitUrl = submitUrl;
 	}
 
-	public void setType(Positionable positionable) {
-		if (positionable instanceof Question) {
-			fillWithQuestion((Question) positionable);
+	public void setType(Type type) {
+		if (type instanceof Question) {
+			fillWithQuestion((Question) type);
 		}
-		if (positionable instanceof Information) {
-			fillWithInformation((Information) positionable);
+		if (type instanceof Information) {
+			fillWithInformation((Information) type);
 		}
-		if (positionable instanceof Image) {
-			fillWithImage((Image) positionable);
+		if (type instanceof Image) {
+			fillWithImage((Image) type);
 		}
-		if (positionable instanceof Video) {
-			fillWithVideo((Video) positionable);
+		if (type instanceof Video) {
+			fillWithVideo((Video) type);
 		}
-		if (positionable instanceof Object3D) {
-			fillWithObject3D((Object3D) positionable);
+		if (type instanceof Object3D) {
+			fillWithObject3D((Object3D) type);
 		}
 	}
 
 	private void fillWithObject3D(Object3D object) {
 		type = "Object3D";
-		title = object.getName();
 		url = object.getUrl();
 	}
 
 	private void fillWithQuestion(Question question) {
 		type = "Question";
-		title = question.getName();
 		description = question.getText();
 		List<String> ansList = new ArrayList<String>();
 		if (question.getAnswer1() != null) {
@@ -77,19 +77,16 @@ public class Item {
 
 	private void fillWithInformation(Information information) {
 		type = "Information";
-		title = information.getName();
 		description = information.getText();
 	}
 
 	private void fillWithImage(Image image) {
 		type = "Image";
-		title = image.getName();
 		url = image.getUrl();
 	}
 
 	private void fillWithVideo(Video video) {
 		type = "Video";
-		title = video.getName();
 		url = video.getVideoUrl();
 	}
 

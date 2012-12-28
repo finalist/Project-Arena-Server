@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.kennisnet.arena.client.domain.QuestDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.SimplePoint;
 
 import org.junit.After;
@@ -46,9 +46,9 @@ public class QuestServiceTest {
         QuestDTO questDTO = new QuestDTO();
         questDTO.setName(existingName);
         questDTO.setEmailOwner(existingEmail);
-        QuestItemDTO itemDTO = new QuestItemDTO("testitem", "Verhaal");
+        PoiDTO itemDTO = new PoiDTO("testitem", "Verhaal");
         itemDTO.setPoint(new SimplePoint(2.2D,1.1D));
-        List<QuestItemDTO> items = new ArrayList<QuestItemDTO>();
+        List<PoiDTO> items = new ArrayList<PoiDTO>();
         items.add(itemDTO);
         questDTO.setItems(items);
         existingQuest = questService.save(questDTO);
@@ -83,8 +83,8 @@ public class QuestServiceTest {
         String email = "kns.arena.tester@gmail.com";
         QuestDTO questDTO = existingQuest;
         questDTO.setName(name);
-        QuestItemDTO questItemDTO = questDTO.getItems().get(0);
-        questItemDTO.setPoint(new SimplePoint(4.4D,2.2D));
+        PoiDTO PoiDTO = questDTO.getItems().get(0);
+        PoiDTO.setPoint(new SimplePoint(4.4D,2.2D));
         QuestDTO saved = questService.save(questDTO);
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
@@ -101,10 +101,10 @@ public class QuestServiceTest {
     @Test
     public void testSaveExistingAddItem() {
         QuestDTO questDTO = existingQuest;
-        QuestItemDTO questItemDTO = new QuestItemDTO("testitem", "Verhaal");
-        questItemDTO.setPoint(new SimplePoint(6.6D,3.3D));
+        PoiDTO PoiDTO = new PoiDTO("testitem", "Verhaal");
+        PoiDTO.setPoint(new SimplePoint(6.6D,3.3D));
 
-        questDTO.getItems().add(questItemDTO);
+        questDTO.getItems().add(PoiDTO);
         QuestDTO saved = questService.save(questDTO);
         Assert.assertEquals(2, saved.getItems().size());
         Assert.assertEquals(new Double(3.3D), saved.getItems().get(1).getPoint().getLongitude());
@@ -115,10 +115,10 @@ public class QuestServiceTest {
     public void testSaveExistingRemoveAndAddItem() {
         QuestDTO questDTO = existingQuest;
         questDTO.getItems().remove(0);
-        QuestItemDTO questItemDTO = new QuestItemDTO("testitem", "Verhaal");
+        PoiDTO PoiDTO = new PoiDTO("testitem", "Verhaal");
 
-        questItemDTO.setPoint(new SimplePoint(6.6D,3.3D));
-        questDTO.getItems().add(questItemDTO);
+        PoiDTO.setPoint(new SimplePoint(6.6D,3.3D));
+        questDTO.getItems().add(PoiDTO);
         QuestDTO saved = questService.save(questDTO);
         Assert.assertEquals(1, saved.getItems().size());
         Assert.assertEquals(new Double(3.3D), saved.getItems().get(0).getPoint().getLongitude());

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.kennisnet.arena.client.domain.QuestDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Location;
@@ -21,8 +21,8 @@ public class DomainObjectFactory {
       result.setEmailOwner(questDTO.getEmailOwner());
       if (questDTO.getItems() != null) {
          List<Positionable> items = new ArrayList<Positionable>();
-         for (QuestItemDTO questItemDTO : questDTO.getItems()) {
-            Positionable positionable = create(questItemDTO);
+         for (PoiDTO PoiDTO : questDTO.getItems()) {
+            Positionable positionable = create(PoiDTO);
             if (positionable != null) {
                items.add(positionable);
             }
@@ -34,21 +34,21 @@ public class DomainObjectFactory {
       return result;
    }
 
-   private static Positionable create(QuestItemDTO questItemDTO) {
+   private static Positionable create(PoiDTO PoiDTO) {
       Positionable result = null;
-      if (questItemDTO.getTypeName().equals("Verhaal")) {
-         result = new Information(questItemDTO.getName(), questItemDTO.getDescription());
-      } else if (questItemDTO.getTypeName().equals("Vraag")) {
-         Question question = new Question(questItemDTO.getDescription(),questItemDTO.getOption1(),questItemDTO.getOption2(),questItemDTO.getOption3(),questItemDTO.getOption4());
-         question.setCorrectAnswer(questItemDTO.getCorrectOption());
+      if (PoiDTO.getTypeName().equals("Verhaal")) {
+         result = new Information(PoiDTO.getName(), PoiDTO.getDescription());
+      } else if (PoiDTO.getTypeName().equals("Vraag")) {
+         Question question = new Question(PoiDTO.getDescription(),PoiDTO.getOption1(),PoiDTO.getOption2(),PoiDTO.getOption3(),PoiDTO.getOption4());
+         question.setCorrectAnswer(PoiDTO.getCorrectOption());
          result=question;
-      } else if (questItemDTO.getTypeName().equals("Foto")) {
+      } else if (PoiDTO.getTypeName().equals("Foto")) {
          result = new Image();
-         ((Image)result).setUrl(questItemDTO.getObjectURL());
+         ((Image)result).setUrl(PoiDTO.getObjectURL());
       }
       if (result!=null){
-         result.setName(questItemDTO.getName());
-         Location location = new Location(GeomUtil.createJTSPoint(questItemDTO.getPoint()), questItemDTO.getAlt(), questItemDTO.getRadius());
+         result.setName(PoiDTO.getName());
+         Location location = new Location(GeomUtil.createJTSPoint(PoiDTO.getPoint()), PoiDTO.getAlt(), PoiDTO.getRadius());
          result.setLocation(location);
       }
       

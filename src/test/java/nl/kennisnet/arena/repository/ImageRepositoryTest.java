@@ -52,11 +52,11 @@ public class ImageRepositoryTest {
 		Image image = new Image();
 		Location location = new Location();
 		location = locationRepository.merge(location);
-		image.setLocation(location);
+		image.getPoi().setLocation(location);
 		Quest quest = new Quest();
 		quest.setEmailOwner("email@email.nl");
 		quest = questRepository.merge(quest);
-		image.setQuest(quest);
+		image.getPoi().setQuest(quest);
 		image.setUrl(url);
 		image = repository.merge(image);
 		return image;

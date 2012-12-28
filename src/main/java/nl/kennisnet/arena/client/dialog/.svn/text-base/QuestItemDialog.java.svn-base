@@ -3,7 +3,7 @@ package nl.kennisnet.arena.client.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
 import nl.kennisnet.arena.client.event.EventBus;
 import nl.kennisnet.arena.client.event.LogEvent;
@@ -29,11 +29,11 @@ public class QuestItemDialog extends DialogBox {
 
    private TextBox nameTextBox = new TextBox();
    private TextBox radiusTextBox = new TextBox();
-   private QuestItemDTO itemDTO;
+   private PoiDTO itemDTO;
    private final boolean readOnlyDialog;
    private final boolean create;
 
-   public QuestItemDialog(final QuestItemDTO itemDTO, boolean readOnlyDialog,boolean create) {
+   public QuestItemDialog(final PoiDTO itemDTO, boolean readOnlyDialog,boolean create) {
       super(false, true);
       this.readOnlyDialog = readOnlyDialog;
       this.create = create;
@@ -45,7 +45,7 @@ public class QuestItemDialog extends DialogBox {
       nameTextBox.setFocus(true);
    }
 
-   protected Panel createPanel(final QuestItemDTO itemDTO) {
+   protected Panel createPanel(final PoiDTO itemDTO) {
       VerticalPanel result = new VerticalPanel();
       FormTablePanel formPanel = new FormTablePanel();
 
@@ -124,12 +124,12 @@ public class QuestItemDialog extends DialogBox {
 
    }
 
-   protected void fillFormFromItem(QuestItemDTO itemDTO) {
+   protected void fillFormFromItem(PoiDTO itemDTO) {
       nameTextBox.setText(itemDTO.getName());
       radiusTextBox.setText("" + itemDTO.getRadius());
    }
 
-   protected QuestItemDTO fillItemFromForm(QuestItemDTO itemDTO) {
+   protected PoiDTO fillItemFromForm(PoiDTO itemDTO) {
       itemDTO.setName(nameTextBox.getText().trim());
       itemDTO.setRadius(Double.valueOf(radiusTextBox.getText()));
       return itemDTO;
@@ -143,7 +143,7 @@ public class QuestItemDialog extends DialogBox {
       return new FormTablePanel.Element("Radius", radiusTextBox);
    }
 
-   public QuestItemDTO getQuestItemDTO() {
+   public PoiDTO getPoiDTO() {
       return itemDTO;
    }
 

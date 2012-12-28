@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import nl.kennisnet.arena.client.domain.QuestDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.QuestItemTypes;
 import nl.kennisnet.arena.client.domain.QuestState;
 import nl.kennisnet.arena.client.event.CreateQuestItemEvent;
@@ -87,7 +87,7 @@ public class TypeFilterPanel extends SidePanel implements RefreshQuestEvent.Hand
       Map<String,Integer> counter=new HashMap<String, Integer>();
       QuestDTO questDTO = QuestState.getInstance().getState();
       if (questDTO != null && questDTO.getItems() != null) {
-         for (QuestItemDTO itemDTO : QuestState.getInstance().getState().getItems()) {
+         for (PoiDTO itemDTO : QuestState.getInstance().getState().getItems()) {
             if (counter.get(itemDTO.getTypeName())==null){
                counter.put(itemDTO.getTypeName(),1);
             } else {

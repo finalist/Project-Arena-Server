@@ -12,7 +12,7 @@ import nl.kennisnet.arena.client.domain.ActionDTO;
 import nl.kennisnet.arena.client.domain.AnswerDTO;
 import nl.kennisnet.arena.client.domain.AnswerDTO.AnswerType;
 import nl.kennisnet.arena.client.domain.LogDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.TeamDTO;
 import nl.kennisnet.arena.model.Image;
@@ -27,6 +27,7 @@ import nl.kennisnet.arena.model.PositionableCollectionHelper;
 import nl.kennisnet.arena.model.Progress;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
+import nl.kennisnet.arena.model.Type;
 import nl.kennisnet.arena.repository.ImageRepository;
 import nl.kennisnet.arena.repository.InformationRepository;
 import nl.kennisnet.arena.repository.ParticipantAnswerRepository;
@@ -139,15 +140,16 @@ public class ParticipantService {
 		Set<Long> counted = new HashSet<Long>();
 		for (ParticipationLog log : participationLogs) {
 			Positionable positionable = log.getPositionable();
-			if (positionable instanceof Question) {
-
-				counted.add(positionable.getId());
-
+			for(Type e : positionable.getElements()) {
+				if(e instanceof Question) {
+					counted.add(e.getId());
+				}
 			}
 		}
 
-		return new Progress(counted.size(), PositionableCollectionHelper
-				.filter(quest.getPositionables(), Question.class).all().size());
+		return new Progress(0, 100);
+//		return new Progress(counted.size(), PositionableCollectionHelper
+//				.filter(quest.getPositionables(), Question.class).all().size());
 	}
 
 	private List<ParticipationLog> getParticipationLogs(Long questId) {
@@ -179,19 +181,21 @@ public class ParticipantService {
 
 		Set<Positionable> positionables = new HashSet<Positionable>(quest.getPositionables());
 		for(Positionable positionable : positionables){
-			if(positionable instanceof Question){
-				Question question = (Question)positionable;
-				for(ParticipantAnswer participantAnswer : question.getParticipantAnswers()){
-					long positionableId = participantAnswer.getQuestion().getId();
-					if(result.get(positionableId) == null){
-						result.put(positionableId, 0);
+			for(Type e : positionable.getElements()) {
+				if(e instanceof Question) {
+					for(ParticipantAnswer participantAnswer : ((Question) e).getParticipantAnswers()){
+						long positionableId = participantAnswer.getQuestion().getId();
+						if(result.get(positionableId) == null){
+							result.put(positionableId, 0);
+						}
+						if(participantAnswer.getResult().equals(ParticipantAnswer.Result.CORRECT.name())){
+							result.put(positionableId,result.get(positionableId) + 1);
+						}
+						
 					}
-					if(participantAnswer.getResult().equals(ParticipantAnswer.Result.CORRECT.name())){
-						result.put(positionableId,result.get(positionableId) + 1);
-					}
-					
 				}
 			}
+			
 		}
 		return result;
 	}
@@ -202,8 +206,9 @@ public class ParticipantService {
 
 		Set<Positionable> positionables = new HashSet<Positionable>(quest.getPositionables());
 		for(Positionable positionable : positionables){
-			if(positionable instanceof Question){
-				Question question = (Question)positionable;
+			for(Type e : positionable.getElements()) {
+				Question question = (Question)e;
+				
 				for(ParticipantAnswer participantAnswer : question.getParticipantAnswers()){
 					long teamId = participantAnswer.getParticipation().getParticipant().getId();
 					if(result.get(teamId) == null){
@@ -211,8 +216,7 @@ public class ParticipantService {
 					}
 					if(participantAnswer.getResult().equals(ParticipantAnswer.Result.CORRECT.name())){
 						result.put(teamId,result.get(teamId) + 1);
-					}
-					
+					}	
 				}
 			}
 		}
@@ -222,9 +226,10 @@ public class ParticipantService {
 	public Question getQuestion(Long id, Quest quest) {
 		if (quest != null && quest.getPositionables() != null) {
 			for (Positionable positionable : quest.getPositionables()) {
-				if (positionable.getId().equals(id)
-						&& positionable instanceof Question) {
-					return (Question) positionable;
+				for(Type e : positionable.getElements()) {
+					if(e.getId().equals(id) && e instanceof Question) {
+						return (Question) e;
+					}
 				}
 			}
 		}
@@ -248,7 +253,7 @@ public class ParticipantService {
 		Participation participation = participationRepository.get(participationId);
 		participantAnswer.setParticipation(participation);
 		participantAnswer.setQuestion(question);
-		participantAnswer.setRound(question.getQuest().getActiveRound());
+		participantAnswer.setRound(question.getPoi().getQuest().getActiveRound());
 		if(question.getCorrectAnswer() == null){
 			throw new IllegalArgumentException("No answer given");
 		}
@@ -267,7 +272,7 @@ public class ParticipantService {
 		Participation participation = participationRepository.get(participationId);
 		participantAnswer.setParticipation(participation);
 		participantAnswer.setQuestion(question);
-		participantAnswer.setRound(question.getQuest().getActiveRound());
+		participantAnswer.setRound(question.getPoi().getQuest().getActiveRound());
 		participantAnswer.setResult(Result.ANSWERED.name());
 		participantAnswerRepository.merge(participantAnswer);
 	}
@@ -307,13 +312,13 @@ public class ParticipantService {
 			}
 		}
 
-		List<QuestItemDTO> items = DTOFactory.create(quest).getItems();
+		List<PoiDTO> items = DTOFactory.create(quest).getItems();
 		Map<Long, Integer> itemScores = getPositionableScores(quest.getId());
 
-		for (QuestItemDTO questItemDTO : items) {
-			questItemDTO.setScore(itemScores.get(questItemDTO.getId()));
-			if (questItemDTO.getScore() == null) {
-				questItemDTO.setScore(0);
+		for (PoiDTO PoiDTO : items) {
+			PoiDTO.setScore(itemScores.get(PoiDTO.getId()));
+			if (PoiDTO.getScore() == null) {
+				PoiDTO.setScore(0);
 			}
 
 		}
@@ -325,8 +330,9 @@ public class ParticipantService {
 		List<AnswerDTO> answerDTOs = new ArrayList<AnswerDTO>();
 		Quest quest = (Quest) questRepository.get(questId);
 		for(Positionable positionable : quest.getPositionables()){
-			if(positionable instanceof Question){
-				Question question = (Question)positionable;
+			for(Type e : positionable.getElements()) {
+				Question question = (Question) e;
+				
 				for(ParticipantAnswer participantAnswer : question.getParticipantAnswers()){
 					AnswerDTO answerDTO = new AnswerDTO();
 					if(question.getQuestionTypeAsEnum() == Question.TYPE.OPEN_QUESTION){
@@ -339,7 +345,7 @@ public class ParticipantService {
 					}
 					answerDTO.setPlayerColor(participantAnswer.getParticipation().getParticipant().getHexColor());
 					answerDTO.setPlayerName(participantAnswer.getParticipation().getParticipant().getName());
-					answerDTO.setQuestionName(question.getName());
+					//answerDTO.setQuestionName(question.getName());
 					answerDTO.setQuestionDescription(question.getText());
 					answerDTO.setResult(participantAnswer.getResult());
 					answerDTO.setQuestId(questId);

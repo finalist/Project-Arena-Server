@@ -3,7 +3,7 @@ package nl.kennisnet.arena.client.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
 import nl.kennisnet.arena.client.event.EventBus;
 import nl.kennisnet.arena.client.event.LogEvent;
@@ -30,23 +30,23 @@ public class QuestItemDialog extends DialogBox {
    private TextBox nameTextBox = new TextBox();
    private TextBox radiusTextBox = new TextBox();
    private TextBox visibleRadiusTexBox = new TextBox(); 
-   private QuestItemDTO itemDTO;
+   private PoiDTO element;
    private final boolean readOnlyDialog;
    private final boolean create;
 
-   public QuestItemDialog(final QuestItemDTO itemDTO, boolean readOnlyDialog,boolean create) {
+   public QuestItemDialog(final PoiDTO itemDTO, boolean readOnlyDialog,boolean create) {
       super(false, true);
       this.readOnlyDialog = readOnlyDialog;
       this.create = create;
       EventBus.get().fireEvent(
             new LogEvent("Dialog is called with :" + readOnlyDialog + " and opened readonly :" + this.readOnlyDialog));
-      this.itemDTO = itemDTO;
+      this.element = itemDTO;
       setWidget(createPanel(itemDTO));
       fillFormFromItem(itemDTO);
       nameTextBox.setFocus(true);
    }
 
-   protected Panel createPanel(final QuestItemDTO itemDTO) {
+   protected Panel createPanel(final PoiDTO itemDTO) {
       VerticalPanel result = new VerticalPanel();
       FormTablePanel formPanel = new FormTablePanel();
 
@@ -72,7 +72,7 @@ public class QuestItemDialog extends DialogBox {
 
             @Override
             public void onClick(ClickEvent event) {
-               fillItemFromForm(itemDTO);
+               fillItemFromForm(element);
                EventBus.get().fireEvent(new UpdateQuestItemEvent());
                hide();
             }
@@ -91,7 +91,7 @@ public class QuestItemDialog extends DialogBox {
          @Override
          public void onClick(ClickEvent event) {
             if (create){
-               QuestState.getInstance().getState().removeItem(itemDTO);
+               QuestState.getInstance().getState().removeItem(element);
                EventBus.get().fireEvent(new RefreshQuestEvent());
             }
             hide();
@@ -126,13 +126,13 @@ public class QuestItemDialog extends DialogBox {
 
    }
 
-   protected void fillFormFromItem(QuestItemDTO itemDTO) {
+   protected void fillFormFromItem(PoiDTO itemDTO) {
       nameTextBox.setText(itemDTO.getName());
       radiusTextBox.setText("" + itemDTO.getRadius());
       visibleRadiusTexBox.setText(""+ itemDTO.getVisibleRadius());
    }
 
-   protected QuestItemDTO fillItemFromForm(QuestItemDTO itemDTO) {
+   protected PoiDTO fillItemFromForm(PoiDTO itemDTO) {
       itemDTO.setName(nameTextBox.getText().trim());
       itemDTO.setRadius(Double.valueOf(radiusTextBox.getText()));
       itemDTO.setVisibleRadius(Double.valueOf(visibleRadiusTexBox.getText()));
@@ -151,8 +151,8 @@ public class QuestItemDialog extends DialogBox {
 	  return new FormTablePanel.Element("Toepasbaar Radius", visibleRadiusTexBox);
    }
 
-   public QuestItemDTO getQuestItemDTO() {
-      return itemDTO;
+   public PoiDTO getPoiDTO() {
+      return element;
    }
 
    public boolean isReadOnly() {

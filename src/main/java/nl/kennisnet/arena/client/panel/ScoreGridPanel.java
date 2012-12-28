@@ -11,7 +11,7 @@ import java.util.Map;
 import nl.kennisnet.arena.client.domain.AnswerDTO;
 import nl.kennisnet.arena.client.domain.LogDTO;
 import nl.kennisnet.arena.client.domain.QuestDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
 import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.TeamDTO;
@@ -99,7 +99,7 @@ public class ScoreGridPanel extends SimplePanel implements RefreshQuestEvent.Han
 			List<Long> itemIndex = new ArrayList<Long>();
 			List<String> teamIndex = new ArrayList<String>();
 
-			for (QuestItemDTO itemDTO : getItems(quest, log, orderItems)) {
+			for (PoiDTO itemDTO : getItems(quest, log, orderItems)) {
 				if (itemDTO.getTypeName().equals("Vraag")) {
 					itemIndex.add(itemDTO.getId());
 					setHTML(result, itemIndex.size(), 0, itemDTO.getName()
@@ -137,37 +137,37 @@ public class ScoreGridPanel extends SimplePanel implements RefreshQuestEvent.Han
 		return result;
 	}
 	
-	private List<QuestItemDTO> getItems(QuestDTO quest, LogDTO log, String order) {
+	private List<PoiDTO> getItems(QuestDTO quest, LogDTO log, String order) {
 
-		Map<Long, QuestItemDTO> itemMap = new HashMap<Long, QuestItemDTO>();
+		Map<Long, PoiDTO> itemMap = new HashMap<Long, PoiDTO>();
 		if (quest != null && quest.getItems() != null) {
-			for (QuestItemDTO questItemDTO : quest.getItems()) {
-				itemMap.put(questItemDTO.getId(), questItemDTO);
-				questItemDTO.setScore(0);
+			for (PoiDTO PoiDTO : quest.getItems()) {
+				itemMap.put(PoiDTO.getId(), PoiDTO);
+				PoiDTO.setScore(0);
 			}
 		}
 		if (log != null && log.getQuestItems() != null) {
-			for (QuestItemDTO questItemDTO : log.getQuestItems()) {
-				itemMap.put(questItemDTO.getId(), questItemDTO);
+			for (PoiDTO PoiDTO : log.getQuestItems()) {
+				itemMap.put(PoiDTO.getId(), PoiDTO);
 			}
 		}
 
-		List<QuestItemDTO> result = new ArrayList<QuestItemDTO>(
+		List<PoiDTO> result = new ArrayList<PoiDTO>(
 				itemMap.values());
 		if (order.equals(ORDER_NAME)) {
-			Collections.sort(result, new Comparator<QuestItemDTO>() {
+			Collections.sort(result, new Comparator<PoiDTO>() {
 
 				@Override
-				public int compare(QuestItemDTO o1, QuestItemDTO o2) {
+				public int compare(PoiDTO o1, PoiDTO o2) {
 					return o1.getName().compareTo(o2.getName());
 				}
 
 			});
 		} else {
-			Collections.sort(result, new Comparator<QuestItemDTO>() {
+			Collections.sort(result, new Comparator<PoiDTO>() {
 
 				@Override
-				public int compare(QuestItemDTO o1, QuestItemDTO o2) {
+				public int compare(PoiDTO o1, PoiDTO o2) {
 					return -o1.getScore().compareTo(o2.getScore());
 				}
 			});

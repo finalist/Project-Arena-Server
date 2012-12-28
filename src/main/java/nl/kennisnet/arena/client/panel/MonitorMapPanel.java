@@ -5,7 +5,7 @@ import java.util.List;
 import nl.kennisnet.arena.client.domain.ActionDTO;
 import nl.kennisnet.arena.client.domain.LogDTO;
 import nl.kennisnet.arena.client.domain.QuestDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
 import nl.kennisnet.arena.client.domain.SimplePoint;
 import nl.kennisnet.arena.client.domain.TeamDTO;
@@ -37,7 +37,7 @@ public class MonitorMapPanel extends AbstractMapPanel implements
 	  clearMap();
       QuestDTO questDTO = QuestState.getInstance().getState();
       if (questDTO != null && questDTO.getItems() != null) {
-         for (QuestItemDTO itemDTO : questDTO.getItems()) {
+         for (PoiDTO itemDTO : questDTO.getItems()) {
             QuestItemMarker questItemMarker = new QuestItemMarker(getMapWidget(), itemDTO, true);
             markerObjects.add(questItemMarker.getMarker());
             polygonObjects.add(questItemMarker.getPolygon()[0]);

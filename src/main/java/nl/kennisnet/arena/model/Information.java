@@ -1,9 +1,11 @@
 package nl.kennisnet.arena.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 @Entity
-public class Information extends Positionable implements DomainObject {
+public class Information extends Type {
 
 	private String text;
 
@@ -11,9 +13,8 @@ public class Information extends Positionable implements DomainObject {
 	   super();
 	}
 	
-	public Information(String name, String text) {
+	public Information(String text) {
 		super();
-		this.setName(name);
 		this.text = text;
 	}
 	

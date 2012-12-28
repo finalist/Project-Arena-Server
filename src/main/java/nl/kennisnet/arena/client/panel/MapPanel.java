@@ -1,8 +1,8 @@
 package nl.kennisnet.arena.client.panel;
 
-import nl.kennisnet.arena.client.dialog.DialogSelector;
+import nl.kennisnet.arena.client.dialog.MainDialog;
 import nl.kennisnet.arena.client.domain.QuestDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
 import nl.kennisnet.arena.client.domain.SimplePoint;
 import nl.kennisnet.arena.client.domain.SimplePolygon;
@@ -51,8 +51,7 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
       String selectedItemType = QuestState.getInstance().getSelectedQuestType();
       if (selectedItemType != null) {
 
-    	  System.out.println(selectedItemType);
-         QuestItemDTO itemDTO = new QuestItemDTO(selectedItemType + " " + QuestState.getInstance().getNumber(selectedItemType),
+         PoiDTO itemDTO = new PoiDTO(selectedItemType + " " + QuestState.getInstance().getNumber(selectedItemType),
                selectedItemType);
 
          itemDTO.setPoint(new SimplePoint(point));
@@ -69,7 +68,8 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
 
          eventQI.setQuestItem(itemDTO);
          
-         DialogSelector.showRelevantDialog(selectedItemType, itemDTO, false,true);
+         new MainDialog(itemDTO, false, true).center();
+        // DialogSelector.showRelevantDialog(selectedItemType, itemDTO, false,true);
 
          EventBus.get().fireEvent(eventQI);
 
@@ -86,7 +86,7 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
          }
    
          if (questDTO != null && questDTO.getItems() != null) {
-            for (QuestItemDTO itemDTO : questDTO.getItems()) {
+            for (PoiDTO itemDTO : questDTO.getItems()) {
                if (QuestState.getInstance().isTypeVisible(itemDTO.getTypeName())) {
                   QuestItemMarker questItemMarker = new QuestItemMarker(getMapWidget(), itemDTO, false);
                   markerObjects.add(questItemMarker.getMarker());
@@ -139,7 +139,7 @@ public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handle
 
    private SimplePolygon createWall(QuestDTO questDTO) {
       LatLngBounds border = LatLngBounds.create();
-      for (QuestItemDTO itemDTO : questDTO.getItems()) {
+      for (PoiDTO itemDTO : questDTO.getItems()) {
          border.extend(GeomUtil.createGWTPoint(itemDTO.getPoint()));
       }
       return new SimplePolygon(GeomUtil.createCircle(border, BORDER_PADDING));

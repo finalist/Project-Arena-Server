@@ -21,7 +21,7 @@ public class QuestState {
 	private static final QuestState INSTANCE = new QuestState();
 	private QuestDTO state;
 	private Map<String, Integer> typeCounter = new HashMap<String, Integer>();
-	private String selectedQuestType = QuestItemTypes.QUEST_TYPE_STORY;
+	private String selectedQuestType = QuestItemTypes.QUEST_TYPE_COMBI;
 	private Set<String> hiddenTypes = new HashSet<String>();
 	private Set<String> hiddenTeams = new HashSet<String>();
 	private LogDTO log;

@@ -3,8 +3,8 @@ package nl.kennisnet.arena.client.panel;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.QuestDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
 import nl.kennisnet.arena.client.event.EventBus;
 import nl.kennisnet.arena.client.event.RefreshQuestEvent;
@@ -68,7 +68,7 @@ public abstract class AbstractMapPanel extends SimplePanel implements ZoomToFitE
          } else if (questDTO.getItems() != null) {
             border = LatLngBounds.create();
 
-            for (QuestItemDTO itemDTO : questDTO.getItems()) {
+            for (PoiDTO itemDTO : questDTO.getItems()) {
                for (LatLng point : GeomUtil.createBoundingBox(itemDTO.getPoint(), itemDTO.getRadius())){
                   border.extend(point);
                }

@@ -1,6 +1,7 @@
 package nl.kennisnet.arena.model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -33,6 +34,9 @@ public class Positionable {
 	
 	@OneToMany(mappedBy = "positionable", cascade = CascadeType.REMOVE, orphanRemoval=true)
 	private List<ParticipationLog> participationlogs = new ArrayList<ParticipationLog>();
+	
+	@OneToMany(mappedBy = "poi", targetEntity = Type.class)
+	private List<Type> elements = new LinkedList<Type>();
 	
 	public Location getLocation() {
 		return location;
@@ -82,6 +86,14 @@ public class Positionable {
 		return participationlogs;
 	}
 	
+	public List<Type> getElements() {
+		return elements;
+	}
+
+	public void setElements(List<Type> elements) {
+		this.elements = elements;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof Positionable){

@@ -1,8 +1,8 @@
 package nl.kennisnet.arena.client.panel;
 
-import nl.kennisnet.arena.client.dialog.DialogSelector;
+import nl.kennisnet.arena.client.dialog.MainDialog;
 import nl.kennisnet.arena.client.domain.QuestDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
 import nl.kennisnet.arena.client.event.CreateQuestItemEvent;
 import nl.kennisnet.arena.client.event.EventBus;
@@ -47,7 +47,7 @@ public class QuestItemsPanel extends SidePanel implements UpdateQuestItemEvent.H
       refresh();
    }
 
-   private Widget createItemWidget(final QuestItemDTO item) {
+   private Widget createItemWidget(final PoiDTO item) {
       FlowPanel result = new FlowPanel();
       result.addStyleName(item.getTypeName().toLowerCase()+"_panel");
       result.addStyleName("questitempanel");
@@ -96,7 +96,8 @@ public class QuestItemsPanel extends SidePanel implements UpdateQuestItemEvent.H
 
          @Override
          public void onClick(ClickEvent arg0) {
-            DialogSelector.showRelevantDialog(item.getTypeName(), item,readOnly,false);
+        	 new MainDialog(item, readOnly, false).center();
+            //DialogSelector.showRelevantDialog(item.getTypeName(), item,readOnly,false);
          }
       });
 
@@ -113,9 +114,9 @@ public class QuestItemsPanel extends SidePanel implements UpdateQuestItemEvent.H
       int numberDisplayed = 0;
       int totalNumber = 0;
       if (quest != null && quest.getItems() != null) {
-         for (QuestItemDTO questItemDTO : quest.getItems()) {
-            if (QuestState.getInstance().isTypeVisible(questItemDTO.getTypeName())) {
-               itemGrid.add(createItemWidget(questItemDTO));
+         for (PoiDTO PoiDTO : quest.getItems()) {
+            if (QuestState.getInstance().isTypeVisible(PoiDTO.getTypeName())) {
+               itemGrid.add(createItemWidget(PoiDTO));
                numberDisplayed++;
             }
          }

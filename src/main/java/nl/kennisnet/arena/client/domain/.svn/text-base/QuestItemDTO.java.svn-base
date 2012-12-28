@@ -2,7 +2,7 @@ package nl.kennisnet.arena.client.domain;
 
 import java.io.Serializable;
 
-public class QuestItemDTO implements Serializable {
+public class PoiDTO implements Serializable {
 
 	/**
 	 * 
@@ -32,11 +32,11 @@ public class QuestItemDTO implements Serializable {
       this.id = id;
    }
 
-   public QuestItemDTO() {
+   public PoiDTO() {
 		super();
 	}
 
-	public QuestItemDTO(String name, String typeName) {
+	public PoiDTO(String name, String typeName) {
 		super();
 		this.name = name;
 		this.typeName = typeName;
@@ -152,7 +152,7 @@ public class QuestItemDTO implements Serializable {
 
    @Override
    public String toString() {
-      return "QuestItemDTO [alt=" + alt + ", correctOption=" + correctOption + ", description=" + description + ", id=" + id
+      return "PoiDTO [alt=" + alt + ", correctOption=" + correctOption + ", description=" + description + ", id=" + id
             + ", name=" + name + ", objectURL=" + objectURL + ", option1=" + option1 + ", option2=" + option2 + ", option3="
             + option3 + ", option4=" + option4 + ", point=" + point + ", radius=" + radius + ", typeName=" + typeName + "]";
    }
@@ -186,7 +186,7 @@ public class QuestItemDTO implements Serializable {
          return false;
       if (getClass() != obj.getClass())
          return false;
-      QuestItemDTO other = (QuestItemDTO) obj;
+      PoiDTO other = (PoiDTO) obj;
       if (alt == null) {
          if (other.alt != null)
             return false;

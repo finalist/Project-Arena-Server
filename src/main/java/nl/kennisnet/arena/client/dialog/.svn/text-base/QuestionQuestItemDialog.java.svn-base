@@ -3,7 +3,7 @@ package nl.kennisnet.arena.client.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.widget.FormTablePanel;
 
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -16,7 +16,7 @@ public class QuestionQuestItemDialog extends StoryQuestItemDialog {
    private TextBox[] answersTextBoxs;
    private RadioButton[] correctAnswer;
 
-   public QuestionQuestItemDialog(final QuestItemDTO itemDTO,boolean readOnlyDialog,boolean create) {
+   public QuestionQuestItemDialog(final PoiDTO itemDTO,boolean readOnlyDialog,boolean create) {
       super(itemDTO,readOnlyDialog,create);
       setText("Vraag details");
    }
@@ -49,7 +49,7 @@ public class QuestionQuestItemDialog extends StoryQuestItemDialog {
    }
    
    
-   protected void fillFormFromItem(QuestItemDTO itemDTO){
+   protected void fillFormFromItem(PoiDTO itemDTO){
       super.fillFormFromItem(itemDTO);
       answersTextBoxs[0].setText(itemDTO.getOption1());
       answersTextBoxs[1].setText(itemDTO.getOption2());
@@ -69,8 +69,8 @@ public class QuestionQuestItemDialog extends StoryQuestItemDialog {
    }
    
    
-   protected QuestItemDTO fillItemFromForm(QuestItemDTO itemDTO){
-      QuestItemDTO result=super.fillItemFromForm(itemDTO);
+   protected PoiDTO fillItemFromForm(PoiDTO itemDTO){
+      PoiDTO result=super.fillItemFromForm(itemDTO);
       itemDTO.setOption1(answersTextBoxs[0].getText());
       itemDTO.setOption2(answersTextBoxs[1].getText());
       itemDTO.setOption3(answersTextBoxs[2].getText());

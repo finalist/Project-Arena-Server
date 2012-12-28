@@ -52,11 +52,11 @@ public class InformationRepositoryTest {
 		Information information = new Information();
 		Location location = new Location();
 		location = locationRepository.merge(location);
-		information.setLocation(location);
+		information.getPoi().setLocation(location);
 		Quest quest = new Quest();
 		quest.setEmailOwner("email@email.nl");
 		quest = questRepository.merge(quest);
-		information.setQuest(quest);
+		information.getPoi().setQuest(quest);
 		information.setText(text);
 		information = repository.merge(information);
 		return information;

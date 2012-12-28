@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -11,7 +13,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
-public class Question extends Positionable implements DomainObject {
+public class Question extends Type {
 
 	public enum TYPE {
 		OPEN_QUESTION, MULTIPLE_CHOICE

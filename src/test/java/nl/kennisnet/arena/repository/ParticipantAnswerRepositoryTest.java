@@ -16,6 +16,7 @@ import nl.kennisnet.arena.model.Location;
 import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Participation;
+import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.model.Round;
@@ -82,15 +83,15 @@ public class ParticipantAnswerRepositoryTest {
 		participation.setRound(round);
 		participation = participationRepository.merge(participation);
 		
-		Question positionable = new Question();
+		Positionable positionable = new Positionable();
 		Location location = new Location();
 		location = locationRepository.merge(location);
 		positionable.setLocation(location);
 		positionable.setQuest(quest);
-		positionable = (Question) positionableRepository.merge(positionable);
+		positionable = positionableRepository.merge(positionable);
 		
 		participantAnswer.setRound(round);
-		participantAnswer.setQuestion(positionable);
+		//participantAnswer.setQuestion(positionable);
 		participantAnswer.setParticipation(participation);
 		participantAnswer = repository.merge(participantAnswer);
 		return participantAnswer;

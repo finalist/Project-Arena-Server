@@ -1,6 +1,6 @@
 package nl.kennisnet.arena.client.event;
 
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
@@ -29,13 +29,13 @@ public class MoveQuestItemEvent extends GwtEvent<MoveQuestItemEvent.Handler> {
    /**
     * Custom data held within this event object.
     */
-   private QuestItemDTO questItem;
+   private PoiDTO questItem;
 
-   public QuestItemDTO getQuestItem() {
+   public PoiDTO getQuestItem() {
       return questItem;
    }
 
-   public void setQuestItem(QuestItemDTO questItem) {
+   public void setQuestItem(PoiDTO questItem) {
       this.questItem = questItem;
    }
 

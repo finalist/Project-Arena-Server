@@ -3,7 +3,7 @@ package nl.kennisnet.arena.model;
 import javax.persistence.Entity;
 
 @Entity
-public class Object3D extends Positionable implements DomainObject {
+public class Object3D extends Type {
 
 	private String url;
 	private float schaal;

@@ -26,20 +26,20 @@ public class PositionableCollectionHelper<D extends Positionable> {
 	public List<D> all() {
 		return positionables;
 	}
-	
+
 	public <V extends Positionable> PositionableCollectionHelper<V> filter(Class<V> clazz) {
 		return PositionableCollectionHelper.filter(positionables, clazz);
 	}
-	
+
 	public PositionableCollectionHelper<D> nearBy(Point p) {
 		return PositionableCollectionHelper.nearBy(positionables, p);
 	}	
-	
-	
+
+
 	public D first(){
 		return positionables.get(0);
 	}
-	
+
 	public static <T extends Positionable> PositionableCollectionHelper<T> nearBy(final List<T> positionables, final Point curLocation) {
 
 	   List<SpacedLocation> spaced = new ArrayList<SpacedLocation>();
@@ -47,23 +47,23 @@ public class PositionableCollectionHelper<D extends Positionable> {
 		   spaced.add(new SpacedLocation(p, p.getLocation().getPoint().distance(curLocation)));
          
       }
-	   
+
 		Collections.sort(spaced);
-		
+
 		return new PositionableCollectionHelper<T>(Lists.transform(spaced, new Function<SpacedLocation, T>() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public T apply(SpacedLocation sl) {
 				return (T)sl.getP();
 			}
-			
+
 		}));		
 	}
-	
+
 	public static <T extends Positionable> PositionableCollectionHelper<T> filter(List<? extends Positionable> positionables, Class<T> clazz) {
 		return new PositionableCollectionHelper<T>( Lists.newArrayList( Iterables.filter(positionables, clazz) ) );
 	}	
-	
+
 	private static class SpacedLocation implements Comparable<SpacedLocation>{
 		private final Positionable p;
 		private final double distance;

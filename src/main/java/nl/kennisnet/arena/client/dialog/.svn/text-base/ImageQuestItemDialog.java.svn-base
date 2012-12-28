@@ -3,7 +3,7 @@ package nl.kennisnet.arena.client.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.widget.FormTablePanel;
 
 import com.google.gwt.user.client.DOM;
@@ -25,7 +25,7 @@ public class ImageQuestItemDialog extends QuestItemDialog {
    private FileUpload upload;
    private FormPanel formPanel;
 
-   public ImageQuestItemDialog(QuestItemDTO itemDTO, boolean readOnly,boolean create) {
+   public ImageQuestItemDialog(PoiDTO itemDTO, boolean readOnly,boolean create) {
       super(itemDTO, readOnly,create);
       setText("Foto details");
 
@@ -89,7 +89,7 @@ public class ImageQuestItemDialog extends QuestItemDialog {
 
       formPanel.addSubmitCompleteHandler(new FormPanel.SubmitCompleteHandler() {
          public void onSubmitComplete(SubmitCompleteEvent event) {
-            getQuestItemDTO().setObjectURL(event.getResults());
+            getPoiDTO().setObjectURL(event.getResults());
             refresh();
          }
       });
@@ -118,23 +118,23 @@ public class ImageQuestItemDialog extends QuestItemDialog {
       }
    }
 
-   protected void fillFormFromItem(QuestItemDTO itemDTO) {
+   protected void fillFormFromItem(PoiDTO itemDTO) {
       super.fillFormFromItem(itemDTO);
       if (itemDTO.getObjectURL() != null) {
          imageDisplay.setUrlAndVisibleRect(itemDTO.getObjectURL(), 0, 0, 320, 200);
       }
    }
 
-   // protected QuestItemDTO fillItemFromForm(QuestItemDTO itemDTO) {
-   // QuestItemDTO result = super.fillItemFromForm(itemDTO);
+   // protected PoiDTO fillItemFromForm(PoiDTO itemDTO) {
+   // PoiDTO result = super.fillItemFromForm(itemDTO);
    // //result.setObjectURL();
    // return result;
    // }
 
    private void refresh() {
       clear();
-      setWidget(createPanel(getQuestItemDTO()));
-      fillFormFromItem(getQuestItemDTO());
+      setWidget(createPanel(getPoiDTO()));
+      fillFormFromItem(getPoiDTO());
    }
 
 }

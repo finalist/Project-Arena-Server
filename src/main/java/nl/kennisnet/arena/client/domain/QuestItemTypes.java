@@ -26,7 +26,7 @@ public class QuestItemTypes {
       types.add(new QuestItemType(QUEST_TYPE_PHOTO, "photo.png", "0337d1"));
       types.add(new QuestItemType(QUEST_TYPE_QUESTION, "question.png", "00a700"));
       types.add(new QuestItemType(QUEST_TYPE_3D, "trash.png", "600060"));
-      types.add(new QuestItemType(QUEST_TYPE_COMBI, "thrash.png", "978000"));
+      types.add(new QuestItemType(QUEST_TYPE_COMBI, "trash.png", "978000"));
       types.add(new QuestItemType(QUEST_TYPE_VIDEO, "video.png", "800080"));
       
    }

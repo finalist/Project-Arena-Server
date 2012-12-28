@@ -8,6 +8,7 @@ import nl.kennisnet.arena.client.event.RefreshQuestEvent;
 import nl.kennisnet.arena.client.event.RefreshQuestLogEvent;
 import nl.kennisnet.arena.formats.Item;
 import nl.kennisnet.arena.formats.convert.ItemFactory;
+import nl.kennisnet.arena.model.Type;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
@@ -43,7 +44,8 @@ public class ItemController {
 
 	@Autowired
 	public ItemController(final QuestService questService,
-			final ParticipantService participantService, final CompositeConfiguration configuration) {
+			final ParticipantService participantService,
+			final CompositeConfiguration configuration) {
 		this.questService = questService;
 		this.participantService = participantService;
 		this.configuration = configuration;
@@ -51,25 +53,28 @@ public class ItemController {
 
 	/**
 	 */
-	@RequestMapping(value = "offline/show/{questId}/{itemId}/{player}", method = RequestMethod.GET) @ResponseBody
-	public String showOfflineItem(@PathVariable Long questId, @PathVariable Long itemId, @PathVariable String player) {
+	@RequestMapping(value = "offline/show/{questId}/{itemId}/{player}", method = RequestMethod.GET)
+	@ResponseBody
+	public String showOfflineItem(@PathVariable Long questId,
+			@PathVariable Long itemId, @PathVariable String player) {
 		Quest quest = questService.getQuest(questId);
-		Positionable positionable = getPositionableById(quest, itemId);
-		if(positionable == null){
+		Type positionable = getPositionableById(quest, itemId);
+		if (positionable == null) {
 			return "Object niet gevonden";
 		}
-		
+
 		log.debug("questId = " + questId + ", questionId = " + itemId
 				+ ", quest = " + quest + ", positionable = " + positionable);
-		
+
 		final String baseUrl = UtilityHelper.getBaseUrl(configuration);
-		final String submitUrl = "("+baseUrl + "item/show/"+questId+"/"+itemId+"/"+player+".item)";
-		
+		final String submitUrl = "(" + baseUrl + "item/show/" + questId + "/"
+				+ itemId + "/" + player + ".item)";
+
 		final Item item = ItemFactory.getInstance(positionable, submitUrl);
 		Gson gson = new Gson();
-		return gson.toJson(item);		
+		return gson.toJson(item);
 	}
-	
+
 	/**
 	 * This method will run if no parameters are send with the url. Mixare will
 	 * first run this url to check if the page exists.
@@ -102,8 +107,8 @@ public class ItemController {
 		}
 		return new ModelAndView(new InternalResourceView("/question.jsp"),
 				model);
-	}	
-	
+	}
+
 	/**
 	 * This method will run if no parameters are send with the url. Mixare will
 	 * first run this url to check if the page exists.
@@ -125,18 +130,20 @@ public class ItemController {
 		}
 
 		HashMap<String, String> model = new HashMap<String, String>();
-		model.put("title", information.getName());
+		// model.put("title", information.getName());
 		model.put("text", information.getText());
 
 		return new ModelAndView(new InternalResourceView("/information.jsp"),
 				model);
 	}
 
-	
-	private Positionable getPositionableById(Quest quest, long itemId){
-		for( Positionable positionable: quest.getPositionables()){
-			if(positionable.getId() == itemId){
-				return positionable;
+	private Type getPositionableById(Quest quest, long itemId) {
+		for (Positionable positionable : quest.getPositionables()) {
+			for (Type e : positionable.getElements()) {
+				if (e.getId() == itemId) {
+					return e;
+				}
+
 			}
 		}
 		return null;
@@ -172,28 +179,30 @@ public class ItemController {
 		log.debug("answering: questId = " + questId + ", questionId = "
 				+ questionId + "," + " quest = " + quest + ", question = "
 				+ question + " answer = " + answer);
-		
+
 		ModelAndView mv = null;
-		if(question.getQuestionTypeAsEnum() == TYPE.MULTIPLE_CHOICE){
-			mv = processMultipleChoiceQuestion(participationId, question, Integer.parseInt(answer));
-		} else if(question.getQuestionTypeAsEnum() == TYPE.OPEN_QUESTION){
+		if (question.getQuestionTypeAsEnum() == TYPE.MULTIPLE_CHOICE) {
+			mv = processMultipleChoiceQuestion(participationId, question,
+					Integer.parseInt(answer));
+		} else if (question.getQuestionTypeAsEnum() == TYPE.OPEN_QUESTION) {
 			mv = processOpenQuestion(participationId, question, answer);
 		}
-			
+
 		EventBus.get().fireEvent(new RefreshQuestEvent());
-        EventBus.get().fireEvent(new RefreshQuestLogEvent());
+		EventBus.get().fireEvent(new RefreshQuestLogEvent());
 		return mv;
-		
+
 	}
-	
-	private ModelAndView processMultipleChoiceQuestion(long participationId, Question question, int answer){
-		try{
-		participantService.storeParticipationAnswer(participationId, question,
-				answer);
-		}catch(IllegalArgumentException e){
+
+	private ModelAndView processMultipleChoiceQuestion(long participationId,
+			Question question, int answer) {
+		try {
+			participantService.storeParticipationAnswer(participationId,
+					question, answer);
+		} catch (IllegalArgumentException e) {
 			return null;
 		}
-		
+
 		HashMap<String, String> model = new HashMap<String, String>();
 		if (question.getCorrectAnswer() == answer) {
 			model.put("correct", "correct");
@@ -205,18 +214,20 @@ public class ItemController {
 					"../../../../question-result.jsp"), model);
 		}
 	}
-	
-	private ModelAndView processOpenQuestion(long participationId, Question question, String answer){
+
+	private ModelAndView processOpenQuestion(long participationId,
+			Question question, String answer) {
 		HashMap<String, String> model = new HashMap<String, String>();
-		if(answer.length() > 0){
-			participantService.storeParticipationTextAnswer(participationId, question, answer);
+		if (answer.length() > 0) {
+			participantService.storeParticipationTextAnswer(participationId,
+					question, answer);
 			model.put("question_submitted", "Question submitted");
-			
-		}else{
+
+		} else {
 			model.put("question_submitted", "Answer is too short");
 		}
 		return new ModelAndView(new InternalResourceView(
 				"../../../../question-result.jsp"), model);
-	}	
-	
+	}
+
 }

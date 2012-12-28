@@ -1,9 +1,11 @@
 package nl.kennisnet.arena.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 @Entity
-public class Video extends Positionable implements DomainObject {
+public class Video extends Type {
 
 	private String videoUrl;
 

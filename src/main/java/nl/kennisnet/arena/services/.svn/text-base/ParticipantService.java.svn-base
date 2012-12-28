@@ -10,7 +10,7 @@ import java.util.Set;
 
 import nl.kennisnet.arena.client.domain.ActionDTO;
 import nl.kennisnet.arena.client.domain.LogDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.TeamDTO;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Participation;
@@ -230,13 +230,13 @@ public class ParticipantService extends HibernateAwareService {
          }
       }
 
-      List<QuestItemDTO> items = DTOFactory.create(quest).getItems();
+      List<PoiDTO> items = DTOFactory.create(quest).getItems();
       Map<Long, Integer> itemScores = getPositionableScores(quest.getId());
 
-      for (QuestItemDTO questItemDTO : items) {
-         questItemDTO.setScore(itemScores.get(questItemDTO.getId()));
-         if (questItemDTO.getScore() == null) {
-            questItemDTO.setScore(0);
+      for (PoiDTO PoiDTO : items) {
+         PoiDTO.setScore(itemScores.get(PoiDTO.getId()));
+         if (PoiDTO.getScore() == null) {
+            PoiDTO.setScore(0);
          }
 
       }

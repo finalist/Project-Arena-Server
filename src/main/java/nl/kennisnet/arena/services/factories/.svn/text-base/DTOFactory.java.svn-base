@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import nl.kennisnet.arena.client.domain.ActionDTO;
 import nl.kennisnet.arena.client.domain.QuestDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.TeamDTO;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
@@ -26,7 +26,7 @@ public class DTOFactory {
       result.setName(quest.getName());
       result.setEmailOwner(quest.getEmailOwner());
       if (quest.getPositionables() != null) {
-         ArrayList<QuestItemDTO> items = new ArrayList<QuestItemDTO>();
+         ArrayList<PoiDTO> items = new ArrayList<PoiDTO>();
          for (Positionable positionable : quest.getPositionables()) {
             items.add(create(positionable));
          }
@@ -36,15 +36,15 @@ public class DTOFactory {
       return result;
    }
 
-   public static QuestItemDTO create(Positionable positionable) {
-      QuestItemDTO result = null;
+   public static PoiDTO create(Positionable positionable) {
+      PoiDTO result = null;
       if (positionable!=null){
          if (positionable instanceof Information) {
-            result = new QuestItemDTO(positionable.getName(), "Verhaal");
+            result = new PoiDTO(positionable.getName(), "Verhaal");
             result.setDescription(((Information) positionable).getText());
          } else if (positionable instanceof Question) {
             Question question = (Question) positionable;
-            result = new QuestItemDTO(question.getName(), "Vraag");
+            result = new PoiDTO(question.getName(), "Vraag");
             result.setDescription(question.getText());
             result.setOption1(question.getAnswer1());
             result.setOption2(question.getAnswer2());
@@ -54,7 +54,7 @@ public class DTOFactory {
             result.setCorrectOption(question.getCorrectAnswer());
          } else if (positionable instanceof Image){
             Image image=(Image)positionable;
-            result = new QuestItemDTO(image.getName(), "Foto");
+            result = new PoiDTO(image.getName(), "Foto");
             result.setObjectURL(image.getUrl());
          }
          if (result!=null){

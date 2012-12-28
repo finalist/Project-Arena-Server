@@ -1,10 +1,12 @@
 package nl.kennisnet.arena.client.panel;
 
+
 import nl.kennisnet.arena.client.domain.QuestDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
 import nl.kennisnet.arena.client.event.EventBus;
 import nl.kennisnet.arena.client.event.RefreshQuestEvent;
+import nl.kennisnet.arena.client.event.WallToggleEvent;
 import nl.kennisnet.arena.client.service.GWTQuestService;
 import nl.kennisnet.arena.client.service.GWTQuestServiceAsync;
 import nl.kennisnet.arena.client.widget.FormTablePanel;
@@ -15,6 +17,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
@@ -30,6 +33,7 @@ public class QuestDetailsPanel extends SidePanel implements
 	private TextBox designerBox;
 	private Panel content;
 	private FormTablePanel formPanel;
+	private CheckBox omheining;
 
 	public QuestDetailsPanel(boolean readOnly) {
 		super("ARena", "Vul hier de gegevens van de ARena in.", false);
@@ -53,8 +57,21 @@ public class QuestDetailsPanel extends SidePanel implements
 		formPanel = new FormTablePanel();
 		designerBox = new TextBox();
 		questNameBox = new TextBox();
+		omheining = new CheckBox();
 		formPanel.addField(new Label("naam"), questNameBox);
 		formPanel.addField(new Label("email"), designerBox);
+		formPanel.addField(new Label("omheining"), omheining);
+		
+		omheining.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				WallToggleEvent wallToggleEvent = new WallToggleEvent();
+	            wallToggleEvent.setWallUp(omheining.getValue());
+	            EventBus.get().fireEvent(wallToggleEvent);
+				
+			}
+		});
 	}
 
 	private void refreshValues() {
@@ -137,6 +154,7 @@ public class QuestDetailsPanel extends SidePanel implements
 
 							@Override
 							public void onFailure(Throwable arg0) {
+								arg0.printStackTrace();
 								Window.alert("Er heeft zich een fout voorgedaan bij het opslaan van de Arena :"
 										+ arg0.getMessage());
 								showPanel();

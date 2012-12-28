@@ -33,11 +33,11 @@ svn:wc:ra_dav:version-url
 V 109
 /svn/knsar/!svn/ver/207/Trunk/arena-server/src/main/java/nl/kennisnet/arena/client/domain/QuestItemTypes.java
 END
-QuestItemDTO.java
+PoiDTO.java
 K 25
 svn:wc:ra_dav:version-url
 V 107
-/svn/knsar/!svn/ver/228/Trunk/arena-server/src/main/java/nl/kennisnet/arena/client/domain/QuestItemDTO.java
+/svn/knsar/!svn/ver/228/Trunk/arena-server/src/main/java/nl/kennisnet/arena/client/domain/PoiDTO.java
 END
 LogDTO.java
 K 25

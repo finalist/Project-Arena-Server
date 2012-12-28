@@ -12,7 +12,7 @@ public class QuestDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String name;
-	private List<QuestItemDTO> items;
+	private List<PoiDTO> items;
 	private Long id;
 	private String emailOwner;
 	private SimplePolygon border;
@@ -28,17 +28,17 @@ public class QuestDTO implements Serializable {
 		this.name = name;
 	}
 
-	public List<QuestItemDTO> getItems() {
+	public List<PoiDTO> getItems() {
 		return items;
 	}
 
-	public void setItems(List<QuestItemDTO> items) {
+	public void setItems(List<PoiDTO> items) {
 		this.items = items;
 	}
 
-	public void addItem(QuestItemDTO item) {
+	public void addItem(PoiDTO item) {
 		if (items == null) {
-			items = new ArrayList<QuestItemDTO>();
+			items = new ArrayList<PoiDTO>();
 		}
 		items.add(item);
 	}
@@ -67,7 +67,7 @@ public class QuestDTO implements Serializable {
 		this.border = border;
 	}
 
-	public void removeItem(QuestItemDTO itemDTO) {
+	public void removeItem(PoiDTO itemDTO) {
 		items.remove(itemDTO);
 	}
 

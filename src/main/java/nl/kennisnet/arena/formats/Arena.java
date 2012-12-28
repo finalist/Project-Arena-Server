@@ -10,6 +10,7 @@ import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.model.Question.TYPE;
+import nl.kennisnet.arena.model.Type;
 import nl.kennisnet.arena.model.Video;
 import nl.kennisnet.arena.services.factories.GeomUtil;
 import nl.kennisnet.arena.utils.ArenaDataBean;
@@ -68,30 +69,35 @@ public class Arena {
 			String baseUrl, ArenaDataBean data) {
 
 		for (Positionable positionable : positionables) {
-			if (positionable instanceof Object3D) {
-				Result result = new Result();
-				result = buildResultData(result, positionable);
-				result = buildWebPage(result, positionable, baseUrl, data);
-				result = buildPositionableType(result, positionable);
-				result = buildObjectImage(result, positionable, baseUrl, data);
-				result = build3dData(result, positionable);
-				result = buildDistance(result, positionable, data);
-				results.add(result);
-				numResults++;
-			} else {
-				Result result = new Result();
-				result = buildResultData(result, positionable);
-				result = buildWebPage(result, positionable, baseUrl, data);
-				result = buildPositionableType(result, positionable);
-				result = buildObjectImage(result, positionable, baseUrl, data);
-				result = buildDistance(result, positionable, data);
-				results.add(result);
-				numResults++;
+			for(Type t : positionable.getElements()) {
+				
 			}
+				
+//			if (positionable instanceof Object3D) {
+//				Result result = new Result();
+//				result = buildResultData(result, positionable);
+//				result = buildWebPage(result, positionable, baseUrl, data);
+//				result = buildPositionableType(result, positionable);
+//				result = buildObjectImage(result, positionable, baseUrl, data);
+//				result = build3dData(result, positionable);
+//				result = buildDistance(result, positionable, data);
+//				results.add(result);
+//				numResults++;
+//			}
+//			} else {
+//				Result result = new Result();
+//				result = buildResultData(result, positionable);
+//				result = buildWebPage(result, positionable, baseUrl, data);
+//				result = buildPositionableType(result, positionable);
+//				result = buildObjectImage(result, positionable, baseUrl, data);
+//				result = buildDistance(result, positionable, data);
+//				results.add(result);
+//				numResults++;
+//			}
 		}
 	}
 
-	private Result build3dData(Result result, Positionable positionable) {
+	private Result build3dData(Result result, Type positionable) {
 		result.setSchaal(((Object3D) positionable).getSchaal());
 		result.setBlended(((Object3D) positionable).isBlended() ? 0 : 1);
 		result.setRotX(((Object3D) positionable).getRotation()[0]);
@@ -108,7 +114,7 @@ public class Arena {
 		return result;
 	}
 
-	private Result buildWebPage(Result result, Positionable positionable,
+	private Result buildWebPage(Result result, Type positionable,
 			String baseUrl, ArenaDataBean data) {
 		if (webPageNeeded(data, positionable)) {
 			result.setHasDetailPage(true);
@@ -137,7 +143,7 @@ public class Arena {
 	}
 
 	private Result buildPositionableType(Result result,
-			Positionable positionable) {
+			Type positionable) {
 		if (positionable instanceof Image) {
 			result.setObjectType("image");
 		} else if (positionable instanceof Information) {
@@ -152,7 +158,7 @@ public class Arena {
 		return result;
 	}
 
-	private Result buildObjectImage(Result result, Positionable positionable,
+	private Result buildObjectImage(Result result, Type positionable,
 			String baseUrl, ArenaDataBean data) {
 		if (!webPageNeeded(data, positionable)) {
 			result.setObjectUrl(baseUrl + "images/too-far.png");
@@ -178,7 +184,7 @@ public class Arena {
 		return result;
 	}
 
-	private String buildQuestionImage(Positionable positionable,
+	private String buildQuestionImage(Type positionable,
 			ParticipantAnswer participantAnswer, String baseUrl) {
 		String objectUrl = "";
 		Question question = (Question) positionable;
@@ -209,25 +215,27 @@ public class Arena {
 		return baseUrl + "images/information.png";
 	}
 
-	private String buildPhotoImage(Positionable positionable, String baseUrl,
+	private String buildPhotoImage(Type positionable, String baseUrl,
 			ArenaDataBean data) {
 		String url = data.getParticipantService().getImageUrl(
 				(positionable).getId());
 		return url;
 	}
 
-	private Result buildDistance(Result result, Positionable positionable,
+	private Result buildDistance(Result result, Type positionable,
 			ArenaDataBean data) {
+		Positionable pos = positionable.getPoi();
 		if (data.isOffline()) {
-			result.setRadius(positionable.getLocation().getRadius());
+			result.setRadius(pos.getLocation().getRadius());
 		}
 		return result;
 	}
 
-	private boolean webPageNeeded(ArenaDataBean data, Positionable positionable) {
-		if (positionable.getLocation().getVisibleRadius() == null
+	private boolean webPageNeeded(ArenaDataBean data, Type positionable) {
+		 Positionable pos = positionable.getPoi();
+		if (pos.getLocation().getVisibleRadius() == null
 				|| GeomUtil.calculateDistanceInMeters(data.getLocation(),
-						positionable.getLocation().getPoint()) < positionable
+						pos.getLocation().getPoint()) < pos
 						.getLocation().getVisibleRadius()) {
 			return true;
 		}

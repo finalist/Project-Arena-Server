@@ -1,7 +1,7 @@
 package nl.kennisnet.arena.client.widget;
 
-import nl.kennisnet.arena.client.dialog.DialogSelector;
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
+import nl.kennisnet.arena.client.dialog.MainDialog;
+import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.QuestItemTypes;
 import nl.kennisnet.arena.client.domain.SimplePoint;
 import nl.kennisnet.arena.client.event.ClickPolygonEvent;
@@ -24,7 +24,7 @@ public class QuestItemMarker {
 	private Polygon[] polygon = new Polygon[2];
 	private Marker marker;
 
-	public QuestItemMarker(final GoogleMap map, final QuestItemDTO item, final boolean readonly) {
+	public QuestItemMarker(final GoogleMap map, final PoiDTO item, final boolean readonly) {
 	  marker = Marker.create();
 	  marker.setPosition(LatLng.create(item.getPoint().getLatitude(), item.getPoint().getLongitude()));
 	  marker.setOptions(createOptions(item));    
@@ -51,7 +51,8 @@ public class QuestItemMarker {
 		
 		@Override
 		public void handle(MouseEvent event) {
-			 DialogSelector.showRelevantDialog(item.getTypeName(), item, readonly,false);
+			new MainDialog(item, readonly, false);
+			// DialogSelector.showRelevantDialog(item.getTypeName(), item, readonly,false);
 			
 		}
 	});
@@ -94,7 +95,7 @@ public class QuestItemMarker {
 		return mvcArray;
 	}
 
-	private static MarkerOptions createOptions(QuestItemDTO item) {
+	private static MarkerOptions createOptions(PoiDTO item) {
 		MarkerOptions options = MarkerOptions.create();
 		MarkerImage icon = QuestItemTypes.getIcon(item.getTypeName());
 		options.setIcon(icon);

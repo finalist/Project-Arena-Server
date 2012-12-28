@@ -3,9 +3,12 @@ package nl.kennisnet.arena.client.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.kennisnet.arena.client.domain.QuestItemDTO;
-import nl.kennisnet.arena.client.domain.QuestItemDTO.TYPE;
+import nl.kennisnet.arena.client.domain.PoiDTO;
+import nl.kennisnet.arena.client.elements.QuestionElement;
+import nl.kennisnet.arena.client.elements.QuestionElement.TYPE;
+import nl.kennisnet.arena.client.widget.ExtendedTextBox;
 import nl.kennisnet.arena.client.widget.FormTablePanel;
+import nl.kennisnet.arena.client.elements.QuestionElement;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -16,17 +19,25 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class QuestionQuestItemDialog extends StoryQuestItemDialog {
+public class QuestionQuestItemDialog extends QuestItemDialog {
 
 	private TextBox[] answersTextBoxs;
 	private RadioButton[] correctAnswer;
 	private RadioButton[] questionType;
-	
+	private QuestionElement element;
+	private ExtendedTextBox storyTextBox;
+
+	private static int MAX_CHARACTERS = 160;
+
 	private List<FormTablePanel.Element> multipleChoiceElements;
 
-	public QuestionQuestItemDialog(final QuestItemDTO itemDTO,
-			boolean readOnlyDialog, boolean create) {
+	public QuestionQuestItemDialog(final PoiDTO itemDTO,
+			QuestionElement element, boolean readOnlyDialog, boolean create) {
 		super(itemDTO, readOnlyDialog, create);
+		this.element = element;
+		if (this.element != null) {
+			fillFormFromItem(element);
+		}
 		setText("Vraag details");
 	}
 
@@ -41,7 +52,8 @@ public class QuestionQuestItemDialog extends StoryQuestItemDialog {
 			panel.add(answersTextBoxs[i]);
 			correctAnswer[i] = new RadioButton("correctAnswer");
 			panel.add(correctAnswer[i]);
-			multipleChoiceElements.add(new FormTablePanel.Element("Antwoord " + (i + 1), panel));
+			multipleChoiceElements.add(new FormTablePanel.Element("Antwoord "
+					+ (i + 1), panel));
 		}
 		return multipleChoiceElements;
 	}
@@ -76,8 +88,8 @@ public class QuestionQuestItemDialog extends StoryQuestItemDialog {
 		});
 		return questionType[0];
 	}
-	
-	private RadioButton createOpenQuestionRadioButtion(boolean visible){
+
+	private RadioButton createOpenQuestionRadioButtion(boolean visible) {
 		questionType[1] = new RadioButton("questionType");
 		questionType[1].setValue(visible);
 		questionType[1].addClickHandler(new ClickHandler() {
@@ -85,12 +97,12 @@ public class QuestionQuestItemDialog extends StoryQuestItemDialog {
 			public void onClick(ClickEvent arg0) {
 				toggleMultipleChoiceElementsVisibility(false);
 			}
-		});		
+		});
 		return questionType[1];
 	}
-	
-	private void toggleMultipleChoiceElementsVisibility(Boolean visible){
-		for(FormTablePanel.Element element: multipleChoiceElements){
+
+	private void toggleMultipleChoiceElementsVisibility(Boolean visible) {
+		for (FormTablePanel.Element element : multipleChoiceElements) {
 			element.getLabel().setVisible(visible);
 			element.getField().setVisible(visible);
 		}
@@ -99,23 +111,28 @@ public class QuestionQuestItemDialog extends StoryQuestItemDialog {
 	@Override
 	protected List<FormTablePanel.Element> createFormPanels() {
 		List<FormTablePanel.Element> result = new ArrayList<FormTablePanel.Element>();
-		result.add(createNamePanel());
+		// result.add(createNamePanel());
 		result.add(createQuestionTypePanel());
 		result.add(createStoryPanel("Vraag"));
 		result.addAll(createAnswerPanels());
-		result.add(createRadiusPanel());
-	      result.add(createVisibleRadiusPanel());
+		// result.add(createRadiusPanel());
+		// result.add(createVisibleRadiusPanel());
 		return result;
 	}
 
-	protected void fillFormFromItem(QuestItemDTO itemDTO) {
-		super.fillFormFromItem(itemDTO);
-		if(itemDTO.getQuestionTypeAsEnum() == TYPE.MULTIPLE_CHOICE){
-			answersTextBoxs[0].setText(itemDTO.getOption1());
-			answersTextBoxs[1].setText(itemDTO.getOption2());
-			answersTextBoxs[2].setText(itemDTO.getOption3());
-			answersTextBoxs[3].setText(itemDTO.getOption4());
-		} else if(itemDTO.getQuestionTypeAsEnum() == TYPE.OPEN_QUESTION){
+	protected FormTablePanel.Element createStoryPanel(String title) {
+		storyTextBox = new ExtendedTextBox(80, 4, MAX_CHARACTERS);
+		return new FormTablePanel.Element(title, storyTextBox);
+	}
+
+	protected void fillFormFromItem(QuestionElement element) {
+		// super.fillFormFromItem(itemDTO);
+		if (element.getQuestionTypeAsEnum() == TYPE.MULTIPLE_CHOICE) {
+			answersTextBoxs[0].setText(element.getOption1());
+			answersTextBoxs[1].setText(element.getOption2());
+			answersTextBoxs[2].setText(element.getOption3());
+			answersTextBoxs[3].setText(element.getOption4());
+		} else if (element.getQuestionTypeAsEnum() == TYPE.OPEN_QUESTION) {
 			questionType[0].setValue(false);
 			questionType[1].setValue(true);
 			toggleMultipleChoiceElementsVisibility(false);
@@ -123,8 +140,8 @@ public class QuestionQuestItemDialog extends StoryQuestItemDialog {
 		if (correctAnswer != null) {
 			for (int i = 0; i < correctAnswer.length; i++) {
 				RadioButton correct = correctAnswer[i];
-				if (itemDTO.getCorrectOption() != null
-						&& itemDTO.getCorrectOption() == i + 1
+				if (element.getCorrectOption() != null
+						&& element.getCorrectOption() == i + 1
 						&& correct != null) {
 					correct.setValue(true);
 				} else {
@@ -133,31 +150,45 @@ public class QuestionQuestItemDialog extends StoryQuestItemDialog {
 
 			}
 		}
+		storyTextBox.setText(element.getDescription());
 	}
 
-	protected QuestItemDTO fillItemFromForm(QuestItemDTO itemDTO) {
-		QuestItemDTO result = super.fillItemFromForm(itemDTO);
-		
-		if(questionType[0].getValue() == true){
-			itemDTO.setOption1(answersTextBoxs[0].getText());
-			itemDTO.setOption2(answersTextBoxs[1].getText());
-			itemDTO.setOption3(answersTextBoxs[2].getText());
-			itemDTO.setOption4(answersTextBoxs[3].getText());
-			itemDTO.setQuestionType(0);
-		}else{
-			itemDTO.setQuestionType(1);
-		}		
+	protected PoiDTO fillItemFromForm(PoiDTO itemDTO) {
+		PoiDTO result = super.fillItemFromForm(itemDTO);
+		QuestionElement element =  new QuestionElement();
+
+		if (questionType[0].getValue() == true) {
+			element.setOption1(answersTextBoxs[0].getText());
+			element.setOption2(answersTextBoxs[1].getText());
+			element.setOption3(answersTextBoxs[2].getText());
+			element.setOption4(answersTextBoxs[3].getText());
+			element.setQuestionType(0);
+
+			// itemDTO.setOption1(answersTextBoxs[0].getText());
+			// itemDTO.setOption2(answersTextBoxs[1].getText());
+			// itemDTO.setOption3(answersTextBoxs[2].getText());
+			// itemDTO.setOption4(answersTextBoxs[3].getText());
+			// itemDTO.setQuestionType(0);
+		} else {
+			element.setQuestionType(1);
+			// itemDTO.setQuestionType(1);
+		}
 
 		if (correctAnswer != null) {
 			for (int i = 0; i < correctAnswer.length; i++) {
 				RadioButton correct = correctAnswer[i];
 				if (correct != null && correct.getValue()) {
-					itemDTO.setCorrectOption(i + 1);
+					element.setCorrectOption(i + 1);
+					// itemDTO.setCorrectOption(i + 1);
 				}
 			}
 		}
 
+		element.setDescription(storyTextBox.getText());
+		result.getElements().add(element);
 		return result;
 	}
+
+
 
 }

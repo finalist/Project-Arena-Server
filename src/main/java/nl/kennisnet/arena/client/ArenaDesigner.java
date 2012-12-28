@@ -23,7 +23,7 @@ public class ArenaDesigner extends HorizontalPanel implements ResizablePanel {
       questDetailsPanel = new QuestDetailsPanel(false);
       itemPanel = new QuestItemsPanel(false);
 
-      add(leftPanel);
+      //add(leftPanel);
       add(mapPanel);
       add(createRightPanel());
    }
@@ -43,8 +43,8 @@ public class ArenaDesigner extends HorizontalPanel implements ResizablePanel {
    @Override
    public void resize(int x, int y) {
       // leftPanel.resize(150, y);
-      itemPanel.resize(300, y - 200);
-      mapPanel.resize(x - 450, y);
+      itemPanel.resize(150, y - 200);
+      mapPanel.resize(x - 320, y);
    }
 
 }

@@ -1,9 +1,11 @@
 package nl.kennisnet.arena.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 @Entity
-public class Image extends Positionable implements DomainObject {
+public class Image extends Type {
 
 	private String url;
 
