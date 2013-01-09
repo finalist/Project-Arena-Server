@@ -52,8 +52,9 @@ public class QuestDetailsPanel extends SidePanel implements
 		formPanel = new FormTablePanel();
 		designerBox = new TextBox();
 		questNameBox = new TextBox();
-		formPanel.addField(new Label("naam"), questNameBox);
-		formPanel.addField(new Label("email"), designerBox);
+		formPanel.addField(new Label("Naam"), questNameBox);
+		formPanel.addField(new Label("Email"), designerBox);
+
 	}
 
 	private void refreshValues() {
