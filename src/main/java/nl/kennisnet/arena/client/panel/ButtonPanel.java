@@ -27,7 +27,7 @@ public class ButtonPanel extends VerticalPanel implements ResizablePanel {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				Window.open("/apks.html", "_blank", "");
+				Window.open("/arena-server/apks.html", "_blank", "");
 
 			}
 		});
