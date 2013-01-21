@@ -140,7 +140,6 @@ public class DomainObjectFactory {
 						}
 					}
 				} else {
-
 					Positionable positionable = create(PoiDTO, quest);
 					positionable.setQuest(quest);
 					quest.getPositionables().add(positionable);
