@@ -1,25 +1,30 @@
 package nl.kennisnet.arena.model;
 
-import java.io.Serializable;
-
 import javax.persistence.CascadeType;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 @Entity
 public class ParticipantAnswer implements DomainObject {
 
 	@Id
-	private ParticipationAnswerPrimaryKey participationAnswerPrimaryKey = new ParticipationAnswerPrimaryKey();
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 	
 	private Integer answer;
 	
 	private String textAnswer;
+	
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	private Participation participation;
+	
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	private Question question;
 	
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Round round;
@@ -31,38 +36,32 @@ public class ParticipantAnswer implements DomainObject {
 		UNANSWERED
 	}
 	
-	private String result = Result.UNANSWERED.name();
+	private String result = Result.UNANSWERED.name();	
 	
-	public ParticipationAnswerPrimaryKey getParticipationAnswerPrimaryKey() {
-		return participationAnswerPrimaryKey;
+	public Long getId() {
+		return id;
 	}
-	
-	public void setParticipationAnswerPrimaryKey(
-			ParticipationAnswerPrimaryKey participationAnswerPrimaryKey) {
-		this.participationAnswerPrimaryKey = participationAnswerPrimaryKey;
+
+	public void setId(Long id) {
+		this.id = id;
 	}
-	
-	public long getParticipationId() {
-		return participationAnswerPrimaryKey.getParticipationId();
-	}
-	
+
 	public Participation getParticipation() {
-		return participationAnswerPrimaryKey.participation;
+		return participation;
 	}
-	
+
 	public void setParticipation(Participation participation) {
-		participationAnswerPrimaryKey.participation = participation;
+		this.participation = participation;
 	}
-	
-	
+
 	public Question getQuestion() {
-		return participationAnswerPrimaryKey.question;
+		return question;
 	}
 
 	public void setQuestion(Question question) {
-		participationAnswerPrimaryKey.question = question;
-	}		
-	
+		this.question = question;
+	}
+
 	public void setAnswer(Integer answer) {
 		this.answer = answer;
 	}
@@ -98,52 +97,29 @@ public class ParticipantAnswer implements DomainObject {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof ParticipantAnswer){
-			if( ((ParticipantAnswer)obj).getParticipationId() == (this.getParticipationId())
-					&& ((ParticipantAnswer)obj).getQuestion().equals(this.getQuestion()) ){
-				return true;
-			}
+		if (this == obj) {
+			return true;
 		}
-		return super.equals(obj);
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		ParticipantAnswer other = (ParticipantAnswer) obj;
+		return new EqualsBuilder().
+			append(this.answer, other.answer).
+			append(this.id, other.id).
+			append(this.participation, other.participation).
+			append(this.round, other.round).
+			append(this.question, other.question).
+			append(this.result, other.result).
+			append(this.textAnswer, other.textAnswer).isEquals();
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(this.getParticipationId()).append(this.getQuestion()).toHashCode();
-	}
-	
-	@Embeddable
-	public static class ParticipationAnswerPrimaryKey implements Serializable{
-
-		private static final long serialVersionUID = 1L;
-
-		@OneToOne(cascade = {CascadeType.ALL}, orphanRemoval=true)
-		private Participation participation;
-		
-		@OneToOne(cascade = {CascadeType.ALL}, orphanRemoval=true)
-		private Question question;
-		
-		
-		public Participation getParticipation() {
-			return participation;
-		}
-		
-		public void setParticipation(Participation participation) {
-			this.participation = participation;
-		}
-		
-		public long getParticipationId() {
-			return participation.getId();
-		}
-
-		public Question getQuestion() {
-			return question;
-		}
-
-		public void setQuestion(Question question) {
-			this.question = question;
-		}
-
+		return new HashCodeBuilder().append(answer).append(id).append(participation).append(question).append(result).append(round).append(textAnswer).toHashCode();
 	}
 	
 }

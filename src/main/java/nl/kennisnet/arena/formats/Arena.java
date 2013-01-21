@@ -22,7 +22,6 @@ public class Arena {
 	@SerializedName("stats")
 	private String stats;
 
-	@SuppressWarnings("unused")
 	@SerializedName("num_results")
 	private int numResults = 0;
 

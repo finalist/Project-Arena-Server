@@ -179,6 +179,7 @@ public class ParticipantService {
 
 		Set<Positionable> positionables = new HashSet<Positionable>(quest.getPositionables());
 		for(Positionable positionable : positionables){
+<<<<<<< HEAD
 			for(Type e : positionable.getElements()) {
 				if(e instanceof Question) {
 					for(ParticipantAnswer participantAnswer : ((Question) e).getParticipantAnswers()){
@@ -190,14 +191,14 @@ public class ParticipantService {
 							result.put(positionableId,result.get(positionableId) + 1);
 						}
 						
-
+=======
 			if(positionable instanceof Question){
 				Question question = (Question)positionable;
 				for(ParticipantAnswer participantAnswer : participantAnswerRepository.findParticipantAnswers(question)){
 					long positionableId = participantAnswer.getQuestion().getId();
 					if(result.get(positionableId) == null){
 						result.put(positionableId, 0);
-
+>>>>>>> 50423c321a4e1a6e036d4dc35267e4004ceab9ef
 					}
 				}
 			}
@@ -212,16 +213,16 @@ public class ParticipantService {
 
 		Set<Positionable> positionables = new HashSet<Positionable>(quest.getPositionables());
 		for(Positionable positionable : positionables){
-
+<<<<<<< HEAD
 			for(Type e : positionable.getElements()) {
 				Question question = (Question)e;
 				
 				for(ParticipantAnswer participantAnswer : question.getParticipantAnswers()){
-
+=======
 			if(positionable instanceof Question){
 				Question question = (Question)positionable;
 				for(ParticipantAnswer participantAnswer : participantAnswerRepository.findParticipantAnswers(question)){
-
+>>>>>>> 50423c321a4e1a6e036d4dc35267e4004ceab9ef
 					long teamId = participantAnswer.getParticipation().getParticipant().getId();
 					if(result.get(teamId) == null){
 						result.put(teamId, 0);
@@ -342,16 +343,16 @@ public class ParticipantService {
 		List<AnswerDTO> answerDTOs = new ArrayList<AnswerDTO>();
 		Quest quest = (Quest) questRepository.get(questId);
 		for(Positionable positionable : quest.getPositionables()){
-
+<<<<<<< HEAD
 			for(Type e : positionable.getElements()) {
 				Question question = (Question) e;
 				
 				for(ParticipantAnswer participantAnswer : question.getParticipantAnswers()){
-
+=======
 			if(positionable instanceof Question){
 				Question question = (Question)positionable;
 				for(ParticipantAnswer participantAnswer : participantAnswerRepository.findParticipantAnswers(question)){
-
+>>>>>>> 50423c321a4e1a6e036d4dc35267e4004ceab9ef
 					AnswerDTO answerDTO = new AnswerDTO();
 					if(question.getQuestionTypeAsEnum() == Question.TYPE.OPEN_QUESTION){
 						answerDTO.setTextAnswer(participantAnswer.getTextAnswer());

@@ -1,9 +1,12 @@
 package nl.kennisnet.arena.model;
 
 import javax.persistence.Entity;
+<<<<<<< HEAD
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+=======
+>>>>>>> 50423c321a4e1a6e036d4dc35267e4004ceab9ef
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;

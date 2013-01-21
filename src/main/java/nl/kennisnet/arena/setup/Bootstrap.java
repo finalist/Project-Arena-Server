@@ -6,18 +6,17 @@ import java.util.Map.Entry;
 import nl.kennisnet.arena.services.ParticipantService;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class Bootstrap {
 	private final Logger log = Logger.getLogger(Bootstrap.class);
 
-	private final ParticipantService participantService;
+	@Autowired
+	private ParticipantService participantService;
 	private Map<String, String> teams;
 
-	public Bootstrap(ParticipantService participantService) {
-		this.participantService = participantService;
-		
-		log.info("==> bootstrapper ready");
-	}
 
 	public void bootstrap() {
 		log.info("==> bootstrapping");

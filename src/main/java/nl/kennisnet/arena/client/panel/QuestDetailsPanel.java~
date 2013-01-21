@@ -2,7 +2,10 @@ package nl.kennisnet.arena.client.panel;
 
 
 import nl.kennisnet.arena.client.domain.QuestDTO;
+<<<<<<< HEAD
 import nl.kennisnet.arena.client.domain.PoiDTO;
+=======
+>>>>>>> 50423c321a4e1a6e036d4dc35267e4004ceab9ef
 import nl.kennisnet.arena.client.domain.QuestState;
 import nl.kennisnet.arena.client.event.EventBus;
 import nl.kennisnet.arena.client.event.RefreshQuestEvent;
@@ -57,7 +60,8 @@ public class QuestDetailsPanel extends SidePanel implements
 		formPanel = new FormTablePanel();
 		designerBox = new TextBox();
 		questNameBox = new TextBox();
-omheining = new CheckBox();
+<<<<<<< HEAD
+		omheining = new CheckBox();
 		formPanel.addField(new Label("naam"), questNameBox);
 		formPanel.addField(new Label("email"), designerBox);
 		formPanel.addField(new Label("omheining"), omheining);
@@ -72,11 +76,11 @@ omheining = new CheckBox();
 				
 			}
 		});
-
+=======
 		formPanel.addField(new Label("Naam"), questNameBox);
 		formPanel.addField(new Label("Email"), designerBox);
 
-
+>>>>>>> 50423c321a4e1a6e036d4dc35267e4004ceab9ef
 	}
 
 	private void refreshValues() {

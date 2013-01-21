@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import nl.kennisnet.arena.model.Location;
 import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.Participant;
+import nl.kennisnet.arena.model.ParticipantAnswer.Result;
 import nl.kennisnet.arena.model.Participation;
 import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
@@ -106,7 +107,7 @@ public class ParticipantAnswerRepositoryTest {
 	@Test
 	public void testGet() {
 		ParticipantAnswer participantAnswer = createObject();
-		ParticipantAnswer receivedAnswer = repository.get(participantAnswer.getParticipationAnswerPrimaryKey());		
+		ParticipantAnswer receivedAnswer = repository.get(participantAnswer.getId());		
 		assertThat(receivedAnswer, is(not(nullValue())));
 		System.out.println(receivedAnswer.getTextAnswer());
 	}
@@ -132,9 +133,176 @@ public class ParticipantAnswerRepositoryTest {
 		listToDelete.add(pa1);
 		listToDelete.add(pa3);
 		repository.delete(listToDelete);
-		assertThat(repository.get(pa1.getParticipationAnswerPrimaryKey()), is(nullValue()));
-		assertThat(repository.get(pa2.getParticipationAnswerPrimaryKey()), is(not(nullValue())));
-		assertThat(repository.get(pa3.getParticipationAnswerPrimaryKey()), is(nullValue()));
+		assertThat(repository.get(pa1.getId()), is(nullValue()));
+		assertThat(repository.get(pa2.getId()), is(not(nullValue())));
+		assertThat(repository.get(pa3.getId()), is(nullValue()));
 	}
 	
+	@Test
+	public void testFindParticipantAnswer() {
+		Participant participant = new Participant();
+		participant.setName("BLUE");
+		participant = participantRepository.merge(participant);
+		
+		Quest quest = new Quest();
+		quest.setEmailOwner("lol@lol.nl");
+		quest = questRepository.merge(quest);
+		
+		Round round = new Round();
+		round.setQuest(quest);
+		round = roundRepository.merge(round);
+		
+		Location location = new Location();
+		location = locationRepository.merge(location);
+		
+		Participation participation = new Participation();
+		participation.setParticipant(participant);
+		participation.setQuest(quest);
+		participation.setRound(round);
+		participation = participationRepository.merge(participation);
+		
+		Question question = new Question();
+		question.setQuest(quest);
+		question.setLocation(location);
+		question = (Question)positionableRepository.merge(question);
+		
+		ParticipantAnswer participantAnswer = new ParticipantAnswer();
+		participantAnswer.setParticipation(participation);
+		participantAnswer.setQuestion(question);
+		participantAnswer.setRound(round);
+		participantAnswer = repository.merge(participantAnswer);
+		repository.getAll();
+		repository.getSession().clear();
+		
+		ParticipantAnswer foundAnswer = repository.findParticipantAnswer(participation, question);
+		
+		assertThat(participantAnswer.getId(), is(foundAnswer.getId()));
+	}
+	
+	@Test
+	public void testFindParticipantAnswers() {
+		Participant participant = new Participant();
+		participant.setName("BLUE");
+		participant = participantRepository.merge(participant);
+		
+		Quest quest = new Quest();
+		quest.setEmailOwner("lol@lol.nl");
+		quest = questRepository.merge(quest);
+		
+		Round round = new Round();
+		round.setQuest(quest);
+		round = roundRepository.merge(round);
+		
+		Location location = new Location();
+		location = locationRepository.merge(location);
+		
+		Participation participation = new Participation();
+		participation.setParticipant(participant);
+		participation.setQuest(quest);
+		participation.setRound(round);
+		participation = participationRepository.merge(participation);
+		
+		Question question = new Question();
+		question.setQuest(quest);
+		question.setLocation(location);
+		question = (Question)positionableRepository.merge(question);
+
+		ParticipantAnswer participantAnswer = new ParticipantAnswer();
+		participantAnswer.setParticipation(participation);
+		participantAnswer.setQuestion(question);
+		participantAnswer.setRound(round);
+		participantAnswer.setTextAnswer("LOL1");
+		participantAnswer = repository.merge(participantAnswer);
+		
+		ParticipantAnswer participantAnswer2 = new ParticipantAnswer();
+		participantAnswer2.setParticipation(participation);
+		participantAnswer2.setQuestion(question);
+		participantAnswer2.setRound(round);
+		participantAnswer2.setTextAnswer("LOL2");
+		participantAnswer2 = repository.merge(participantAnswer2);
+		
+		repository.getAll();
+		
+		ParticipantAnswer foundAnswer = repository.findParticipantAnswers(question).get(1);
+		
+		assertThat(participantAnswer2, is(foundAnswer));
+	}
+	
+	@Test
+	public void testSaveAnswerApprove() {
+		//SETUP
+		Participant blauw = new Participant();
+		blauw.setName("Blauw");
+		blauw = participantRepository.merge(blauw);
+		
+		Quest quest = new Quest();
+		quest.setEmailOwner("email@email.nl");
+		quest = questRepository.merge(quest);
+		
+		Round round = new Round();
+		round.setName("Round");
+		round.setQuest(quest);
+		round = roundRepository.merge(round);
+		
+		quest.setActiveRound(round);
+		quest.getRounds().add(round);
+		quest = questRepository.merge(quest);
+		
+		Participation part1 = new Participation();
+		part1.setParticipant(blauw);
+		part1.setRound(round);
+		part1.setQuest(quest);
+		part1 = participationRepository.merge(part1);
+		
+		blauw.getParticipations().add(part1);
+		blauw = participantRepository.merge(blauw);
+		
+		//ADD QUESTION & ANSWER
+		Location location = new Location();
+		location = locationRepository.merge(location);
+		
+		Question question = new Question();
+		question.setName("The Question?");
+		question.setQuest(quest);
+		question.setQuestionType(1);
+		question.setLocation(location);
+		question = (Question)positionableRepository.merge(question);
+		
+		quest.getPositionables().add(question);
+		quest = questRepository.merge(quest);
+		
+		location.getPositionables().add(question);
+		location = locationRepository.merge(location);
+		
+		ParticipantAnswer answer1 = new ParticipantAnswer();
+		answer1.setTextAnswer("The Answer");
+		answer1.setQuestion(question);
+		answer1.setParticipation(part1);
+		answer1.setRound(round);
+		answer1 = repository.merge(answer1);
+
+		repository.getAll();
+		repository.getSession().clear();
+		
+		//CHECK ANSWER 
+		ParticipantAnswer participantAnswer = repository.findParticipantAnswer(part1, question);
+		participantAnswer.setResult(Result.INCORRECT.name());
+		participantAnswer = repository.merge(participantAnswer);
+		repository.getAll();
+		
+		System.out.println("RESULT: " + participantAnswer.getResult());
+	}
+	
+	public Question getQuestion(Long id, Quest quest) {
+		if (quest != null && quest.getPositionables() != null) {
+			Positionable pos = positionableRepository.get(id);
+			if (pos.getQuest().getId() == quest.getId()) {
+				if (pos instanceof Question) {
+					return (Question)pos;
+				}
+			}
+		}
+		return null;
+	}
+
 }

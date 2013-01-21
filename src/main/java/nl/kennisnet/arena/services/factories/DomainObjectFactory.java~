@@ -30,6 +30,10 @@ public class DomainObjectFactory {
 
 	public static Quest create(QuestDTO questDTO) {
 		Quest result = new Quest();
+<<<<<<< HEAD
+		// result.setId(questDTO.getId());
+=======
+>>>>>>> 50423c321a4e1a6e036d4dc35267e4004ceab9ef
 		result.setName(questDTO.getName());
 		result.setEmailOwner(questDTO.getEmailOwner());
 		if (questDTO.getItems() != null) {
@@ -127,7 +131,7 @@ public class DomainObjectFactory {
 		}
 
 		if (questDTO.getItems() != null) {
-
+<<<<<<< HEAD
 			for (PoiDTO PoiDTO : questDTO.getItems()) {
 				if (PoiDTO.getId() != null) {
 					System.out.println(">>>>>>>>>>>>>>>>>>> DTO ID: "
@@ -137,13 +141,13 @@ public class DomainObjectFactory {
 						if (found.getId().equals(PoiDTO.getId())) {
 							System.out.println("GEVONDEN");
 							updatePositionable(found, PoiDTO);
-
+=======
 			for (QuestItemDTO questItemDTO : questDTO.getItems()) {
 				if (questItemDTO.getId() != null) {
 					for (Positionable found : quest.getPositionables()) {
 						if (found.getId().equals(questItemDTO.getId())) {
 							updatePositionable(found, questItemDTO);
-
+>>>>>>> 50423c321a4e1a6e036d4dc35267e4004ceab9ef
 						}
 					}
 				} else {
