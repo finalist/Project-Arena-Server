@@ -1,15 +1,14 @@
 package nl.kennisnet.arena.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.hibernate.annotations.Type;
 
 import com.vividsolutions.jts.geom.Point;
@@ -17,20 +16,28 @@ import com.vividsolutions.jts.geom.Point;
 @Entity
 public class Location {
 
-	@Id @GeneratedValue(strategy=GenerationType.AUTO)
+	@Id 
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
+	
 	@Type(type="org.hibernatespatial.GeometryUserType")
 	private Point point;
+	
 	private Double alt;
 	private Double radius;
 	private Double visibleRadius;
 	private Boolean onRadar;
 	
-	@OneToMany
-	private List<Positionable> positionables = new ArrayList<Positionable>();
+	private String name;
+	private Boolean consumable;
+	
+	@ManyToOne(optional = false)
+	private Quest quest;
+	
+	@OneToMany(mappedBy = "location")
+	private List<ContentElement> elements;	
 	
 	public Location() {
-		
 	}
 	
 	public Location(Point point, Double alt, Double radius, Double visibleRadius) {
@@ -89,14 +96,6 @@ public class Location {
 		return visibleRadius;
 	}
 
-	public void setPositionables(List<Positionable> positionables) {
-		this.positionables = positionables;
-	}
-
-	public List<Positionable> getPositionables() {
-		return positionables;
-	}
-
 	public Double getAlt() {
 		return alt;
 	}
@@ -105,22 +104,35 @@ public class Location {
 		this.alt = alt;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if(obj instanceof Location){
-			Location location = (Location)obj;
-			if(location.getPoint().equals(this.getPoint())){
-				return true;
-			}
-		}
-		return false;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Boolean getConsumable() {
+		return consumable;
+	}
+
+	public void setConsumable(Boolean consumable) {
+		this.consumable = consumable;
+	}
+
+	public List<ContentElement> getElements() {
+		return elements;
 	}
 	
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(this.getPoint()).toHashCode();
+	public void setElements(List<ContentElement> elements) {
+		this.elements = elements;
 	}
 	
-	
+	public void setQuest(Quest quest) {
+		this.quest = quest;
+	}
+	public Quest getQuest() {
+		return quest;
+	}
 	
 }

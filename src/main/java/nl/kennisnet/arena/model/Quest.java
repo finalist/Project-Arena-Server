@@ -34,7 +34,7 @@ public class Quest implements DomainObject {
 	private String emailOwner;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "quest", orphanRemoval=true)
-	private List<Positionable> positionables = new ArrayList<Positionable>();
+	private List<Location> locations = new ArrayList<Location>();
 
 	@OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy="quest", orphanRemoval=true)
 	private List<Round> rounds = new ArrayList<Round>();
@@ -78,58 +78,55 @@ public class Quest implements DomainObject {
 		return emailOwner;
 	}
 
-	public List<Positionable> getPositionables() {
-		return positionables;
+	public List<Location> getLocations() {
+		return locations;
+	}
+	
+	public void setLocations(List<Location> locations) {
+		this.locations = locations;
 	}
 
 	/**
-	 * Return the positiables that are visible on the radar.
+	 * Return the locations that are visible on the radar.
+	 * 
+	 * @param selectedPoint
+	 * @return
+	 * Replace with query
+	 */
+	@Deprecated
+	public List<Location> getLocationsForRadar(Point selectedPoint) {
+		List<Location> filteredLocations = new ArrayList<Location>();
+
+		for (Location location : locations) {
+			Point point = location.getPoint();
+
+			double dist = GeomUtil.calculateDistanceInMeters(point,selectedPoint);
+			if (dist <= location.getRadius() && dist > HOTZONE_RADIUS) {
+				filteredLocations.add(location);
+			}
+		}
+
+		return filteredLocations;
+	}
+
+	/**
+	 * Return the locations that are visible on the radar.
 	 * 
 	 * @param selectedPoint
 	 * @return
 	 */
-	public List<Positionable> getPositionablesForRadar(Point selectedPoint) {
-		List<Positionable> filteredPositionables = new ArrayList<Positionable>();
+	public List<Location> getVisiblePositionables(Point selectedPoint) {
+		List<Location> filteredPositionables = new ArrayList<Location>();
 
-		for (Positionable positionable : positionables) {
-			Point point = positionable.getLocation().getPoint();
+		for (Location location : locations) {
+			Point point = location.getPoint();
 
-			double dist = GeomUtil.calculateDistanceInMeters(point,
-					selectedPoint);
-			if (dist <= positionable.getLocation().getRadius()
-					&& dist > HOTZONE_RADIUS) {
-				filteredPositionables.add(positionable);
+			double dist = GeomUtil.calculateDistanceInMeters(point,selectedPoint);
+			if (dist <= location.getRadius()) {
+				filteredPositionables.add(location);
 			}
 		}
-
 		return filteredPositionables;
-	}
-
-	/**
-	 * Return the positiables that are visible on the radar.
-	 * 
-	 * @param selectedPoint
-	 * @return
-	 */
-	public List<Positionable> getVisiblePositionables(Point selectedPoint) {
-		List<Positionable> filteredPositionables = new ArrayList<Positionable>();
-
-		for (Positionable positionable : positionables) {
-			Point point = positionable.getLocation().getPoint();
-
-			double dist = GeomUtil.calculateDistanceInMeters(point,
-					selectedPoint);
-			// if (dist <= HOTZONE_RADIUS) {
-			if (dist <= positionable.getLocation().getRadius()) {
-				filteredPositionables.add(positionable);
-			}
-		}
-
-		return filteredPositionables;
-	}
-
-	public void setPositionables(List<Positionable> positionables) {
-		this.positionables = positionables;
 	}
 
 	public Polygon getBorder() {

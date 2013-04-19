@@ -30,7 +30,7 @@ public class ParticipationLog implements DomainObject {
 	private Point location;
 
 	@ManyToOne
-	private Positionable positionable;
+	private ContentElement element;
 	private String answer;
 
 	public ParticipationLog() {
@@ -45,23 +45,23 @@ public class ParticipationLog implements DomainObject {
 		this.location = location;
 	}
 
-	public ParticipationLog(final Participation participation, final Date time, final String action, final Point location, final Positionable positionable) {
+	public ParticipationLog(final Participation participation, final Date time, final String action, final Point location, final ContentElement element) {
 		super();
 		this.participation = participation;
 		this.time = time;
 		this.action = action;
 		this.location = location;
-		this.positionable = positionable;
+		this.element = element;
 	}
 
-	public ParticipationLog(final Participation participation, final Date time, final String action, final Point location, final Positionable positionable,
+	public ParticipationLog(final Participation participation, final Date time, final String action, final Point location, final ContentElement element,
 			final String answer) {
 		super();
 		this.participation = participation;
 		this.time = time;
 		this.action = action;
 		this.location = location;
-		this.positionable = positionable;
+		this.element = element;
 		this.answer = answer;
 	}
 
@@ -81,10 +81,14 @@ public class ParticipationLog implements DomainObject {
 		return action;
 	}
 
-	public Positionable getPositionable() {
-		return positionable;
+	public ContentElement getElement() {
+		return element;
 	}
-
+	
+	public void setElement(ContentElement element) {
+		this.element = element;
+	}
+	
 	public String getAnswer() {
 		return answer;
 	}
@@ -105,9 +109,6 @@ public class ParticipationLog implements DomainObject {
 		this.action = action;
 	}
 
-	public void setPositionable(Positionable positionable) {
-		this.positionable = positionable;
-	}
 
 	public void setAnswer(String answer) {
 		this.answer = answer;

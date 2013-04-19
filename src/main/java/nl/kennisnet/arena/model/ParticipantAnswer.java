@@ -26,9 +26,6 @@ public class ParticipantAnswer implements DomainObject {
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Question question;
 	
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	private Round round;
-	
 	public enum Result{
 		CORRECT,
 		INCORRECT,
@@ -87,14 +84,6 @@ public class ParticipantAnswer implements DomainObject {
 		return result;
 	}
 	
-	public void setRound(Round round) {
-		this.round = round;
-	}
-	
-	public Round getRound() {
-		return round;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -111,7 +100,6 @@ public class ParticipantAnswer implements DomainObject {
 			append(this.answer, other.answer).
 			append(this.id, other.id).
 			append(this.participation, other.participation).
-			append(this.round, other.round).
 			append(this.question, other.question).
 			append(this.result, other.result).
 			append(this.textAnswer, other.textAnswer).isEquals();
@@ -119,7 +107,7 @@ public class ParticipantAnswer implements DomainObject {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder().append(answer).append(id).append(participation).append(question).append(result).append(round).append(textAnswer).toHashCode();
+		return new HashCodeBuilder().append(answer).append(id).append(participation).append(question).append(result).append(textAnswer).toHashCode();
 	}
 	
 }

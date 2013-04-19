@@ -4,15 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.configuration.Configuration;
-
-import nl.kennisnet.arena.client.elements.Element;
+import nl.kennisnet.arena.model.ContentElement;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
 import nl.kennisnet.arena.model.Object3D;
-import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Question;
-import nl.kennisnet.arena.model.Type;
 import nl.kennisnet.arena.model.Video;
 
 public class Item {
@@ -28,12 +24,12 @@ public class Item {
 	// image or video type attribute:
 	private String url;
 
-	public Item(Type positionable, String submitUrl) {
+	public Item(ContentElement positionable, String submitUrl) {
 		setType(positionable);
 		this.submitUrl = submitUrl;
 	}
 
-	public void setType(Type type) {
+	public void setType(ContentElement type) {
 		if (type instanceof Question) {
 			fillWithQuestion((Question) type);
 		}

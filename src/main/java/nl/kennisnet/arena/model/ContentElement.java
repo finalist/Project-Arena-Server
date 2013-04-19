@@ -7,32 +7,31 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Transient;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Type {
+public class ContentElement {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
-	private Long ID;
+	private Long id;
 
 	@ManyToOne
-	private Positionable poi;
+	private Location location;
 
-	public Positionable getPoi() {
-		if(poi == null) {
-			poi = new Positionable();
-		}
-		return poi;
+	public Location getLocation() {
+		return location;
 	}
-
-	public void setPoi(Positionable poi) {
-		this.poi = poi;
+	
+	public void setLocation(Location location) {
+		this.location = location;
 	}
-
+	
 	public Long getId() {
-		return ID;
+		return id;
+	}
+	
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

@@ -26,8 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/configuration.xml",
-		"classpath:/integration.xml", "classpath:/integration-test.xml",
-		"classpath:/services.xml", "classpath:arena-servlet-test.xml" })
+		"classpath:/integration.xml", "classpath:/integration-test.xml"})
 @Transactional
 public class ImageRepositoryTest {
 
@@ -49,14 +48,16 @@ public class ImageRepositoryTest {
 	}
 
 	private Image createObject(String url) {
-		Image image = new Image();
+        Quest quest = new Quest();
+        quest.setEmailOwner("email@email.nl");
+        quest = questRepository.merge(quest);
+	    
 		Location location = new Location();
+        location.setQuest(quest);
 		location = locationRepository.merge(location);
-		image.getPoi().setLocation(location);
-		Quest quest = new Quest();
-		quest.setEmailOwner("email@email.nl");
-		quest = questRepository.merge(quest);
-		image.getPoi().setQuest(quest);
+        
+		Image image = new Image();
+		image.setLocation(location);
 		image.setUrl(url);
 		image = repository.merge(image);
 		return image;

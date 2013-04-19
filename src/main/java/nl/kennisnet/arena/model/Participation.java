@@ -23,7 +23,6 @@ public class Participation implements DomainObject {
 	private int score;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy="participation")
-	// TODO: should probably be a SortedSet with ordering on timestamp
 	private List<ParticipationLog> participationLogs = new ArrayList<ParticipationLog>();
 	@ManyToOne(optional=false)
 	private Quest quest;

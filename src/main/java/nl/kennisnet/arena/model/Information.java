@@ -1,11 +1,9 @@
 package nl.kennisnet.arena.model;
 
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 
 @Entity
-public class Information extends Type {
+public class Information extends ContentElement {
 
 	private String text;
 

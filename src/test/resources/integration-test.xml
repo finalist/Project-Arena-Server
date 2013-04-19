@@ -25,22 +25,8 @@
 		destroy-method="destroy">
 		<property name="configurationClass" value="org.hibernate.cfg.AnnotationConfiguration" />
 
-		<property name="annotatedClasses">
-			<list>
-				<value>nl.kennisnet.arena.model.Positionable</value>
-			</list>
-		</property>
+		<property name="packagesToScan" value="nl.kennisnet.arena.model.**" />
 
-		<property name="packagesToScan">
-			<list>
-				<value>nl.kennisnet.arena.model.**</value>
-			</list>
-		</property>
-		<property name="annotatedPackages">
-			<list>
-				<value>nl.kennisnet.arena.model</value>
-			</list>
-		</property>
 		<property name="dataSource" ref="dataSource" />
 
 		<property name="hibernateProperties">

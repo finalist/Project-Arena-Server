@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 
 import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.widget.FormTablePanel;
-import nl.kennisnet.arena.model.Type;
+import nl.kennisnet.arena.model.ContentElement;
 
 import nl.kennisnet.arena.client.elements.VideoElement;
 import com.google.gwt.user.client.ui.Label;

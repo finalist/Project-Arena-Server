@@ -13,6 +13,7 @@ import geodb.GeoDB;
 import javax.sql.DataSource;
 
 import nl.kennisnet.arena.model.Location;
+import nl.kennisnet.arena.model.Quest;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,16 +25,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/configuration.xml",
-		"classpath:/integration.xml", "classpath:/integration-test.xml",
-		"classpath:/services.xml", "classpath:arena-servlet-test.xml" })
+		"classpath:/integration.xml", "classpath:/integration-test.xml"})
 @Transactional
 public class LocationRepositoryTest {
 
 	@Autowired
-	DataSource dataSource;
+	private DataSource dataSource;
 
 	@Autowired
-	LocationRepository repository;
+	private LocationRepository repository;
+	
+	@Autowired
+	private QuestRepository questRepository;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -41,8 +44,14 @@ public class LocationRepositoryTest {
 	}
 
 	private Location createObject() {
+        Quest quest = new Quest();
+        quest.setEmailOwner("email@email.nl");
+        quest = questRepository.merge(quest);
+	    
 		Location location = new Location();
+		location.setQuest(quest);
 		location = repository.merge(location);
+		
 		return location;
 	}
 	

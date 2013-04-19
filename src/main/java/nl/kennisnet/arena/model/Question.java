@@ -1,15 +1,12 @@
 package nl.kennisnet.arena.model;
 
 import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 @Entity
-public class Question extends Type {
+public class Question extends ContentElement {
 
 	public enum TYPE {
 		OPEN_QUESTION, MULTIPLE_CHOICE

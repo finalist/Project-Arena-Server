@@ -29,6 +29,7 @@ public class ArenaController {
 	private final QuestService questService;
 	private final ParticipantService participantService;
 	private final CompositeConfiguration configuration;
+	private final ArenaFactory arenaFactory;
 	
 	private Logger log = Logger.getLogger(ArenaController.class);
 	
@@ -38,10 +39,11 @@ public class ArenaController {
 	
 	
 	@Autowired
-	public ArenaController(final QuestService questService, final ParticipantService participantService, final CompositeConfiguration configuration) {
+	public ArenaController(final QuestService questService, final ParticipantService participantService, final CompositeConfiguration configuration,ArenaFactory arenaFactory) {
 		this.questService = questService;
 		this.participantService = participantService;
 		this.configuration = configuration;
+		this.arenaFactory = arenaFactory;
 	}
 
 	/**
@@ -58,7 +60,6 @@ public class ArenaController {
 		final long participationId = questService.participateInQuest(participantId, quest);
 
 		final ArenaDataBean data = new ArenaDataBean(questId, player, latitude, longitude, participantId, quest, participationId);
-		data.setParticipantService(participantService);
 
 		String pLog = "player: "+ player + " on lat: "+ latitude+ " and lng "+ longitude;
 		participantService.addParticipationLog(participationId, new Date().getTime(), pLog
@@ -66,7 +67,7 @@ public class ArenaController {
 		
 		log.debug("default get: [quest=" + questId + ",player=" + player + "]");		
 		if(quest != null){	
-			final Arena arena = ArenaFactory.getInstance(data, configuration);
+			final Arena arena = arenaFactory.getInstance(data, configuration);
 
 			log.debug("response model: " + arena);
 			Gson gson = new Gson();
@@ -88,11 +89,10 @@ public class ArenaController {
 		final long participationId = questService.participateInQuest(participantId, quest);
 
 		final ArenaDataBean data = new ArenaDataBean(questId, player, participantId, quest, participationId, true);
-		data.setParticipantService(participantService);
 
 		log.debug("default get: [quest=" + questId + ",player=" + player + " OFFLINE mode]");		
 		if(quest != null){	
-			final Arena arena = ArenaFactory.getOfflineInstance(data, configuration);
+			final Arena arena = arenaFactory.getOfflineInstance(data, configuration);
 
 			log.debug("response model: " + arena);
 			Gson gson = new Gson();

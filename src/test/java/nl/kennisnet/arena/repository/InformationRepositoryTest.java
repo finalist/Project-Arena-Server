@@ -26,8 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/configuration.xml",
-		"classpath:/integration.xml", "classpath:/integration-test.xml",
-		"classpath:/services.xml", "classpath:arena-servlet-test.xml" })
+		"classpath:/integration.xml", "classpath:/integration-test.xml"})
 @Transactional
 public class InformationRepositoryTest {
 
@@ -49,14 +48,16 @@ public class InformationRepositoryTest {
 	}
 
 	private Information createObject(String text) {
-		Information information = new Information();
-		Location location = new Location();
-		location = locationRepository.merge(location);
-		information.getPoi().setLocation(location);
-		Quest quest = new Quest();
-		quest.setEmailOwner("email@email.nl");
-		quest = questRepository.merge(quest);
-		information.getPoi().setQuest(quest);
+        Quest quest = new Quest();
+        quest.setEmailOwner("email@email.nl");
+        quest = questRepository.merge(quest);
+
+        Location location = new Location();
+        location.setQuest(quest);
+        location = locationRepository.merge(location);
+
+        Information information = new Information();
+		information.setLocation(location);
 		information.setText(text);
 		information = repository.merge(information);
 		return information;

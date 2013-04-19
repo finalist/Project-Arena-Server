@@ -28,8 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/configuration.xml",
-		"classpath:/integration.xml", "classpath:/integration-test.xml",
-		"classpath:/services.xml", "classpath:arena-servlet-test.xml" })
+		"classpath:/integration.xml", "classpath:/integration-test.xml"})
 @Transactional
 public class ParticipationRepositoryTest {
 

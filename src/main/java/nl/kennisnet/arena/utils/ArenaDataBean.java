@@ -17,7 +17,6 @@ public class ArenaDataBean {
 	private long participantId;
 	private Quest quest;
 	private long participationId;
-	private ParticipantService participantService;
 	private boolean isOffline = false;
 	
 	public ArenaDataBean() {
@@ -102,14 +101,6 @@ public class ArenaDataBean {
 
 	public void setParticipationId(long participationId) {
 		this.participationId = participationId;
-	}
-	
-	public void setParticipantService(ParticipantService participantService) {
-		this.participantService = participantService;
-	}
-	
-	public ParticipantService getParticipantService() {
-		return participantService;
 	}
 	
 	public boolean isOffline() {

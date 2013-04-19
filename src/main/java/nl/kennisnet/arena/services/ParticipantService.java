@@ -15,19 +15,18 @@ import nl.kennisnet.arena.client.domain.LogDTO;
 import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.TeamDTO;
+import nl.kennisnet.arena.model.ContentElement;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
+import nl.kennisnet.arena.model.Location;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.ParticipantAnswer;
 import nl.kennisnet.arena.model.ParticipantAnswer.Result;
 import nl.kennisnet.arena.model.Participation;
 import nl.kennisnet.arena.model.ParticipationLog;
-import nl.kennisnet.arena.model.Positionable;
-import nl.kennisnet.arena.model.PositionableCollectionHelper;
 import nl.kennisnet.arena.model.Progress;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
-import nl.kennisnet.arena.model.Type;
 import nl.kennisnet.arena.repository.ImageRepository;
 import nl.kennisnet.arena.repository.InformationRepository;
 import nl.kennisnet.arena.repository.ParticipantAnswerRepository;
@@ -48,357 +47,347 @@ import com.vividsolutions.jts.geom.Point;
 @Service("participantService")
 @Transactional
 public class ParticipantService {
-	
-	@Autowired
-	ParticipantRepository participantRepository;
-	
-	@Autowired
-	ParticipationRepository participationRepository;
-	
-	@Autowired
-	QuestRepository questRepository;
-	
-	@Autowired
-	ParticipationLogRepository participationLogRepository;
-	
-	@Autowired
-	ImageRepository imageRepository;
-	
-	@Autowired
-	InformationRepository informationRepository;
-	
-	@Autowired
-	ParticipantAnswerRepository participantAnswerRepository;
-	
-	private final Logger log = Logger.getLogger(ParticipantService.class);
 
-	public void getParticipant(final String name,
-			final TransactionalCallback<Participant> callback) {
-		callback.onResult(participantRepository.get(getParticipantId(name)));
-	}
+    @Autowired
+    ParticipantRepository participantRepository;
 
-	public void createParticipantIfNotPresent(final String name,
-			final String color) {
+    @Autowired
+    ParticipationRepository participationRepository;
 
-		Participant participant = participantRepository.findParticipant(name);
-		
-		if (participant == null) {
-			Participant newParticipant = new Participant(name);
-			newParticipant.setHexColor(color);
-			participantRepository.merge(newParticipant);
-			log.info("==> team created: " + name);
-		} else {
-			log.info("==> team was present: " + name);
-		}
-	}
+    @Autowired
+    QuestRepository questRepository;
 
-	public long getParticipantId(final String name) {
-		Participant participant = participantRepository.findParticipant(name);
-		if (participant != null) {
-			return participant.getId();
-		} else {
-			Participant newParticipant = new Participant(name);
-			return participantRepository.merge(newParticipant).getId();
-		}
-	}
+    @Autowired
+    ParticipationLogRepository participationLogRepository;
 
-	public Participant getParticipant(final String name) {
-		Participant participant = participantRepository.findParticipant(name);
-		if (participant != null) {
-			return participant;
-		} else {
-			Participant newParticipant = new Participant(name);
-			return participantRepository.merge(newParticipant);
-		}
-	}
+    @Autowired
+    ImageRepository imageRepository;
 
-	public ParticipationLog addParticipationLog(final long participationId,
-			final long time, final String action, final Point location) {
-		Participation participation = participationRepository.get(participationId);
-		ParticipationLog participationLog = new ParticipationLog(participation,
-				new Date(time), action, location);
-		return participationLogRepository.merge(participationLog);
-	}
+    @Autowired
+    InformationRepository informationRepository;
 
-	public ParticipationLog addParticipationLogPress(
-			final long participationId, final Long time, final String action,
-			final Point location, final Positionable positionable) {
-		Participation participation = participationRepository.get(participationId);
-		ParticipationLog participationLog = new ParticipationLog(participation,
-				new Date(time), action, location, positionable);
-		return participationLogRepository.merge(participationLog);
-	}
+    @Autowired
+    ParticipantAnswerRepository participantAnswerRepository;
 
-	public Progress getProgress(final long participationId) {
-		Participation p = participationRepository.get(participationId);
-		Quest quest = p.getQuest();
+    private final Logger log = Logger.getLogger(ParticipantService.class);
 
-		List<ParticipationLog> participationLogs = p.getParticipationLogs();
+    public void getParticipant(final String name,
+            final TransactionalCallback<Participant> callback) {
+        callback.onResult(participantRepository.get(getParticipantId(name)));
+    }
 
-		Set<Long> counted = new HashSet<Long>();
-		for (ParticipationLog log : participationLogs) {
-			Positionable positionable = log.getPositionable();
-			for(Type e : positionable.getElements()) {
-				if(e instanceof Question) {
-					counted.add(e.getId());
-				}
-			}
-		}
+    public void createParticipantIfNotPresent(final String name,
+            final String color) {
 
-		return new Progress(0, 100);
-//		return new Progress(counted.size(), PositionableCollectionHelper
-//				.filter(quest.getPositionables(), Question.class).all().size());
-	}
+        Participant participant = participantRepository.findParticipant(name);
 
-	private List<ParticipationLog> getParticipationLogs(Long questId) {
-		// TODO : add ordering by time.
-		return participationLogRepository.getParticipationLogsByQuest(questId);
-	}
+        if (participant == null) {
+            Participant newParticipant = new Participant(name);
+            newParticipant.setHexColor(color);
+            participantRepository.merge(newParticipant);
+            log.info("==> team created: " + name);
+        } else {
+            log.info("==> team was present: " + name);
+        }
+    }
 
-	public Map<MultiKey, Integer> getAnswers(Long questId) {
-		Map<MultiKey, Integer> teamItemAnswers = new HashMap<MultiKey, Integer>();
-		for (ParticipationLog log : getParticipationLogs(questId)) {
-			if (log.getPositionable() != null
-					&& log.getParticipation().getParticipant() != null) {
-				MultiKey teamItemKey = new MultiKey(log.getPositionable()
-						.getId(), log.getParticipation().getParticipant()
-						.getId());
-				try{
-				teamItemAnswers.put(teamItemKey,
-						Integer.valueOf(log.getAnswer().substring(1, 2)));
-				}catch(NumberFormatException ne){
-				}
-			}
-		}
-		return teamItemAnswers;
-	}
+    public long getParticipantId(final String name) {
+        Participant participant = participantRepository.findParticipant(name);
+        if (participant != null) {
+            return participant.getId();
+        } else {
+            Participant newParticipant = new Participant(name);
+            return participantRepository.merge(newParticipant).getId();
+        }
+    }
 
-	public Map<Long, Integer> getPositionableScores(Long questId) {
-		Map<Long, Integer> result = new HashMap<Long, Integer>();
-		Quest quest = questRepository.get(questId);
+    public Participant getParticipant(final String name) {
+        Participant participant = participantRepository.findParticipant(name);
+        if (participant != null) {
+            return participant;
+        } else {
+            Participant newParticipant = new Participant(name);
+            return participantRepository.merge(newParticipant);
+        }
+    }
 
-		Set<Positionable> positionables = new HashSet<Positionable>(quest.getPositionables());
-		for(Positionable positionable : positionables){
-			for(Type e : positionable.getElements()) {
-				if(e instanceof Question) {
-					for(ParticipantAnswer participantAnswer : ((Question) e).getParticipantAnswers()){
-						long positionableId = participantAnswer.getQuestion().getId();
-						if(result.get(positionableId) == null){
-							result.put(positionableId, 0);
-						}
-						if(participantAnswer.getResult().equals(ParticipantAnswer.Result.CORRECT.name())){
-							result.put(positionableId,result.get(positionableId) + 1);
-						}
-						
+    public ParticipationLog addParticipationLog(final long participationId,
+            final long time, final String action, final Point location) {
+        Participation participation = participationRepository
+                .get(participationId);
+        ParticipationLog participationLog = new ParticipationLog(participation,
+                new Date(time), action, location);
+        return participationLogRepository.merge(participationLog);
+    }
 
-			if(positionable instanceof Question){
-				Question question = (Question)positionable;
-				for(ParticipantAnswer participantAnswer : participantAnswerRepository.findParticipantAnswers(question)){
-					long positionableId = participantAnswer.getQuestion().getId();
-					if(result.get(positionableId) == null){
-						result.put(positionableId, 0);
+    public ParticipationLog addParticipationLogPress(
+            final long participationId, final Long time, final String action,
+            final Point location, final ContentElement element) {
+        Participation participation = participationRepository
+                .get(participationId);
+        ParticipationLog participationLog = new ParticipationLog(participation,
+                new Date(time), action, location, element);
+        return participationLogRepository.merge(participationLog);
+    }
 
-					}
-				}
-			}
-			
-		}
-		return result;
-	}
+    public Progress getProgress(final long participationId) {
+        Participation p = participationRepository.get(participationId);
+        List<ParticipationLog> participationLogs = p.getParticipationLogs();
 
-	public Map<Long, Integer> getTeamScores(Long questId) {
-		Map<Long, Integer> result = new HashMap<Long, Integer>();
-		Quest quest = questRepository.get(questId);
+        Set<Long> counted = new HashSet<Long>();
+        for (ParticipationLog log : participationLogs) {
+            ContentElement element = log.getElement();
+            if (element instanceof Question) {
+                counted.add(element.getId());
+            }
+        }
 
-		Set<Positionable> positionables = new HashSet<Positionable>(quest.getPositionables());
-		for(Positionable positionable : positionables){
+        return new Progress(0, 100);
+    }
 
-			for(Type e : positionable.getElements()) {
-				Question question = (Question)e;
-				
-				for(ParticipantAnswer participantAnswer : question.getParticipantAnswers()){
+    private List<ParticipationLog> getParticipationLogs(Long questId) {
+        // TODO : add ordering by time.
+        return participationLogRepository.getParticipationLogsByQuest(questId);
+    }
 
-			if(positionable instanceof Question){
-				Question question = (Question)positionable;
-				for(ParticipantAnswer participantAnswer : participantAnswerRepository.findParticipantAnswers(question)){
+    public Map<MultiKey, Integer> getAnswers(Long questId) {
+        Map<MultiKey, Integer> teamItemAnswers = new HashMap<MultiKey, Integer>();
+        for (ParticipationLog log : getParticipationLogs(questId)) {
+            if (log.getElement() != null
+                    && log.getParticipation().getParticipant() != null) {
+                MultiKey teamItemKey = new MultiKey(log.getElement()
+                        .getId(), log.getParticipation().getParticipant()
+                        .getId());
+                try {
+                    teamItemAnswers.put(teamItemKey,
+                            Integer.valueOf(log.getAnswer().substring(1, 2)));
+                } catch (NumberFormatException ne) {
+                }
+            }
+        }
+        return teamItemAnswers;
+    }
 
-					long teamId = participantAnswer.getParticipation().getParticipant().getId();
-					if(result.get(teamId) == null){
-						result.put(teamId, 0);
-					}
-					if(participantAnswer.getResult().equals(ParticipantAnswer.Result.CORRECT.name())){
-						result.put(teamId,result.get(teamId) + 1);
-					}	
-				}
-			}
-		}
-		return result;
-	}
+    public Map<Long, Integer> getPositionableScores(Long questId) {
+        Map<Long, Integer> result = new HashMap<Long, Integer>();
+        Quest quest = questRepository.get(questId);
 
-	public Question getQuestion(Long id, Quest quest) {
-		if (quest != null && quest.getPositionables() != null) {
-			for (Positionable positionable : quest.getPositionables()) {
-				for(Type e : positionable.getElements()) {
-					if(e.getId().equals(id) && e instanceof Question) {
-						return (Question) e;
-					}
-				}
-			}
-		}
-		return null;
-	}
+        for (Question question : getQuestions(quest)) {
+            for (ParticipantAnswer participantAnswer : participantAnswerRepository.findParticipantAnswers(question)) {
+                long positionableId = participantAnswer.getQuestion().getId();
+                if (result.get(positionableId) == null) {
+                    result.put(positionableId, 0);
+                }
+            }
 
-	public List<TeamDTO> getAllParticipants() {
-		List<Participant> participants = participantRepository.getAll();
-		List<TeamDTO> result = new ArrayList<TeamDTO>();
-		for (Participant participant : participants) {
-			result.add(DTOFactory.create(participant));
-		}
-		return result;
+        }
+        return result;
+    }
 
-	}
+    public Map<Long, Integer> getTeamScores(Long questId) {
+        Map<Long, Integer> result = new HashMap<Long, Integer>();
 
-	public void storeParticipationAnswer(long participationId,
-			Question question, int answer) {
-		ParticipantAnswer participantAnswer = getParticipationAnswer(participationId, question);
-		if (participantAnswer == null) {
-			participantAnswer = new ParticipantAnswer();
-		}
-		participantAnswer.setAnswer(answer);
-		Participation participation = participationRepository.get(participationId);
-		participantAnswer.setParticipation(participation);
-		participantAnswer.setQuestion(question);
-		participantAnswer.setRound(question.getPoi().getQuest().getActiveRound());
-		if(question.getCorrectAnswer() == null){
-			throw new IllegalArgumentException("No answer given");
-		}
-		if(answer == question.getCorrectAnswer()){
-			participantAnswer.setResult(Result.CORRECT.name());
-		}else{
-			participantAnswer.setResult(Result.INCORRECT.name());
-		}
-		participantAnswerRepository.merge(participantAnswer);
-	}
-	
-	public void storeParticipationTextAnswer(long participationId,
-			Question question, String textAnswer){
-		ParticipantAnswer participantAnswer = getParticipationAnswer(participationId, question);
-		if (participantAnswer == null) {
-			participantAnswer = new ParticipantAnswer();
-		}
-		participantAnswer.setTextAnswer(textAnswer);
-		Participation participation = participationRepository.get(participationId);
-		participantAnswer.setParticipation(participation);
-		participantAnswer.setQuestion(question);
-		participantAnswer.setRound(question.getPoi().getQuest().getActiveRound());
-		participantAnswer.setResult(Result.ANSWERED.name());
-		participantAnswerRepository.merge(participantAnswer);
-	}
+        Quest quest = questRepository.get(questId);
+        for (Question question : getQuestions(quest)) {
+            for (ParticipantAnswer participantAnswer : participantAnswerRepository.findParticipantAnswers(question)) {
 
-	public ParticipantAnswer getParticipationAnswer(long participationId,
-			Question question) {
-		Participation participation = participationRepository.get(participationId);
-		return participantAnswerRepository.findParticipantAnswer(participation, question);
-	}	
+                long teamId = participantAnswer.getParticipation().getParticipant().getId();
+                if (result.get(teamId) == null) {
+                    result.put(teamId, 0);
+                }
+                if (participantAnswer.getResult().equals(ParticipantAnswer.Result.CORRECT.name())) {
+                    result.put(teamId, result.get(teamId) + 1);
+                }
+            }
+        }
+        return result;
+    }
 
-	public LogDTO getParticipationLog(final Long questId) {
-		List<ParticipationLog> log = getParticipationLogs(questId);
+    public Question getQuestion(Long id, Quest quest) {
+        for (Question question : getQuestions(quest)) {
+            if (question.getId().equals(id)) {
+                return question;
+            }
+        }
+        return null;
+    }
 
-		Quest quest = (Quest) questRepository.get(questId);
+    private List<Question> getQuestions(Quest quest) {
+        List<Question> questions = new ArrayList<Question>();
+        if (quest != null && quest.getLocations() != null) {
+            for (Location location : quest.getLocations()) {
+                for (ContentElement element : location.getElements()) {
+                    if (element instanceof Question) {
+                        questions.add((Question) element);
+                    }
+                }
+            }
+        }
+        return questions;
+    }
 
-		List<ActionDTO> actions = new ArrayList<ActionDTO>(log.size());
-		Set<TeamDTO> teams = new HashSet<TeamDTO>();
+    public List<TeamDTO> getAllParticipants() {
+        List<Participant> participants = participantRepository.getAll();
+        List<TeamDTO> result = new ArrayList<TeamDTO>();
+        for (Participant participant : participants) {
+            result.add(DTOFactory.create(participant));
+        }
+        return result;
 
-		for (ParticipationLog participationLog : log) {
-			actions.add(DTOFactory.create(participationLog));
-			TeamDTO team = DTOFactory.create(participationLog
-					.getParticipation().getParticipant());
-			teams.add(team);
-		}
+    }
 
-		Map<Long, Integer> teamScores = getTeamScores(questId);
-		for (TeamDTO teamDTO : teams) {
-			teamDTO.setScore(teamScores.get(teamDTO.getId()));
-			if (teamDTO.getScore() == null) {
-				teamDTO.setScore(0);
-			}
-		}
+    public void storeParticipationAnswer(long participationId,
+            Question question, int answer) {
+        ParticipantAnswer participantAnswer = getParticipationAnswer(
+                participationId, question);
+        if (participantAnswer == null) {
+            participantAnswer = new ParticipantAnswer();
+        }
+        participantAnswer.setAnswer(answer);
+        Participation participation = participationRepository
+                .get(participationId);
+        participantAnswer.setParticipation(participation);
+        participantAnswer.setQuestion(question);
+        if (question.getCorrectAnswer() == null) {
+            throw new IllegalArgumentException("No answer given");
+        }
+        if (answer == question.getCorrectAnswer()) {
+            participantAnswer.setResult(Result.CORRECT.name());
+        } else {
+            participantAnswer.setResult(Result.INCORRECT.name());
+        }
+        participantAnswerRepository.merge(participantAnswer);
+    }
 
-		List<PoiDTO> items = DTOFactory.create(quest).getItems();
-		Map<Long, Integer> itemScores = getPositionableScores(quest.getId());
+    public void storeParticipationTextAnswer(long participationId,
+            Question question, String textAnswer) {
+        ParticipantAnswer participantAnswer = getParticipationAnswer(
+                participationId, question);
+        if (participantAnswer == null) {
+            participantAnswer = new ParticipantAnswer();
+        }
+        participantAnswer.setTextAnswer(textAnswer);
+        Participation participation = participationRepository
+                .get(participationId);
+        participantAnswer.setParticipation(participation);
+        participantAnswer.setQuestion(question);
+        participantAnswer.setResult(Result.ANSWERED.name());
+        participantAnswerRepository.merge(participantAnswer);
+    }
 
-		for (PoiDTO PoiDTO : items) {
-			PoiDTO.setScore(itemScores.get(PoiDTO.getId()));
-			if (PoiDTO.getScore() == null) {
-				PoiDTO.setScore(0);
-			}
+    public ParticipantAnswer getParticipationAnswer(long participationId,
+            Question question) {
+        Participation participation = participationRepository
+                .get(participationId);
+        return participantAnswerRepository.findParticipantAnswer(participation,
+                question);
+    }
 
-		}
+    public LogDTO getParticipationLog(final Long questId) {
+        List<ParticipationLog> log = getParticipationLogs(questId);
 
-		return new LogDTO(actions, teams, items);
-	}
-	
-	public List<AnswerDTO> getAnswerDTO(final long questId){
-		List<AnswerDTO> answerDTOs = new ArrayList<AnswerDTO>();
-		Quest quest = (Quest) questRepository.get(questId);
-		for(Positionable positionable : quest.getPositionables()){
+        Quest quest = (Quest) questRepository.get(questId);
 
-			for(Type e : positionable.getElements()) {
-				Question question = (Question) e;
-				
-				for(ParticipantAnswer participantAnswer : question.getParticipantAnswers()){
+        List<ActionDTO> actions = new ArrayList<ActionDTO>(log.size());
+        Set<TeamDTO> teams = new HashSet<TeamDTO>();
 
-			if(positionable instanceof Question){
-				Question question = (Question)positionable;
-				for(ParticipantAnswer participantAnswer : participantAnswerRepository.findParticipantAnswers(question)){
+        for (ParticipationLog participationLog : log) {
+            actions.add(DTOFactory.create(participationLog));
+            TeamDTO team = DTOFactory.create(participationLog
+                    .getParticipation().getParticipant());
+            teams.add(team);
+        }
 
-					AnswerDTO answerDTO = new AnswerDTO();
-					if(question.getQuestionTypeAsEnum() == Question.TYPE.OPEN_QUESTION){
-						answerDTO.setTextAnswer(participantAnswer.getTextAnswer());
-						answerDTO.setAnswerType(AnswerType.TEXT_ANSWER);
-					}
-					else{
-						answerDTO.setAnswer(participantAnswer.getAnswer());		
-						answerDTO.setAnswerType(AnswerType.MULTIPLE_CHOICE);
-					}
-					answerDTO.setPlayerColor(participantAnswer.getParticipation().getParticipant().getHexColor());
-					answerDTO.setPlayerName(participantAnswer.getParticipation().getParticipant().getName());
-					//answerDTO.setQuestionName(question.getName());
-					answerDTO.setQuestionDescription(question.getText());
-					answerDTO.setResult(participantAnswer.getResult());
-					answerDTO.setQuestId(questId);
-					answerDTO.setQuestionId(participantAnswer.getQuestion().getId());
-					answerDTO.setParticipationId(participantAnswer.getParticipation().getId());
-					answerDTO.setRound(new RoundDTO(participantAnswer.getRound().getId(), participantAnswer.getRound().getName()));
-					answerDTOs.add(answerDTO);
-				}
-			}
-		}
-		return answerDTOs;
-	}
+        Map<Long, Integer> teamScores = getTeamScores(questId);
+        for (TeamDTO teamDTO : teams) {
+            teamDTO.setScore(teamScores.get(teamDTO.getId()));
+            if (teamDTO.getScore() == null) {
+                teamDTO.setScore(0);
+            }
+        }
 
-	public void clearQuestLog(final Long questId) {
-		List<ParticipationLog> log = getParticipationLogs(questId);
-		for (ParticipationLog participationLog : log) {
-			participationLogRepository.delete(participationLog);
-		}
-	}
-	
-	public String getImageUrl(long imageId){
-		Image image = imageRepository.get(imageId);		
-		return image.getUrl();
-	}
-	
-	public Information getInformation(long informationId){
-		Information information = informationRepository.get(informationId);
-		return information;
-	}
+        List<PoiDTO> items = DTOFactory.create(quest).getItems();
+        Map<Long, Integer> itemScores = getPositionableScores(quest.getId());
 
-	public AnswerDTO updateAnswerDto(AnswerDTO answerDto, Quest quest) {
-		ParticipantAnswer participantAnswer = getParticipationAnswer(answerDto.getParticipationId(), 
-				getQuestion(answerDto.getQuestionId(), quest));
-		participantAnswer.setResult(answerDto.getResult());
-		participantAnswerRepository.merge(participantAnswer);
-		return answerDto;
-	}
+        for (PoiDTO PoiDTO : items) {
+            PoiDTO.setScore(itemScores.get(PoiDTO.getId()));
+            if (PoiDTO.getScore() == null) {
+                PoiDTO.setScore(0);
+            }
+
+        }
+
+        return new LogDTO(actions, teams, items);
+    }
+
+    public List<AnswerDTO> getAnswerDTO(final long questId) {
+        List<AnswerDTO> answerDTOs = new ArrayList<AnswerDTO>();
+        Quest quest = (Quest) questRepository.get(questId);
+        for (Location location : quest.getLocations()) {
+
+            for (ContentElement element : location.getElements()) {
+                if (element instanceof Question) {
+                    Question question = (Question) element;
+                    for (ParticipantAnswer participantAnswer : participantAnswerRepository
+                            .findParticipantAnswers(question)) {
+
+                        AnswerDTO answerDTO = new AnswerDTO();
+                        if (question.getQuestionTypeAsEnum() == Question.TYPE.OPEN_QUESTION) {
+                            answerDTO.setTextAnswer(participantAnswer
+                                    .getTextAnswer());
+                            answerDTO.setAnswerType(AnswerType.TEXT_ANSWER);
+                        } else {
+                            answerDTO.setAnswer(participantAnswer.getAnswer());
+                            answerDTO.setAnswerType(AnswerType.MULTIPLE_CHOICE);
+                        }
+                        answerDTO.setPlayerColor(participantAnswer
+                                .getParticipation().getParticipant()
+                                .getHexColor());
+                        answerDTO.setPlayerName(participantAnswer
+                                .getParticipation().getParticipant().getName());
+                        // answerDTO.setQuestionName(question.getName());
+                        answerDTO.setQuestionDescription(question.getText());
+                        answerDTO.setResult(participantAnswer.getResult());
+                        answerDTO.setQuestId(questId);
+                        answerDTO.setQuestionId(participantAnswer.getQuestion()
+                                .getId());
+                        answerDTO.setParticipationId(participantAnswer
+                                .getParticipation().getId());
+                        answerDTO.setRound(new RoundDTO(participantAnswer
+                                .getParticipation().getRound().getId(),
+                                participantAnswer.getParticipation().getRound()
+                                        .getName()));
+                        answerDTOs.add(answerDTO);
+                    }
+                }
+            }
+        }
+        return answerDTOs;
+    }
+
+    public void clearQuestLog(final Long questId) {
+        List<ParticipationLog> log = getParticipationLogs(questId);
+        for (ParticipationLog participationLog : log) {
+            participationLogRepository.delete(participationLog);
+        }
+    }
+
+    public String getImageUrl(long imageId) {
+        Image image = imageRepository.get(imageId);
+        return image.getUrl();
+    }
+
+    public Information getInformation(long informationId) {
+        Information information = informationRepository.get(informationId);
+        return information;
+    }
+
+    public AnswerDTO updateAnswerDto(AnswerDTO answerDto, Quest quest) {
+        ParticipantAnswer participantAnswer = getParticipationAnswer(
+                answerDto.getParticipationId(),
+                getQuestion(answerDto.getQuestionId(), quest));
+        participantAnswer.setResult(answerDto.getResult());
+        participantAnswerRepository.merge(participantAnswer);
+        return answerDto;
+    }
 }

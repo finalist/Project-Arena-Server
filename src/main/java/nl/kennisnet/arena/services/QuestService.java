@@ -16,7 +16,6 @@ import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.repository.LocationRepository;
 import nl.kennisnet.arena.repository.ParticipantRepository;
 import nl.kennisnet.arena.repository.ParticipationRepository;
-import nl.kennisnet.arena.repository.PositionableRepository;
 import nl.kennisnet.arena.repository.QuestRepository;
 import nl.kennisnet.arena.services.factories.DTOFactory;
 import nl.kennisnet.arena.services.factories.DomainObjectFactory;
@@ -41,9 +40,6 @@ public class QuestService {
 
 	@Autowired
 	private LocationRepository locationRepository;
-
-	@Autowired
-	PositionableRepository positionableRepository;
 
 	@Autowired
 	private ParticipationRepository participationRepository;

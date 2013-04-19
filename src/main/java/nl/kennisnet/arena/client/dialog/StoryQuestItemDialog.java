@@ -9,7 +9,7 @@ import nl.kennisnet.arena.client.domain.PoiDTO;
 import nl.kennisnet.arena.client.elements.StoryElement;
 import nl.kennisnet.arena.client.widget.ExtendedTextBox;
 import nl.kennisnet.arena.client.widget.FormTablePanel;
-import nl.kennisnet.arena.model.Type;
+import nl.kennisnet.arena.model.ContentElement;
 
 public class StoryQuestItemDialog extends QuestItemDialog {
 

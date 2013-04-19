@@ -3,10 +3,10 @@ package nl.kennisnet.arena.model;
 import javax.persistence.Entity;
 
 @Entity
-public class Object3D extends Type {
+public class Object3D extends ContentElement {
 
 	private String url;
-	private float schaal;
+	private float scale;
 	private boolean isBlended;
 	private Float x, y, z;
 
@@ -22,12 +22,12 @@ public class Object3D extends Type {
 		this.url = url;
 	}
 
-	public void setSchaal(float schaal) {
-		this.schaal = schaal;
+	public void setScale(float scale) {
+		this.scale = scale;
 	}
 
-	public float getSchaal() {
-		return schaal;
+	public float getScale() {
+		return scale;
 	}
 
 	public boolean isBlended() {

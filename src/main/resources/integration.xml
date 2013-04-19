@@ -21,22 +21,7 @@
 	<bean id="arenaSessionFactory"
 		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="annotatedClasses">
-			<list>
-				<value>nl.kennisnet.arena.model.Positionable</value>
-			</list>
-		</property>
-
-		<property name="packagesToScan">
-			<list>
-				<value>nl.kennisnet.arena.model.**</value>
-			</list>
-		</property>
-		<property name="annotatedPackages">
-			<list>
-				<value>nl.kennisnet.arena.model</value>
-			</list>
-		</property>
+		<property name="packagesToScan" value="nl.kennisnet.arena.model.**" />
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernatespatial.postgis.PostgisDialect</prop>
@@ -72,4 +57,7 @@
 		</property>
 		<property name="subject" value="Arena Designer" />
 	</bean>
+
+	<context:component-scan base-package="nl.kennisnet.arena.repository" />
+
 </beans>

@@ -4,25 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.kennisnet.arena.client.domain.ActionDTO;
-import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.PoiDTO;
+import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.RoundDTO;
 import nl.kennisnet.arena.client.domain.TeamDTO;
 import nl.kennisnet.arena.client.elements.ImageElement;
 import nl.kennisnet.arena.client.elements.QuestionElement;
 import nl.kennisnet.arena.client.elements.StoryElement;
 import nl.kennisnet.arena.client.elements.VideoElement;
+import nl.kennisnet.arena.model.ContentElement;
 import nl.kennisnet.arena.model.Image;
 import nl.kennisnet.arena.model.Information;
+import nl.kennisnet.arena.model.Location;
 import nl.kennisnet.arena.model.Object3D;
 import nl.kennisnet.arena.model.Participant;
 import nl.kennisnet.arena.model.Participation;
 import nl.kennisnet.arena.model.ParticipationLog;
-import nl.kennisnet.arena.model.Positionable;
 import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.model.Round;
-import nl.kennisnet.arena.model.Type;
 import nl.kennisnet.arena.model.Video;
 
 public class DTOFactory {
@@ -35,10 +35,10 @@ public static QuestDTO create(Quest quest) {
 		result.setId(quest.getId());
 		result.setName(quest.getName());
 		result.setEmailOwner(quest.getEmailOwner());
-		if (quest.getPositionables() != null) {
+		if (quest.getLocations() != null) {
 			ArrayList<PoiDTO> items = new ArrayList<PoiDTO>();
-			for (Positionable positionable : quest.getPositionables()) {
-				items.add(create(positionable));
+			for (Location location : quest.getLocations()) {
+				items.add(create(location));
 			}
 			result.setItems(items);
 		}
@@ -51,13 +51,13 @@ public static QuestDTO create(Quest quest) {
 		return result;
 	}
 
-	public static PoiDTO create(Positionable positionable) {
+	public static PoiDTO create(Location location) {
 		PoiDTO result = null;
-		if (positionable != null) {
+		if (location != null) {
 			result = new PoiDTO();
-			result.setName(positionable.getName());
+			result.setName(location.getName());
 			
-			for(Type t : positionable.getElements()) {
+			for(ContentElement t : location.getElements()) {
 				if(t instanceof Information) {
 					StoryElement element = new StoryElement(((Information) t).getText());
 					result.getElements().add(element);
@@ -77,50 +77,15 @@ public static QuestDTO create(Quest quest) {
 				} else if (t instanceof Video) {
 					VideoElement element = new VideoElement(((Video) t).getVideoUrl());
 					result.getElements().add(element);
+				} else if (t instanceof Object3D){
+				    //TODO:Add element
 				}
 			}
-//			if (positionable instanceof Information) {
-//				result = new PoiDTO(positionable.getName(), "Verhaal");
-//				result.setDescription(((Information) positionable).getText());
-//			} else if (positionable instanceof Question) {
-//				Question question = (Question) positionable;
-//				result = new PoiDTO(question.getName(), "Vraag");
-//				result.setDescription(question.getText());
-//				result.setOption1(question.getAnswer1());
-//				result.setOption2(question.getAnswer2());
-//				result.setOption3(question.getAnswer3());
-//				result.setOption4(question.getAnswer4());
-//				result.setQuestionType(question.getQuestionType());
-//				result.setName(question.getName());
-//				result.setCorrectOption(question.getCorrectAnswer());
-//			} else if (positionable instanceof Image) {
-//				Image image = (Image) positionable;
-//				result = new PoiDTO(image.getName(), "Foto");
-//				result.setObjectURL(image.getUrl());
-//			} else if (positionable instanceof Video) {
-//				Video video = (Video) positionable;
-//				result = new PoiDTO(video.getName(), "Video");
-//				result.setObjectURL(video.getVideoUrl());
-//			} else if (positionable instanceof Object3D) {
-//				Object3D object3d = (Object3D) positionable;
-//				result = new PoiDTO(object3d.getName(), "Object3D");
-//				result.setObjectURL(object3d.getUrl());
-//				result.setSchaal(object3d.getSchaal());
-//				result.setBlended(object3d.isBlended() ? 1 : 0);
-//				result.setRotation(object3d.getRotation());
-//			}
-//			} else if (positionable instanceof Combined) {
-//				Combined combined = (Combined) positionable;
-//				result = new PoiDTO(combined.getName(), "Combinded");
-//				result.setItems(combined.getItems());
-//			}
 			if (result != null) {
-				result.setRadius(positionable.getLocation().getRadius());
-				result.setVisibleRadius(positionable.getLocation()
-						.getVisibleRadius());
-				result.setPoint(GeomUtil.createSimplePoint(positionable
-						.getLocation().getPoint()));
-				result.setId(positionable.getId());
+				result.setRadius(location.getRadius());
+				result.setVisibleRadius(location.getVisibleRadius());
+				result.setPoint(GeomUtil.createSimplePoint(location.getPoint()));
+				result.setId(location.getId());
 			}
 		}
 
@@ -137,8 +102,8 @@ public static QuestDTO create(Quest quest) {
 		action.setTeamName(log.getParticipation().getParticipant().getName());
 		action.setQuestId(log.getParticipation().getQuest().getId());
 		action.setTimeInMillis(log.getTime().getTime());
-		if (log.getPositionable() != null) {
-			action.setPositionableId(log.getPositionable().getId());
+		if (log.getElement() != null) {
+			action.setPositionableId(log.getElement().getId());
 		}
 		return action;
 	}
