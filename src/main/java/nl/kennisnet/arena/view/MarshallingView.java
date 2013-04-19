@@ -93,7 +93,6 @@ public class MarshallingView extends AbstractView {
 		Assert.notNull(marshaller, "Property 'marshaller' is required");
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void renderMergedOutputModel(Map model, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -121,7 +120,6 @@ public class MarshallingView extends AbstractView {
 	 *                          supported by the marshaller
 	 * @see #setModelKey(String)
 	 */
-	@SuppressWarnings("unchecked")
 	protected Object locateToBeMarshalled(Map model) throws ServletException {
 		if (this.modelKey != null) {
 			Object o = model.get(this.modelKey);

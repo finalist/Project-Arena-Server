@@ -14,7 +14,6 @@ import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.domain.QuestItemDTO;
 import nl.kennisnet.arena.client.domain.QuestState;
 import nl.kennisnet.arena.client.domain.RoundDTO;
-import nl.kennisnet.arena.client.domain.TeamDTO;
 import nl.kennisnet.arena.client.event.EventBus;
 import nl.kennisnet.arena.client.event.RefreshQuestEvent;
 import nl.kennisnet.arena.client.event.RefreshQuestLogEvent;
@@ -44,7 +43,6 @@ import com.google.gwt.user.client.ui.Widget;
 public class ScoreGridPanel extends SimplePanel implements RefreshQuestEvent.Handler,
 	RefreshQuestLogEvent.Handler, ResizablePanel {
 
-	private String orderTeams = ORDER_NAME;
 	private String orderItems = ORDER_NAME;
 
 	private final static String ORDER_NAME = "name";
@@ -176,30 +174,6 @@ public class ScoreGridPanel extends SimplePanel implements RefreshQuestEvent.Han
 		return result;
 	}
 
-	private List<TeamDTO> getTeams(LogDTO log, String order) {
-		List<TeamDTO> result = new ArrayList<TeamDTO>(log.getTeams());
-		if (order.equals(ORDER_NAME)) {
-			Collections.sort(result, new Comparator<TeamDTO>() {
-
-				@Override
-				public int compare(TeamDTO o1, TeamDTO o2) {
-					return o1.getName().compareTo(o2.getName());
-				}
-
-			});
-		} else {
-			Collections.sort(result, new Comparator<TeamDTO>() {
-
-				@Override
-				public int compare(TeamDTO o1, TeamDTO o2) {
-					return -o1.getScore().compareTo(o2.getScore());
-				}
-			});
-
-		}
-		return result;
-	}
-
 	@Override
 	public void resize(int x, int y) {
 		container.setHeight(y + "px");
@@ -223,7 +197,6 @@ public class ScoreGridPanel extends SimplePanel implements RefreshQuestEvent.Han
 
 			@Override
 			public void onClick(ClickEvent arg0) {
-				orderTeams = ORDER_NAME;
 				refresh();
 			}
 		});
@@ -237,7 +210,6 @@ public class ScoreGridPanel extends SimplePanel implements RefreshQuestEvent.Han
 
 			@Override
 			public void onClick(ClickEvent arg0) {
-				orderTeams = ORDER_SCORE;
 				refresh();
 			}
 		});

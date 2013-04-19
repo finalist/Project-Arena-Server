@@ -26,7 +26,6 @@ public class HibernateAwareService {
         return t;
     }
     
-    @SuppressWarnings("unchecked")
     public <T> void delete(List<T> obj) {
     	final Session session = getSession();
     	for(T t: obj){

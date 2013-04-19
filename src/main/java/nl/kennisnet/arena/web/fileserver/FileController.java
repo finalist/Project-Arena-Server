@@ -28,13 +28,10 @@ public class FileController {
    
    private final PictureService pictureService;
 
-   private final CompositeConfiguration configuration;
-
    @Autowired
    public FileController(PictureService questService,CompositeConfiguration configuration) {
        super();
        this.pictureService = questService;
-       this.configuration = configuration;
    }
 
    
