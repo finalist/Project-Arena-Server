@@ -1,7 +1,6 @@
 package nl.kennisnet.arena.utils;
 
 import nl.kennisnet.arena.model.Quest;
-import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.services.ParticipantService;
 import nl.kennisnet.arena.services.factories.GeomUtil;
 
