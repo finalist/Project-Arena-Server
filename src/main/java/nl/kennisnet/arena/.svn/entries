@@ -1,89 +1,0 @@
-10
-
-dir
-271
-https://extranet.finalist.com/svn/knsar/Trunk/arena-server/src/main/java/nl/kennisnet/arena
-https://extranet.finalist.com/svn/knsar
-
-
-
-2010-07-13T18:02:49.788297Z
-271
-jacques
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-ffac1fe6-dff6-11de-9401-9b21e82dcd7c
-
-model
-dir
-
-setup
-dir
-
-utils
-dir
-
-services
-dir
-
-server
-dir
-
-view
-dir
-
-formats
-dir
-
-web
-dir
-
-ARenaWA.gwt.xml
-file
-
-
-
-
-2012-02-07T16:50:41.175080Z
-b95bc7ff871f75fe3f4990ddf14d85a9
-2010-01-08T16:00:20.560641Z
-248
-jacques
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-1197
-
-client
-dir
-
