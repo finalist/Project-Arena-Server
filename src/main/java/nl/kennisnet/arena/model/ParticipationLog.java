@@ -15,7 +15,7 @@ import org.hibernate.annotations.Type;
 import com.vividsolutions.jts.geom.Point;
 
 @Entity
-public class ParticipationLog implements DomainObject {
+public class ParticipationLog {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

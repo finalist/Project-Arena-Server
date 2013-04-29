@@ -22,7 +22,7 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 
 @Entity
-public class Quest implements DomainObject {
+public class Quest {
 
 	private static final double HOTZONE_RADIUS = 500.0;
 

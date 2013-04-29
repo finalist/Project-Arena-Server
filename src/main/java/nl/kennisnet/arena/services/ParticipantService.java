@@ -71,10 +71,10 @@ public class ParticipantService {
 
     private final Logger log = Logger.getLogger(ParticipantService.class);
 
-    public void getParticipant(final String name,
-            final TransactionalCallback<Participant> callback) {
-        callback.onResult(participantRepository.get(getParticipantId(name)));
-    }
+//    public void getParticipant(final String name,
+//            final TransactionalCallback<Participant> callback) {
+//        callback.onResult(participantRepository.get(getParticipantId(name)));
+//    }
 
     public void createParticipantIfNotPresent(final String name,
             final String color) {
@@ -203,7 +203,8 @@ public class ParticipantService {
         return result;
     }
 
-    public Question getQuestion(Long id, Quest quest) {
+    public Question getQuestion(Long id, Long questId) {
+        Quest quest = questRepository.get(questId);
         for (Question question : getQuestions(quest)) {
             if (question.getId().equals(id)) {
                 return question;
@@ -382,10 +383,9 @@ public class ParticipantService {
         return information;
     }
 
-    public AnswerDTO updateAnswerDto(AnswerDTO answerDto, Quest quest) {
-        ParticipantAnswer participantAnswer = getParticipationAnswer(
-                answerDto.getParticipationId(),
-                getQuestion(answerDto.getQuestionId(), quest));
+    public AnswerDTO updateAnswerDto(AnswerDTO answerDto, Long questId) {
+        Question question = getQuestion(answerDto.getQuestionId(), questId);
+        ParticipantAnswer participantAnswer = getParticipationAnswer(answerDto.getParticipationId(), question);
         participantAnswer.setResult(answerDto.getResult());
         participantAnswerRepository.merge(participantAnswer);
         return answerDto;

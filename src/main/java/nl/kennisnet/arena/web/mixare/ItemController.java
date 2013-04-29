@@ -8,7 +8,6 @@ import nl.kennisnet.arena.client.event.RefreshQuestEvent;
 import nl.kennisnet.arena.client.event.RefreshQuestLogEvent;
 import nl.kennisnet.arena.formats.Item;
 import nl.kennisnet.arena.model.Information;
-import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.model.Question;
 import nl.kennisnet.arena.model.Question.TYPE;
 import nl.kennisnet.arena.services.ItemService;
@@ -69,11 +68,7 @@ public class ItemController {
     @RequestMapping(value = "/show/{questId}/{questionId}/{player}", method = RequestMethod.GET)
     public ModelAndView showQuestions(@PathVariable Long questId,
             @PathVariable Long questionId) {
-        Quest quest = questService.getQuest(questId);
-        Question question = participantService.getQuestion(questionId, quest);
-
-        log.debug("questId = " + questId + ", questionId = " + questionId
-                + ", quest = " + quest + ", question = " + question);
+        Question question = participantService.getQuestion(questionId, questId);
 
         if (question == null) {
             return new ModelAndView(new InternalResourceView("/question.jsp"));
@@ -141,16 +136,10 @@ public class ItemController {
             @PathVariable Long questionId, @PathVariable String player,
             @RequestParam("answer") String answer) {
 
-        final Quest quest = questService.getQuest(questId);
-        final Question question = participantService.getQuestion(questionId,
-                quest);
+        final Question question = participantService.getQuestion(questionId,questId);
         final long participantId = participantService.getParticipantId(player);
-        final long participationId = questService.participateInQuest(
-                participantId, quest);
+        final long participationId = questService.participateInQuest(participantId, questId);
 
-        log.debug("answering: questId = " + questId + ", questionId = "
-                + questionId + "," + " quest = " + quest + ", question = "
-                + question + " answer = " + answer);
 
         ModelAndView mv = null;
         if (question.getQuestionTypeAsEnum() == TYPE.MULTIPLE_CHOICE) {

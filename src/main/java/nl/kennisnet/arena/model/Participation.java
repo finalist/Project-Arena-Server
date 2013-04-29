@@ -15,7 +15,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames={"participant_id", "quest_id", "round_id"})})
-public class Participation implements DomainObject {
+public class Participation {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

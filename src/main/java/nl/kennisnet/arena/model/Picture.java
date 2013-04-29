@@ -11,7 +11,7 @@ import javax.persistence.Lob;
 
 /** Used for image upload */
 @Entity
-public class Picture implements DomainObject {
+public class Picture {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

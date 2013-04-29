@@ -6,7 +6,6 @@ import nl.kennisnet.arena.client.domain.AnswerDTO;
 import nl.kennisnet.arena.client.domain.LogDTO;
 import nl.kennisnet.arena.client.domain.QuestDTO;
 import nl.kennisnet.arena.client.service.GWTQuestService;
-import nl.kennisnet.arena.model.Quest;
 import nl.kennisnet.arena.services.ParticipantService;
 import nl.kennisnet.arena.services.QuestService;
 
@@ -64,8 +63,7 @@ public class GWTQuestServiceServlet extends RemoteServiceServlet implements
 
 	@Override
 	public AnswerDTO update(AnswerDTO answerDto) {
-		Quest quest = questService.getQuest(answerDto.getQuestId());
-		return participantService.updateAnswerDto(answerDto, quest);
+		return participantService.updateAnswerDto(answerDto, answerDto.getQuestId());
 	}
 
 }

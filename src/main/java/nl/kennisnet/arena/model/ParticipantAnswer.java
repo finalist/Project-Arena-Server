@@ -10,104 +10,105 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 @Entity
-public class ParticipantAnswer implements DomainObject {
+public class ParticipantAnswer {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	
-	private Integer answer;
-	
-	private String textAnswer;
-	
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	private Participation participation;
-	
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	private Question question;
-	
-	public enum Result{
-		CORRECT,
-		INCORRECT,
-		ANSWERED,
-		UNANSWERED
-	}
-	
-	private String result = Result.UNANSWERED.name();	
-	
-	public Long getId() {
-		return id;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    private Integer answer;
 
-	public Participation getParticipation() {
-		return participation;
-	}
+    private String textAnswer;
 
-	public void setParticipation(Participation participation) {
-		this.participation = participation;
-	}
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Participation participation;
 
-	public Question getQuestion() {
-		return question;
-	}
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Question question;
 
-	public void setQuestion(Question question) {
-		this.question = question;
-	}
+    public enum Result {
+        CORRECT,
+        INCORRECT,
+        ANSWERED,
+        UNANSWERED
+    }
 
-	public void setAnswer(Integer answer) {
-		this.answer = answer;
-	}
-	
-	public Integer getAnswer() {
-		return answer;
-	}
-	
-	public void setTextAnswer(String textAnswer) {
-		answer = 0;
-		this.textAnswer = textAnswer;
-	}
-	
-	public String getTextAnswer() {
-		return textAnswer;
-	}
-	
-	public void setResult(String result) {
-		this.result = result;
-	}
-	
-	public String getResult() {
-		return result;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		ParticipantAnswer other = (ParticipantAnswer) obj;
-		return new EqualsBuilder().
-			append(this.answer, other.answer).
-			append(this.id, other.id).
-			append(this.participation, other.participation).
-			append(this.question, other.question).
-			append(this.result, other.result).
-			append(this.textAnswer, other.textAnswer).isEquals();
-	}
+    private String result = Result.UNANSWERED.name();
 
-	@Override
-	public int hashCode() {
-		return new HashCodeBuilder().append(answer).append(id).append(participation).append(question).append(result).append(textAnswer).toHashCode();
-	}
-	
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Participation getParticipation() {
+        return participation;
+    }
+
+    public void setParticipation(Participation participation) {
+        this.participation = participation;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public void setAnswer(Integer answer) {
+        this.answer = answer;
+    }
+
+    public Integer getAnswer() {
+        return answer;
+    }
+
+    public void setTextAnswer(String textAnswer) {
+        answer = 0;
+        this.textAnswer = textAnswer;
+    }
+
+    public String getTextAnswer() {
+        return textAnswer;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        ParticipantAnswer other = (ParticipantAnswer) obj;
+        return new EqualsBuilder().
+                append(this.answer, other.answer).
+                append(this.id, other.id).
+                append(this.participation, other.participation).
+                append(this.question, other.question).
+                append(this.result, other.result).
+                append(this.textAnswer, other.textAnswer).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(answer).append(id).append(participation).append(question).append(result)
+                .append(textAnswer).toHashCode();
+    }
+
 }

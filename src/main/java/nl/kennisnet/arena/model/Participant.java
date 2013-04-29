@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 @Entity
-public class Participant implements DomainObject {
+public class Participant {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

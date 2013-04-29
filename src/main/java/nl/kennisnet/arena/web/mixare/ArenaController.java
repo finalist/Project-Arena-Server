@@ -57,7 +57,7 @@ public class ArenaController {
 			
 		final long participantId = participantService.getParticipantId(player);
 		final Quest quest = questService.getQuest(questId);
-		final long participationId = questService.participateInQuest(participantId, quest);
+		final long participationId = questService.participateInQuest(participantId, questId);
 
 		final ArenaDataBean data = new ArenaDataBean(questId, player, latitude, longitude, participantId, quest, participationId);
 
@@ -86,7 +86,7 @@ public class ArenaController {
 			
 		final long participantId = participantService.getParticipantId(player);
 		final Quest quest = questService.getQuest(questId);
-		final long participationId = questService.participateInQuest(participantId, quest);
+		final long participationId = questService.participateInQuest(participantId, questId);
 
 		final ArenaDataBean data = new ArenaDataBean(questId, player, participantId, quest, participationId, true);
 

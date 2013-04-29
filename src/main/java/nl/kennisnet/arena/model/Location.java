@@ -29,7 +29,6 @@ public class Location {
 	private Boolean onRadar;
 	
 	private String name;
-	private Boolean consumable;
 	
 	@ManyToOne(optional = false)
 	private Quest quest;
@@ -110,14 +109,6 @@ public class Location {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Boolean getConsumable() {
-		return consumable;
-	}
-
-	public void setConsumable(Boolean consumable) {
-		this.consumable = consumable;
 	}
 
 	public List<ContentElement> getElements() {
