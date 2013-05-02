@@ -190,8 +190,8 @@ img {
 	background-position: top right;
 	float: left;
 	position: absolute;
-	right: 15;
-	top: 15;
+	right: 15px;
+	top: 15px;
 	width: 300px;
 	height: 84px;
 }
