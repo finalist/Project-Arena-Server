@@ -20,28 +20,9 @@ public class FrontendController {
       this.configuration = configuration;
    }
 
-//   @RequestMapping(value = "/designer.do")
-//   public ModelAndView handleDesigner(){
-//      return handleGWTPage("designer");
-//   }
-//
-//   @RequestMapping(value = "/monitor.do")
-//   public ModelAndView handleMonitor(){
-//      return handleGWTPage("monitor");
-//   }
-//
-//   private ModelAndView handleGWTPage(String gwtPage){
-//      Map<String,String> model=new HashMap<String, String>();
-//      model.put("googleAPIkey",configuration.getString("google.api.key"));
-//      model.put("divName",gwtPage);
-//      return new ModelAndView("/gwt.jsp", model);
-//      
-//   }
-
    @RequestMapping(value = "/main.do")
    public ModelAndView handleMain(){
       Map<String,String> model=new HashMap<String, String>();
-      model.put("googleMapsAPIkey",configuration.getString("google.maps.api.key"));
       model.put("googleAnalyticskey",configuration.getString("google.analytics.key"));
       return new ModelAndView("/main.jsp", model);
    }
