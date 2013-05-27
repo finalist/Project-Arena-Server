@@ -24,149 +24,155 @@ import com.google.maps.gwt.client.MouseEvent;
 import com.google.maps.gwt.client.Polygon;
 
 public class MapPanel extends AbstractMapPanel implements WallToggleEvent.Handler, ItemFilterEvent.Handler,
-      MoveQuestItemEvent.Handler, ClickPolygonEvent.Handler, UpdateQuestItemEvent.Handler {
+        MoveQuestItemEvent.Handler, ClickPolygonEvent.Handler, UpdateQuestItemEvent.Handler {
 
-   private static double BORDER_PADDING = 250;
+    private static double BORDER_PADDING = 250;
 
-   public MapPanel() {
-      super();
-      EventBus.get().addHandler(WallToggleEvent.TYPE, this);
-      EventBus.get().addHandler(ItemFilterEvent.TYPE, this);
-      EventBus.get().addHandler(MoveQuestItemEvent.TYPE, this);
-      EventBus.get().addHandler(ClickPolygonEvent.TYPE, this);
-      EventBus.get().addHandler(UpdateQuestItemEvent.TYPE, this);
+    public MapPanel() {
+        super();
+        EventBus.get().addHandler(WallToggleEvent.TYPE, this);
+        EventBus.get().addHandler(ItemFilterEvent.TYPE, this);
+        EventBus.get().addHandler(MoveQuestItemEvent.TYPE, this);
+        EventBus.get().addHandler(ClickPolygonEvent.TYPE, this);
+        EventBus.get().addHandler(UpdateQuestItemEvent.TYPE, this);
 
+    }
 
-      getMapWidget().addClickListener(new ClickHandler() {
-		
-    	@Override
-		public void handle(MouseEvent event) {
-            LatLng point = event.getLatLng();
-            createQuestItem(point);     
-		}
-	});
-   }
+    @Override
+    protected void initMap() {
+        super.initMap();
+        getMapWidget().addClickListener(new ClickHandler() {
 
-   private void createQuestItem(LatLng point) {
-      String selectedItemType = QuestState.getInstance().getSelectedQuestType();
-      if (selectedItemType != null) {
-
-         QuestItemDTO itemDTO = new QuestItemDTO(selectedItemType + " " + QuestState.getInstance().getNumber(selectedItemType),
-               selectedItemType);
-
-         itemDTO.setPoint(new SimplePoint(point));
-         itemDTO.setRadius(250.0);
-         itemDTO.setVisibleRadius(100.0);
-
-         QuestItemMarker questItemMarker = new QuestItemMarker(getMapWidget(), itemDTO, false);
-         markerObjects.add(questItemMarker.getMarker());
-         polygonObjects.add(questItemMarker.getPolygon()[0]);
-         polygonObjects.add(questItemMarker.getPolygon()[1]);
-         
-         QuestState.getInstance().getState().addItem(itemDTO);
-         CreateQuestItemEvent eventQI = new CreateQuestItemEvent();
-
-         eventQI.setQuestItem(itemDTO);
-         
-         DialogSelector.showRelevantDialog(selectedItemType, itemDTO, false,true);
-
-         EventBus.get().fireEvent(eventQI);
-
-         refresh();
-      }
-   }
-
-   protected void refresh() {
-	  clearMap();
-      QuestDTO questDTO = QuestState.getInstance().getState();
-      if (questDTO!=null){
-         if (questDTO.getBorder() != null) {
-            questDTO.setBorder(createWall(questDTO));
-         }
-   
-         if (questDTO != null && questDTO.getItems() != null) {
-            for (QuestItemDTO itemDTO : questDTO.getItems()) {
-               if (QuestState.getInstance().isTypeVisible(itemDTO.getTypeName())) {
-                  QuestItemMarker questItemMarker = new QuestItemMarker(getMapWidget(), itemDTO, false);
-                  markerObjects.add(questItemMarker.getMarker());
-                  polygonObjects.add(questItemMarker.getPolygon()[0]);
-                  polygonObjects.add(questItemMarker.getPolygon()[1]);
-               }
+            @Override
+            public void handle(MouseEvent event) {
+                LatLng point = event.getLatLng();
+                createQuestItem(point);
             }
-         }
-   
-         if (questDTO.getBorder() != null) {
-            final Polygon polygon = Polygon.create();
-            polygon.setPath(polygonArrayToMvcArray(GeomUtil.createGWTPolygon(questDTO.getBorder())));
-            polygon.addClickListener(new Polygon.ClickHandler() {
-				            	
-				@Override
-				public void handle(MouseEvent event) {
-					ClickPolygonEvent qi = new ClickPolygonEvent();
-					qi.setClickPoint(event.getLatLng());
-	                //TODO
-					//qi.setSender(event.getSender());
-	                EventBus.get().fireEvent(qi);
-				}
-			});
-            polygon.setMap(getMapWidget());
-            polygonObjects.add(polygon);
-         }
-      }
-   }
-   
-   public MVCArray<LatLng> polygonArrayToMvcArray(LatLng[] latlngArray){
-	   MVCArray<LatLng> mvcArray = MVCArray.create();
-       for(LatLng latLng: latlngArray){
-    	   mvcArray.push(latLng);	   
-       }
-       return mvcArray;
-   }
+        });
 
-   @Override
-   public void onWallToggle(WallToggleEvent p) {
-      QuestDTO questDTO = QuestState.getInstance().getState();
-      if (p.getWallUp() != null && p.getWallUp().booleanValue()) {
-         if (questDTO != null && questDTO.getItems() != null) {
-            questDTO.setBorder(createWall(questDTO));
-         }
-      } else {
-         questDTO.setBorder(null);
-      }
-      refresh();
-   }
+    }
 
-   private SimplePolygon createWall(QuestDTO questDTO) {
-      LatLngBounds border = LatLngBounds.create();
-      for (QuestItemDTO itemDTO : questDTO.getItems()) {
-         border.extend(GeomUtil.createGWTPoint(itemDTO.getPoint()));
-      }
-      return new SimplePolygon(GeomUtil.createCircle(border, BORDER_PADDING));
-   }
+    private void createQuestItem(LatLng point) {
+        String selectedItemType = QuestState.getInstance().getSelectedQuestType();
+        if (selectedItemType != null) {
 
-   @Override
-   public void onMoveQuestItem(MoveQuestItemEvent p) {
-      refresh();
-   }
+            QuestItemDTO itemDTO = new QuestItemDTO(selectedItemType + " "
+                    + QuestState.getInstance().getNumber(selectedItemType),
+                    selectedItemType);
 
-   @Override
-   public void onClickPolygon(ClickPolygonEvent p) {
-      createQuestItem(p.getClickPoint());
-   }
+            itemDTO.setPoint(new SimplePoint(point));
+            itemDTO.setRadius(250.0);
+            itemDTO.setVisibleRadius(100.0);
 
-   @Override
-   public void onItemFilter(ItemFilterEvent p) {
-      refresh();
-   }
+            QuestItemMarker questItemMarker = new QuestItemMarker(getMapWidget(), itemDTO, false);
+            markerObjects.add(questItemMarker.getMarker());
+            polygonObjects.add(questItemMarker.getPolygon()[0]);
+            polygonObjects.add(questItemMarker.getPolygon()[1]);
 
-   @Override
-   public void onUpdateQuestItem(UpdateQuestItemEvent p) {
-      refresh();
-   }
+            QuestState.getInstance().getState().addItem(itemDTO);
+            CreateQuestItemEvent eventQI = new CreateQuestItemEvent();
 
-   @Override
-   protected int getViewId() {
-      return QuestState.DESIGNER_VIEW;
-   }
+            eventQI.setQuestItem(itemDTO);
+
+            DialogSelector.showRelevantDialog(selectedItemType, itemDTO, false, true);
+
+            EventBus.get().fireEvent(eventQI);
+
+            refresh();
+        }
+    }
+
+    protected void refresh() {
+        clearMap();
+        QuestDTO questDTO = QuestState.getInstance().getState();
+        if (questDTO != null) {
+            if (questDTO.getBorder() != null) {
+                questDTO.setBorder(createWall(questDTO));
+            }
+
+            if (questDTO != null && questDTO.getItems() != null) {
+                for (QuestItemDTO itemDTO : questDTO.getItems()) {
+                    if (QuestState.getInstance().isTypeVisible(itemDTO.getTypeName())) {
+                        QuestItemMarker questItemMarker = new QuestItemMarker(getMapWidget(), itemDTO, false);
+                        markerObjects.add(questItemMarker.getMarker());
+                        polygonObjects.add(questItemMarker.getPolygon()[0]);
+                        polygonObjects.add(questItemMarker.getPolygon()[1]);
+                    }
+                }
+            }
+
+            if (questDTO.getBorder() != null) {
+                final Polygon polygon = Polygon.create();
+                polygon.setPath(polygonArrayToMvcArray(GeomUtil.createGWTPolygon(questDTO.getBorder())));
+                polygon.addClickListener(new Polygon.ClickHandler() {
+
+                    @Override
+                    public void handle(MouseEvent event) {
+                        ClickPolygonEvent qi = new ClickPolygonEvent();
+                        qi.setClickPoint(event.getLatLng());
+                        // TODO
+                        // qi.setSender(event.getSender());
+                        EventBus.get().fireEvent(qi);
+                    }
+                });
+                polygon.setMap(getMapWidget());
+                polygonObjects.add(polygon);
+            }
+        }
+    }
+
+    public MVCArray<LatLng> polygonArrayToMvcArray(LatLng[] latlngArray) {
+        MVCArray<LatLng> mvcArray = MVCArray.create();
+        for (LatLng latLng : latlngArray) {
+            mvcArray.push(latLng);
+        }
+        return mvcArray;
+    }
+
+    @Override
+    public void onWallToggle(WallToggleEvent p) {
+        QuestDTO questDTO = QuestState.getInstance().getState();
+        if (p.getWallUp() != null && p.getWallUp().booleanValue()) {
+            if (questDTO != null && questDTO.getItems() != null) {
+                questDTO.setBorder(createWall(questDTO));
+            }
+        } else {
+            questDTO.setBorder(null);
+        }
+        refresh();
+    }
+
+    private SimplePolygon createWall(QuestDTO questDTO) {
+        LatLngBounds border = LatLngBounds.create();
+        for (QuestItemDTO itemDTO : questDTO.getItems()) {
+            border.extend(GeomUtil.createGWTPoint(itemDTO.getPoint()));
+        }
+        return new SimplePolygon(GeomUtil.createCircle(border, BORDER_PADDING));
+    }
+
+    @Override
+    public void onMoveQuestItem(MoveQuestItemEvent p) {
+        refresh();
+    }
+
+    @Override
+    public void onClickPolygon(ClickPolygonEvent p) {
+        createQuestItem(p.getClickPoint());
+    }
+
+    @Override
+    public void onItemFilter(ItemFilterEvent p) {
+        refresh();
+    }
+
+    @Override
+    public void onUpdateQuestItem(UpdateQuestItemEvent p) {
+        refresh();
+    }
+
+    @Override
+    protected int getViewId() {
+        return QuestState.DESIGNER_VIEW;
+    }
 
 }

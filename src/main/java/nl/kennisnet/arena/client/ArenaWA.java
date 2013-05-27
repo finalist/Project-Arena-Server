@@ -17,7 +17,6 @@ import nl.kennisnet.arena.client.panel.ResizablePanel;
 import nl.kennisnet.arena.client.panel.ScoreGridPanel;
 import nl.kennisnet.arena.client.service.GWTQuestService;
 import nl.kennisnet.arena.client.service.GWTQuestServiceAsync;
-import nl.kennisnet.arena.client.util.AnalyticsUtil;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -69,28 +68,20 @@ public class ArenaWA implements EntryPoint, ScreenSwitchEvent.Handler, RefreshQu
 
    private void refreshContent() {
       contentView.clear();
-      String trackerUrl;
       switch (QuestState.getInstance().getCurrentView()) {
       case QuestState.DESIGNER_VIEW:
          contentView.add(designerPanel);
-         trackerUrl = "Designer";
          break;
       case QuestState.MONITOR_VIEW:
          contentView.add(getMonitorPanel());
-         trackerUrl = "Monitor";
          break;
       case QuestState.ANSWER_VIEW:
           contentView.add(getAnswerCheckPanel());
-          trackerUrl = "Antwoorden";
           break;
       case QuestState.SCORE_VIEW:
          contentView.add(getScorePanel());
-         trackerUrl = "Score";
          break;
-      default:
-         trackerUrl = "Unknown";
       }
-      AnalyticsUtil.trackHit(trackerUrl);
 
       resize();
    }

@@ -120,7 +120,7 @@ public class QuestService {
 		}
 		quest = questRepository.merge(quest);
 		if (sendNotification && !update) {
-			sendNotification(quest);
+//			sendNotification(quest);
 		}
 		return DTOFactory.create(quest);
 	}

@@ -30,9 +30,14 @@ public class MonitorMapPanel extends AbstractMapPanel implements
 		super();
 		EventBus.get().addHandler(RefreshQuestLogEvent.TYPE, this);
 		EventBus.get().addHandler(TeamFilterEvent.TYPE, this);
-		triggerZoomForTheFirstTime();
 	}
 
+	@Override
+	protected void initMap() {
+	    super.initMap();
+        triggerZoomForTheFirstTime();
+	}
+	
 	protected void refresh() {
 	  clearMap();
       QuestDTO questDTO = QuestState.getInstance().getState();

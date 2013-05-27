@@ -12,6 +12,7 @@ import nl.kennisnet.arena.client.event.SelectQuestItemEvent;
 import nl.kennisnet.arena.client.event.ZoomToFitEvent;
 import nl.kennisnet.arena.client.util.GeomUtil;
 
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.maps.gwt.client.GoogleMap;
 import com.google.maps.gwt.client.LatLng;
@@ -37,25 +38,39 @@ public abstract class AbstractMapPanel extends SimplePanel implements ZoomToFitE
    
    
    public AbstractMapPanel(){
-      MapOptions mapOptions = MapOptions.create();
-      mapOptions.setCenter(LatLng.create(START_LATITUDE, START_LONGTITUDE));
-	  map = (GoogleMap) GoogleMap.create(this.getElement());
-
-	  mapOptions.setScrollwheel(true);
-	  mapOptions.setDisableDoubleClickZoom(false);
-	  mapOptions.setOverviewMapControl(true);
-	  mapOptions.setDraggable(true);
-	  mapOptions.setZoom(START_ZOOM);
-	  mapOptions.setMapTypeId(MapTypeId.HYBRID);
-	  
-      map.setOptions(mapOptions);
-      
       EventBus.get().addHandler(ZoomToFitEvent.TYPE, this);
       EventBus.get().addHandler(RefreshQuestEvent.TYPE, this);
       EventBus.get().addHandler(SelectQuestItemEvent.TYPE, this);
-      refresh();
+      new Timer() {
+        
+        @Override
+        public void run() {
+            if (getElement()!=null){
+                initMap();
+            } else {
+                schedule(50);
+            }
+        }
+    }.schedule(100);
    }
 
+   protected void initMap(){
+       MapOptions mapOptions = MapOptions.create();
+       mapOptions.setCenter(LatLng.create(START_LATITUDE, START_LONGTITUDE));
+       map = (GoogleMap) GoogleMap.create(this.getElement());
+
+       mapOptions.setScrollwheel(true);
+       mapOptions.setDisableDoubleClickZoom(false);
+       mapOptions.setOverviewMapControl(true);
+       mapOptions.setDraggable(true);
+       mapOptions.setZoom(START_ZOOM);
+       mapOptions.setMapTypeId(MapTypeId.HYBRID);
+       
+       map.setOptions(mapOptions);
+       refresh();
+   }
+   
+   
    public void zoomToFit() {
       LatLngBounds border = null;
       QuestDTO questDTO = QuestState.getInstance().getState();

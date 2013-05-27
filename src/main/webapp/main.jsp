@@ -26,14 +26,5 @@
 	style="position: absolute; width: 0; height: 0; border: 0"></iframe>
 
 <div id="content" style="heigth: 100%; width: 100%"></div>
-<script type="text/javascript">
-    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-	var pageTracker = _gat._getTracker("<c:out value='${googleAnalyticskey}'/>");
-    pageTracker._initData();
-    pageTracker._trackPageview("/arena/Designer");
-</script>
 </body>
 </html>

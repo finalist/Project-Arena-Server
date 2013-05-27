@@ -48,6 +48,7 @@
 		<postgres.version>8.4-701.jdbc4</postgres.version>
 		<postgis.version>1.5.2</postgis.version>
 		<geotools.version>8.7</geotools.version>
+		<env>local</env>
 	</properties>
 
 	<dependencies>
